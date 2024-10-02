@@ -12,5 +12,6 @@ declare module 'vue' {
     LeagueCreation: typeof import('./src/components/LeagueCreation.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SideBar: typeof import('./src/components/SideBar.vue')['default']
   }
 }
