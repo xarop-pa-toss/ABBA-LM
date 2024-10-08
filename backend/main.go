@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -13,13 +12,13 @@ func main() {
 	viper.SetConfigFile("./config/.env")
 	viper.ReadInConfig()
 
-	fmt.Println((viper.Get("PORT")))
+	port := viper.GetString("PORT")
 
 	fs := http.FileServer(http.Dir("../frontend/dist"))
 	http.Handle("/", fs)
 
-	log.Println("Listening on :8080...")
-	err := http.ListenAndServe(":8080", nil)
+	log.Println("Listening on http://localhost:" + port)
+	err := http.ListenAndServe(":"+port, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
