@@ -7,9 +7,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/xarop-pa-toss/ABBA-LM/backend/cmd/internal/abbamongo"
-
 	"github.com/spf13/viper"
+	"github.com/xarop-pa-toss/ABBA-LM/backend/internal/abbamongo"
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
@@ -19,12 +18,15 @@ func main() {
 	viper.ReadInConfig()
 	port := viper.GetString("PORT")
 
-	dbClient, ctxBackground := abbamongo.CreateDbClient()
-	defer dbClient.Disconnect()
+	dbClient, ctxBackground := abbamongo.CreateDBClient()
+	defer dbClient.Client.Disconnect(ctxBackground)
 
 	// TEST MONGODB QUERY
 	filter := bson.M{"name": "block"}
-	entry, err := dbClient.GetEntry("skills", filter, context.WithTimeout(ctxBackground, 3*time.Second))
+	ctx, cancel := context.WithTimeout(ctxBackground, 3*time.Second)
+	defer cancel() // Ensures Cancel is called to free resources
+
+	entry, err := dbClient.GetEntry("skills", filter, ctx)
 	if err != nil {
 		log.Fatal(err)
 	}
