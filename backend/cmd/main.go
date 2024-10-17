@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/spf13/viper"
-	"github.com/xarop-pa-toss/ABBA-LM/backend/internal/abbamongo"
-	"go.mongodb.org/mongo-driver/v2/bson"
+	abbamongo "github.com/xarop-pa-toss/ABBA-LM/backend/internal/database"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 func main() {
