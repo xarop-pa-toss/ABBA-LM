@@ -23,7 +23,7 @@ func CreateDBClient() (*DBClient, context.Context) {
 
 	// Database connection
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	client, err := mongo.Connect(options.Client().ApplyURI(viper.GetString("MONGO_URI")))
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(viper.GetString("MONGO_URI")))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -49,7 +49,7 @@ func CreateDBClient() (*DBClient, context.Context) {
 }
 
 func (db *DBClient) GetEntry(collectionName string, filter interface{}, ctx context.Context) (interface{}, error) {
-	collection := db.Client.Database("yourDatabase").Collection(collectionName)
+	collection := db.Client.Database("abba_lm").Collection(collectionName)
 
 	var result interface{}
 	err := collection.FindOne(ctx, filter).Decode(&result)
