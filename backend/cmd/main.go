@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"time"
+	"mux"
 
 	"github.com/spf13/viper"
 	abbamongo "github.com/xarop-pa-toss/ABBA-LM/backend/internal/database"
@@ -21,23 +22,20 @@ func main() {
 	dbClient, ctxBackground := abbamongo.CreateDBClient()
 	defer dbClient.Client.Disconnect(ctxBackground)
 
-	// TEST MONGODB QUERY
-	filter := bson.M{"name": "block"}
-	ctx, cancel := context.WithTimeout(ctxBackground, 3*time.Second)
-	defer cancel() // Ensures Cancel is called to free resources
-
-	entry, err := dbClient.GetEntry("skills", filter, ctx)
+	log.Println("Listening on http://localhost:" + port)
+	err := http.ListenAndServe(`:{port}`, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(entry)
 
+	// ROUTES
 	fs := http.FileServer(http.Dir("../frontend/dist"))
 	http.Handle("/", fs)
 
-	log.Println("Listening on http://localhost:" + port)
-	err = http.ListenAndServe(":"+port, nil)
-	if err != nil {
-		log.Fatal(err)
+	router := http.NewServeMux()
+	router.HandleFunc("/skills", skills)
+	
+	func skills (response http.ResponseWriter, request *http.Request) {
+
 	}
 }
