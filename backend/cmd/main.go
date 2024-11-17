@@ -1,41 +1,32 @@
 package main
 
 import (
-	"context"
-	"fmt"
+	"flag"
 	"log"
 	"net/http"
-	"time"
-	"mux"
 
 	"github.com/spf13/viper"
-	abbamongo "github.com/xarop-pa-toss/ABBA-LM/backend/internal/database"
-	"go.mongodb.org/mongo-driver/bson"
+	"github.com/xarop-pa-toss/ABBA-LM/backend/cmd/server"
+	mongodb "github.com/xarop-pa-toss/ABBA-LM/backend/cmd/storage"
 )
 
 func main() {
 	// Viper configuration loading
 	viper.SetConfigFile("./config/.env")
 	viper.ReadInConfig()
-	port := viper.GetString("PORT")
 
-	dbClient, ctxBackground := abbamongo.CreateDBClient()
+	// FLAGS
+	listenAddr := flag.String("addr", ":3000", "Server address with port")
+	flag.Parse()
+
+	dbClient, ctxBackground := mongodb.CreateDBClient()
 	defer dbClient.Client.Disconnect(ctxBackground)
 
-	log.Println("Listening on http://localhost:" + port)
-	err := http.ListenAndServe(`:{port}`, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
+	// START SERVER
+	server := server.NewServer(*listenAddr)
+	log.Println("Listening on ", *listenAddr)
+	log.Fatal(server.Start())
 
-	// ROUTES
 	fs := http.FileServer(http.Dir("../frontend/dist"))
 	http.Handle("/", fs)
-
-	router := http.NewServeMux()
-	router.HandleFunc("/skills", skills)
-	
-	func skills (response http.ResponseWriter, request *http.Request) {
-
-	}
 }

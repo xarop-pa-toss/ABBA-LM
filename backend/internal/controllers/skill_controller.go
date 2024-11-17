@@ -1,14 +1,15 @@
 package controllers
 
 import (
-	"bson"
 	"context"
 	"encoding/json"
 	"log"
 	"net/http"
 	"time"
 
-	"github.com/xarop-pa-toss/ABBA-LM/backend/models"
+	"go.mongodb.org/mongo-driver/bson"
+
+	"github.com/xarop-pa-toss/ABBA-LM/backend/cmd/models"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -64,7 +65,7 @@ func (s *SkillController) GetSingleSkill(response http.ResponseWriter, request *
 	json.NewEncoder(response).Encode(result)
 }
 
-func (s *SkillController) GetSkills(response http.ResponseWriter, request *http.Request) {
+func (s *SkillController) GetAllSkills(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 
 	var skills []models.Skill
