@@ -9,11 +9,11 @@ public class PlayerTemplate
     [BsonRepresentation(BsonType.ObjectId)]
     public ObjectId Id { get; set; }
     
-    [BsonElement("team_type")]
-    public string TeamType { get; set; }
+    [BsonElement("team_code")]
+    public string TeamCode { get; set; }
 
     [BsonElement("position")]
-    public string Position { get; set; }
+    public PlayerPositionEnum Position { get; set; }
 
     [BsonElement("cost")]
     public int Cost { get; set; }
@@ -27,20 +27,8 @@ public class PlayerTemplate
     [BsonElement("injuries")]
     public List<string> Injuries { get; set; }
     
-    [BsonElement("star_player_points")]
-    public int StarPlayerPoints { get; set; }
-    
-    [BsonElement("star_player_points_used")]
-    public int StarPlayerPointsUsed { get; set; }
-    
     [BsonElement("rank_description")]
     public string RankDescription { get; set; }
-    
-    [BsonElement("number")]
-    public int Number { get; set; }
-    
-    [BsonElement("list_position")]
-    public List<string> ListPosition { get; set; }
 }
 
 public class PlayerStats
@@ -56,4 +44,18 @@ public class PlayerStats
 
     [BsonElement("armor")]
     public int Armor { get; set; }
+}
+
+public enum PlayerPositionEnum
+{
+    Blitzer,
+    Thrower,
+    Catcher,
+    Lineman,
+    StarPlayer
+}
+
+public class Rank
+{
+    
 }

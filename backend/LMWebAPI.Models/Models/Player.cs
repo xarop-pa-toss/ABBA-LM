@@ -15,7 +15,7 @@ public class Player
     public string Name { get; set; }
 
     [BsonElement("position")]
-    public string Position { get; set; }
+    public PlayerPositionEnum Position { get; set; }
 
     [BsonElement("stats")]
     public PlayerStats Stats { get; set; }
@@ -24,23 +24,20 @@ public class Player
     public List<string> Skills { get; set; }
 
     [BsonElement("injuries")]
-    public List<Injury> Injuries { get; set; }
+    public List<string> Injuries { get; set; }
     
-    [BsonElement("star_player_points")]
-    public int StarPlayerPoints { get; set; }
+    [BsonElement("spp_available")]
+    public int SPPAvailable { get; set; }
+    
+    [BsonElement("spp_spent")]
+    public int SPPSpent { get; set; }
     
     [BsonElement("number")]
     public int Number { get; set; }
     
     [BsonElement("list_position")]
     public List<string> ListPosition { get; set; }
-}
-
-public class Injury
-{
-    [BsonElement("type")]
-    public string Type { get; set; }
     
-    [BsonElement("stat_modifier")]
-    public PlayerStats StatModifier { get; set; }
+    [BsonElement("next_injury_modifier")]
+    public bool NextInjuryModifier { get; set; }
 }

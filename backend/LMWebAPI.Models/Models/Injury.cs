@@ -3,24 +3,22 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace LMWebAPI.Models;
 
-public class Skill
+public class Injury
 {
     [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
+    [BsonRepresentation(BsonType.String)]
+    [BsonElement("_id")]
     public string Id { get; set; }
-    
-    [BsonElement("type")]
-    public string Type { get; set; }
-    
+
     [BsonElement("code")]
     public string Code { get; set; }
     
     [BsonElement("name")]
     public string Name { get; set; }
-    
-    [BsonElement("is_special_trait")]
-    public string IsSpecialTrait { get; set; }
-    
+
     [BsonElement("description")]
     public string Description { get; set; }
+
+    [BsonElement("stat_modifiers")]
+    public PlayerStats StatModifiers { get; set; }
 }
