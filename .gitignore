@@ -1,5 +1,5 @@
 # Created by https://www.toptal.com/developers/gitignore/api/go,vue,vuejs,visualstudiocode
-# Edit at https://www.toptal.com/developers/gitignore?templates=go,vue,vuejs,visualstudiocode
+# Merged with ASP.NET Web API and .NET-specific rules
 
 ### Go ###
 # If you prefer the allow list template instead of the deny list, see community template:
@@ -179,12 +179,80 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
 ### Vuejs ###
 # Recommended template: Node.gitignore
-
 node_modules/
 dist/
 npm-debug.log
 yarn-error.log
 
-# End of https://www.toptal.com/developers/gitignore/api/go,vue,vuejs,visualstudiocode
+### .NET / ASP.NET ###
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# User-specific folders
+.vs/
+.vscode/
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Azure Web Apps
+appsettings.json
+appsettings.*.json
+
+# File-based dependency managers
+global.json
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# NuGet
+*.nupkg
+*.snupkg
+*.nuspec
+*.psmdcp
+packages/
+# Uncomment if necessary (NuGet package cache)
+# **/packages/*
+# Uncomment if necessary (enable "nuget restore" for project build tools)
+# !**/packages/build/
+
+# Entity Framework
+*.edmx.sql
+*.edmx.diagram
+
+# Rider
+.idea/
+
+# DotNetCore
+*.swp
+*.pidb
