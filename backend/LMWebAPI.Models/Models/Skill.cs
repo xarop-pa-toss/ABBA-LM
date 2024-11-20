@@ -7,19 +7,19 @@ public class Skill
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; }
+    public ObjectId Id { get; set; }
     
     [BsonElement("type")]
-    public string Type { get; set; }
+    public required string Type { get; set; }
     
     [BsonElement("code")]
-    public string Code { get; set; }
+    public required string Code { get; set; }
     
     [BsonElement("name")]
-    public string Name { get; set; }
+    public required string Name { get; set; }
     
     [BsonElement("is_special_trait")]
-    public string IsSpecialTrait { get; set; }
+    public required bool IsSpecialTrait { get; set; }
     
     [BsonElement("description")]
     public string Description { get; set; }

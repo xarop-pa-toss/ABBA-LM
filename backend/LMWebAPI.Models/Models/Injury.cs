@@ -8,7 +8,7 @@ public class Injury
     [BsonId]
     [BsonRepresentation(BsonType.String)]
     [BsonElement("_id")]
-    public string Id { get; set; }
+    public ObjectId Id { get; set; }
 
     [BsonElement("code")]
     public string Code { get; set; }

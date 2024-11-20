@@ -4,6 +4,7 @@ using MongoDB.Bson.Serialization.Attributes;
 public class User
 {
     [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
     public ObjectId Id { get; set; }
 
     [BsonElement("username")]

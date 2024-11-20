@@ -6,13 +6,14 @@ namespace LMWebAPI.Models;
 public class TeamTemplate
 {
     [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
     public ObjectId Id { get; set; }
 
     [BsonElement("team_code")]
-    public string TeamCode { get; set; }
+    public required string TeamCode { get; set; }
 
     [BsonElement("player_templates_ids")]
-    public List<TeamTemplatePlayer> PlayerTemplatesIds { get; set; }
+    public List<TeamTemplatePlayer> PlayerTemplatesIds { get; set; } = new List<TeamTemplatePlayer>();
 }
 
 public class TeamTemplatePlayer

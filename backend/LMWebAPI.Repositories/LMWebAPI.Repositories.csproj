@@ -15,4 +15,8 @@
     <ProjectReference Include="..\LMWebAPI.Models\LMWebAPI.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Implementations\" />
+  </ItemGroup>
+
 </Project>

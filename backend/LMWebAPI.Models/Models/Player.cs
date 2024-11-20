@@ -6,38 +6,39 @@ namespace LMWebAPI.Models;
 public class Player
 {
     [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
     public ObjectId Id { get; set; }
 
     [BsonElement("team_id")]
-    public ObjectId TeamId { get; set; }  // This should reference the team the player is on.
+    public required ObjectId TeamId { get; set; }  // This should reference the team the player is on.
 
     [BsonElement("name")]
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     [BsonElement("position")]
-    public PlayerPositionEnum Position { get; set; }
+    public required PlayerPositionEnum Position { get; set; }
 
     [BsonElement("stats")]
-    public PlayerStats Stats { get; set; }
+    public required PlayerStats Stats { get; set; }
 
     [BsonElement("skills")]
-    public List<string> Skills { get; set; }
+    public List<string> Skills { get; set; } = new List<string>();
 
     [BsonElement("injuries")]
-    public List<string> Injuries { get; set; }
+    public List<string> Injuries { get; set; } = new List<string>();
     
     [BsonElement("spp_available")]
-    public int SPPAvailable { get; set; }
+    public required int SPPAvailable { get; set; }
     
     [BsonElement("spp_spent")]
-    public int SPPSpent { get; set; }
+    public required int SPPSpent { get; set; }
+    
+    [BsonElement("rank")]
+    public required string Rank { get; set; }
+    
+    [BsonElement("value")]
+    public required int Value { get; set; }
     
     [BsonElement("number")]
     public int Number { get; set; }
-    
-    [BsonElement("list_position")]
-    public List<string> ListPosition { get; set; }
-    
-    [BsonElement("next_injury_modifier")]
-    public bool NextInjuryModifier { get; set; }
 }
