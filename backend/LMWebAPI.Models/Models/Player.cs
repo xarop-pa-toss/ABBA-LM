@@ -10,7 +10,7 @@ public class Player
     public ObjectId Id { get; set; }
 
     [BsonElement("team_id")]
-    public required ObjectId TeamId { get; set; }  // This should reference the team the player is on.
+    public required ObjectId TeamId { get; set; }
 
     [BsonElement("name")]
     public required string Name { get; set; }
@@ -28,10 +28,10 @@ public class Player
     public List<string> Injuries { get; set; } = new List<string>();
     
     [BsonElement("spp_available")]
-    public required int SPPAvailable { get; set; }
+    public required int SppAvailable { get; set; }
     
     [BsonElement("spp_spent")]
-    public required int SPPSpent { get; set; }
+    public required int SppSpent { get; set; }
     
     [BsonElement("rank")]
     public required string Rank { get; set; }

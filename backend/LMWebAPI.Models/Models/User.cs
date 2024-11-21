@@ -1,5 +1,6 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+namespace LMWebAPI.Models;
 
 public class User
 {
@@ -8,17 +9,17 @@ public class User
     public ObjectId Id { get; set; }
 
     [BsonElement("username")]
-    public string Username { get; set; }
+    public required string Username { get; set; }
 
     [BsonElement("first_name")]
-    public string FirstName { get; set; }
+    public required string FirstName { get; set; }
 
     [BsonElement("last_name")]
-    public string LastName { get; set; }
+    public required string LastName { get; set; }
 
     [BsonElement("password")]
-    public string Password { get; set; }
+    public required string Password { get; set; }
 
     [BsonElement("password_salt")]
-    public string PasswordSalt { get; set; }
+    public required string PasswordSalt { get; set; }
 }
