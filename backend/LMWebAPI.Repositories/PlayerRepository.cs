@@ -5,35 +5,35 @@ using MongoDB.Driver;
 
 namespace LMWebAPI.Repositories;
 
-public class PlayerRepository<T> : IRepository<T>
+public class PlayerRepository<T> : MongoRepository<T> where T : Player
 {
-    private readonly IMongoCollection<Player> _playerCollection;
     private readonly IMongoCollection<Team> _teamCollection;
 
-    public PlayerRepository(IMongoDatabase database)
+    public PlayerRepository(IMongoDatabase database) : base(database, "players_built")
     {
-        _playerCollection = database.GetCollection<Player>("players_built");
         _teamCollection = database.GetCollection<Team>("teams_built");
     }
 
     public async Task<Player?> GetByIdAsync(ObjectId id)
     {       
-        return await _playerCollection.Find(player => player.Id== id).FirstOrDefaultAsync(); 
+        return await _collection.Find(player => player.Id== id).FirstOrDefaultAsync(); 
     }
 
-    public async Task<List<Player>> GetByTeamIdAsync(ObjectId teamId)
+    public async Task<List<T>> GetByTeamIdAsync(ObjectId teamId)
     {
-        return await _playerCollection.Find(player => player.TeamId == teamId)
+        return await _collection.Find(player => player.TeamId == teamId)
             .ToListAsync(); 
     }
-    
-    public async Task<List<Player>> GetByTeamNameAsync(string teamName)
+
+    public async Task<List<T>> GetByTeamNameAsync(string teamName)
     {
         ObjectId teamId = _teamCollection.Find(team => team.Name.ToLower() == teamName.ToLower())
             .Project(team => team.Id)
             .FirstOrDefault();
-        
-        return await _playerCollection.Find(player => player.TeamId == teamId)
-            .ToListAsync(); 
+
+        return await _collection.Find(player => player.TeamId == teamId)
+            .ToListAsync();
     }
+    
+    
 }

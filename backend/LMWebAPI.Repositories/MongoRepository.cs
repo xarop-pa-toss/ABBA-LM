@@ -7,7 +7,7 @@ namespace LMWebAPI.Repositories;
 
 public class MongoRepository<T> : IRepository<T>
 {
-    private readonly IMongoCollection<T> _collection;
+    public readonly IMongoCollection<T> _collection;
 
     public MongoRepository(IMongoDatabase database, string collectionName)
     {
