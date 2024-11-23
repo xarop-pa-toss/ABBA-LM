@@ -1,6 +1,0 @@
-@LMWebAPI.Repositories_HostAddress = http://localhost:5120
-
-GET {{LMWebAPI.Repositories_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

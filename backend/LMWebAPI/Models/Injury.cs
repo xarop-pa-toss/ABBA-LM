@@ -11,14 +11,14 @@ public class Injury
     public ObjectId Id { get; set; }
 
     [BsonElement("code")]
-    public string Code { get; set; }
+    public required string Code { get; set; }
     
     [BsonElement("name")]
-    public string Name { get; set; }
-
+    public required string Name { get; set; }
+    
     [BsonElement("description")]
-    public string Description { get; set; }
+    public required string Description { get; set; }
 
     [BsonElement("stat_modifiers")]
-    public PlayerStats StatModifiers { get; set; }
+    public required PlayerStats StatModifiers { get; set; }
 }

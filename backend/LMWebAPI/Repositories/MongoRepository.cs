@@ -7,7 +7,7 @@ namespace LMWebAPI.Repositories;
 public class MongoRepository<T> : IRepository<T>
 {
     protected readonly IMongoDatabase Database;
-    public IMongoCollection<T> Collection { get; }
+    protected readonly IMongoCollection<T> Collection;
 
     public MongoRepository(IMongoDatabase database, string collectionName)
     {
@@ -15,7 +15,7 @@ public class MongoRepository<T> : IRepository<T>
         Collection = Database.GetCollection<T>(collectionName);
     }
 
-    public async Task<List<T?>> GetAllAsync()
+    public async Task<List<T>> GetAllAsync()
     {       
         return await Collection.Find(Builders<T>.Filter.Empty).ToListAsync(); 
     }

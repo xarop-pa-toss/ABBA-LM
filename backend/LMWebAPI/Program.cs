@@ -18,9 +18,6 @@ builder.Services.AddScoped<IMongoDatabase>(sp =>
 });
 #endregion
 
-builder.Services.AddControllers();
-builder.Services.AddOpenApi();
-
 #region Controllers / Services / Repositories
 // Add Repositories
 builder.Services.AddScoped<PlayerRepository<Player>>();
@@ -30,10 +27,12 @@ builder.Services.AddScoped<PlayerService>();
 builder.Services.AddScoped<PlayerSkillService>();
 builder.Services.AddScoped<TeamService>();
 
+builder.Services.AddControllers();
+
+builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 #endregion
-
 
 var app = builder.Build();
 

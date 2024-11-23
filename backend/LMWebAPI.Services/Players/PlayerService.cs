@@ -1,6 +1,0 @@
-namespace LMWebAPI.Services.Players;
-
-public class PlayerService
-{
-    
-}
