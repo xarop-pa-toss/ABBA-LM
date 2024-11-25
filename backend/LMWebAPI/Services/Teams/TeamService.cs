@@ -1,4 +1,4 @@
-namespace LMWebAPI.Services.Players;
+namespace LMWebAPI.Services.Teams;
 
 public class TeamService
 {

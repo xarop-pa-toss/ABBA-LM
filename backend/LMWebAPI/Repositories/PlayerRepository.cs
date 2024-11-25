@@ -12,7 +12,7 @@ public class PlayerRepository<T>(IMongoDatabase database) : MongoRepository<T>(d
     public async Task<List<T>> GetByTeamIdAsync(ObjectId teamId)
     {
         return await Collection.Find(player => player.TeamId == teamId)
-            .ToListAsync(); 
+            .ToListAsync();
     }
 
     public async Task<List<T>> GetByTeamNameAsync(string teamName)

@@ -1,20 +1,24 @@
 using LMWebAPI.Models;
 using LMWebAPI.Repositories;
 using LMWebAPI.Services.Players;
+using LMWebAPI.Services.Teams;
 using MongoDB.Driver;
+
 var builder = WebApplication.CreateBuilder(args);
 
-#region Add MongoDB connection/client
+// This solution uses User Secrets, a .NET feature that can be created with "dotnet user-secrets init".
+// It only works in development environment which is set with "set ASPNETCORE_ENVIRONMENT=Development".
+#region MongoDB connection/client
 builder.Services.AddSingleton<IMongoClient>(sp =>
 {
-    var connectionString = builder.Configuration.GetConnectionString("MongoDB");
+    var connectionString = builder.Configuration["MONGO_CONNECTION_STRING_DEV"];
     return new MongoClient(connectionString);
 });
 
 builder.Services.AddScoped<IMongoDatabase>(sp =>
 {
     var client = sp.GetRequiredService<IMongoClient>();
-    return client.GetDatabase("DatabaseName");
+    return client.GetDatabase("MONGO_DATABASE_NAME");
 });
 #endregion
 
