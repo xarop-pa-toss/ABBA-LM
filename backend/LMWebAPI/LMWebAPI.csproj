@@ -17,4 +17,14 @@
     <Folder Include="Services\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Models\MongoSchemas\injuries.json" />
+    <_ContentIncludedByDefault Remove="Models\MongoSchemas\players_built.json" />
+    <_ContentIncludedByDefault Remove="Models\MongoSchemas\player_templates.json" />
+    <_ContentIncludedByDefault Remove="Models\MongoSchemas\skills.json" />
+    <_ContentIncludedByDefault Remove="Models\MongoSchemas\teams_built.json" />
+    <_ContentIncludedByDefault Remove="Models\MongoSchemas\team_templates.json" />
+    <_ContentIncludedByDefault Remove="Models\MongoSchemas\users.json" />
+  </ItemGroup>
+
 </Project>
