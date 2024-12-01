@@ -5,5 +5,5 @@ The collections are bound by the schemas in the MongoSchemas folder.
 
 To import the mock database into your own MongoDB, extract the abba_lm.7z and use the _mongorestore_ command, replacing the --drop path with the folder where abba_lm was extracted to
 ```
-mongorestore --uri="mongodb://username:password@localhost:27017" --drop ./backups/abba_lm
+mongorestore --uri="mongodb://username:password@localhost:27017" --db=db_name path\to\dumpfolder 
 ```
