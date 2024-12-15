@@ -51,18 +51,10 @@ public class MongoRepository<T> : IRepository<T>
     {
         try
         {
-            var idPropInfo = typeof(T).GetProperty("id");
-            if (idPropInfo == null)
-            {
-                throw new ArgumentException($"Property 'id' is not set in type {typeof(T)}.");
-            }
-
-            if (idPropInfo.GetValue(replacement) == null)
-            {
-                throw new ArgumentException($"'id' is null or empty.");
-            }
+            // Will throw ArgumentException if id property cannot be verified.
+            ObjectId id = Helpers.CheckIdExistsInDocument(replacement);
             
-            var filter = Builders<T>.Filter.Eq("_id", idPropInfo.GetValue(replacement));
+            var filter = Builders<T>.Filter.Eq("_id", id);
             var result = await Collection.ReplaceOneAsync(filter, replacement);
 
             if (result.MatchedCount.Equals(0))
@@ -89,12 +81,21 @@ public class MongoRepository<T> : IRepository<T>
         return true;
     }
 
-    public async Task<bool> ReplaceManyAsync(List<T> replacement)
+    public async Task<bool> ReplaceManyAsync(List<T> replacementList)
     {
+        Dictionary <ObjectId, T> replacementsDict = new Dictionary <ObjectId, T>();
+        
+        // Validate replacements
+        foreach (var player in replacementList)
+        {
+            ObjectId id = Helpers.CheckIdExistsInDocument(player);
+            replacementsDict.Add(id, player);
+        }
+        
         try
         {
             var filter = Builders<T>.Filter.Eq("_id", id);
-            var result = await Collection.ReplaceOneAsync(filter, replacement);
+            var result = await Collection.ReplaceOneAsync(filter, replacementList);
 
             if (result.MatchedCount.Equals(0))
             {
