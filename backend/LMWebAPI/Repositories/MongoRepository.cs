@@ -1,6 +1,8 @@
 ﻿using LMWebAPI.Repositories.Interfaces;
+using LMWebAPI.Resources;
 using MongoDB.Bson;
 using MongoDB.Driver;
+
 
 namespace LMWebAPI.Repositories;
 
@@ -45,7 +47,49 @@ public class MongoRepository<T> : IRepository<T>
         }
     }
     
-    public async Task<bool> ReplaceDocumentAsync(ObjectId id, T replacement)
+    public async Task<bool> ReplaceOneAsync(T replacement)
+    {
+        try
+        {
+            var idPropInfo = typeof(T).GetProperty("id");
+            if (idPropInfo == null)
+            {
+                throw new ArgumentException($"Property 'id' is not set in type {typeof(T)}.");
+            }
+
+            if (idPropInfo.GetValue(replacement) == null)
+            {
+                throw new ArgumentException($"'id' is null or empty.");
+            }
+            
+            var filter = Builders<T>.Filter.Eq("_id", idPropInfo.GetValue(replacement));
+            var result = await Collection.ReplaceOneAsync(filter, replacement);
+
+            if (result.MatchedCount.Equals(0))
+            {
+                throw new InvalidOperationException("No document matched the filter.");
+            }
+            
+            if (result.ModifiedCount.Equals(0))
+            {
+                throw new NoChangeException("Document was found but no changes were made.");
+            }
+        }
+        catch (MongoWriteException mwx)
+        {
+            throw new DatabaseException(
+                $"A write error occurred."
+                + $"\nMongoWriteException message: {mwx.Message}");
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+        
+        return true;
+    }
+
+    public async Task<bool> ReplaceManyAsync(List<T> replacement)
     {
         try
         {
@@ -54,15 +98,29 @@ public class MongoRepository<T> : IRepository<T>
 
             if (result.MatchedCount.Equals(0))
             {
-                throw new Exception("No document matched the filter. Did not perform replacement.");
+                throw new InvalidOperationException("No document matched the filter. Did not perform replacement.");
             }
-
-            return result.ModifiedCount > 0;
+            
+            if (result.ModifiedCount.Equals(0))
+            {
+                throw new NoChangeException("Document was found but no changes were made.");
+            }
         }
-        catch ()
+        catch (MongoWriteException mwx)
+        {
+            throw new DatabaseException(
+                $"A write error occurred while replacing the Player {id}. Did not perform replacement."
+                + $"\nMongoWriteException message: {mwx.Message}");
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+        
+        return true;
     }
-
-    public async Task DeleteAsync(ObjectId id)
+    
+    public async Task<bool> DeleteAsync(ObjectId id)
     {
         var filter = Builders<T>.Filter.Eq("_id", id);
         await Collection.DeleteOneAsync(filter);

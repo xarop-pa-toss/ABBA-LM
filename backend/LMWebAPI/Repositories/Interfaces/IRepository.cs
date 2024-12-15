@@ -7,7 +7,7 @@ public interface IRepository<T>
 {
     Task<T?> GetByIdAsync(ObjectId id);
     Task<List<T>> GetAllAsync();
-    Task<bool> AddAsync(T entity);
-    Task<bool> UpdateAsync(ObjectId Id, T entity);
-    Task<bool> DeleteAsync(ObjectId Id);
+    Task<bool> AddOneAsync(T entity);
+    Task<bool> ReplaceOneAsync(ObjectId id, T entity);
+    Task<bool> DeleteOneAsync(ObjectId id);
 }
