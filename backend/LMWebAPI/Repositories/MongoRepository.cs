@@ -26,15 +26,40 @@ public class MongoRepository<T> : IRepository<T>
         return await Collection.Find(filter).FirstOrDefaultAsync();
     }
 
-    public async Task AddAsync(T entity)
+    public async Task<bool> AddAsync(T entity)
     {
-        await Collection.InsertOneAsync(entity);
+        try
+        {
+            await Collection.InsertOneAsync(entity);
+            return true;
+        }
+        catch (MongoWriteException mwx) when (mwx.WriteError.Category == ServerErrorCategory.DuplicateKey)
+        {
+            Console.WriteLine("Duplicate key error: " + mwx.Message);
+            return false;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("An error occurred: " + ex.Message);
+            return false;
+        }
     }
-
-    public async Task UpdateAsync(ObjectId id, T entity)
+    
+    public async Task<bool> ReplaceDocumentAsync(ObjectId id, T replacement)
     {
-        var filter = Builders<T>.Filter.Eq("_id", id);
-        await Collection.ReplaceOneAsync(filter, entity);
+        try
+        {
+            var filter = Builders<T>.Filter.Eq("_id", id);
+            var result = await Collection.ReplaceOneAsync(filter, replacement);
+
+            if (result.MatchedCount.Equals(0))
+            {
+                throw new Exception("No document matched the filter. Did not perform replacement.");
+            }
+
+            return result.ModifiedCount > 0;
+        }
+        catch ()
     }
 
     public async Task DeleteAsync(ObjectId id)

@@ -24,4 +24,11 @@ public class PlayerController : ControllerBase
             return NotFound("No players found.");
         return Ok(players);
     }
+
+    // [HttpGet]
+    // public async Task<ActionResult<Player>> GetPlayerById(string id)
+    // {
+    //
+    // }
+    
 }

@@ -12,8 +12,8 @@ public class Team
     [BsonRepresentation(BsonType.ObjectId)]
     public required string UserId { get; set; }
 
-    [BsonElement("team_code")]
-    public required string TeamCode { get; set; }
+    [BsonElement("team_codename")]
+    public required string TeamCodename { get; set; }
 
     [BsonElement("players")]
     public List<TeamPlayer> Players { get; set; } = new List<TeamPlayer>();
