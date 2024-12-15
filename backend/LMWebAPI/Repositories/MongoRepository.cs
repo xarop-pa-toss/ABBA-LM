@@ -84,22 +84,42 @@ public class MongoRepository<T> : IRepository<T>
     public async Task<bool> ReplaceManyAsync(List<T> replacementList)
     {
         Dictionary <ObjectId, T> replacementsDict = new Dictionary <ObjectId, T>();
-        
-        // Validate replacements
-        foreach (var player in replacementList)
-        {
-            ObjectId id = Helpers.CheckIdExistsInDocument(player);
-            replacementsDict.Add(id, player);
-        }
+        Dictionary <ObjectId, T> existingDocsDict = new Dictionary <ObjectId, T>();
         
         try
         {
-            var filter = Builders<T>.Filter.Eq("_id", id);
-            var result = await Collection.ReplaceOneAsync(filter, replacementList);
-
-            if (result.MatchedCount.Equals(0))
+            // Replacements have their IDs validated and then are compared to matching documents in the DB
+            // This is done because Mongo Replace functions always run regardless of origin = replacement
+            foreach (var replacement in replacementList)
             {
-                throw new InvalidOperationException("No document matched the filter. Did not perform replacement.");
+                ObjectId id = Helpers.CheckIdExistsInDocument(replacement);
+                replacementsDict.Add(id, replacement);
+            }
+            
+            var existingDocsFilter = Builders<T>.Filter.In("_id", replacementsDict.Keys);
+            var existingDocsList = await Collection.Find(existingDocsFilter).ToListAsync();
+            existingDocsDict = existingDocsList.ToDictionary(x => Helpers.CheckIdExistsInDocument(x));
+
+            if (!existingDocsDict.Any())
+            {
+                throw new InvalidOperationException("No documents matched the filter.");
+            }
+
+            // Check if new docs values match the ones on the DB
+            foreach (var kvp in replacementsDict)
+            {
+                var id = kvp.Key;
+                var replacement = kvp.Value;
+                
+                if (existingDocsDict.TryGetValue(id, out var existingDoc)) 
+                {
+                    // Only replace if they don't match
+                    if (existingDoc.Equals(replacement)) continue;
+                    
+                    var replaceFilter = Builders<T>.Filter.Eq("_id", id);
+                    await Collection.ReplaceOneAsync(replaceFilter, replacement);
+                    Console.WriteLine($"Replaced document with ID: {id}");
+                }
             }
             
             if (result.ModifiedCount.Equals(0))
@@ -110,7 +130,7 @@ public class MongoRepository<T> : IRepository<T>
         catch (MongoWriteException mwx)
         {
             throw new DatabaseException(
-                $"A write error occurred while replacing the Player {id}. Did not perform replacement."
+                $"A write error occurred."
                 + $"\nMongoWriteException message: {mwx.Message}");
         }
         catch (Exception ex)
