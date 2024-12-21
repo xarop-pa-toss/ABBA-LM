@@ -129,16 +129,8 @@ public class MongoRepository<T> : IRepository<T>
         }
         catch (MongoWriteException mwx)
         {
-            throw new DatabaseException(
-                $"A write error occurred."
-                + $"\nMongoWriteException message: {mwx.Message}");
+            Helpers.HandleMongoWriteException(mwx);
         }
-        catch (Exception ex)
-        {
-            throw;
-        }
-        
-        return true;
     }
 
     public async Task<bool> DeleteAsync(ObjectId id)
