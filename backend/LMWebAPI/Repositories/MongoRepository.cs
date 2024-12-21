@@ -1,5 +1,7 @@
 ﻿using LMWebAPI.Repositories.Interfaces;
 using LMWebAPI.Resources;
+using LMWebAPI.Resources.Errors;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -18,70 +20,68 @@ public class MongoRepository<T> : IRepository<T>
     }
 
     public async Task<List<T>> GetAllAsync()
-    {       
-        return await Collection.Find(Builders<T>.Filter.Empty).ToListAsync(); 
+    {
+        var resultList = await Collection.Find(Builders<T>.Filter.Empty).ToListAsync();
+        if (resultList == null || resultList.Count == 0)
+        {
+            throw new NotFoundException("No results found.");
+        }
+        
+        return resultList;
     }
 
     public async Task<T?> GetByIdAsync(ObjectId id)
     {
         var filter = Builders<T>.Filter.Eq("_id", id);
-        return await Collection.Find(filter).FirstOrDefaultAsync();
+        var result = await Collection.Find(filter).FirstOrDefaultAsync();
+        if (result == null)
+        {
+            throw new NotFoundException("No result found.");
+        }
+
+        return result;
     }
 
-    public async Task<bool> AddAsync(T entity)
+    public async Task AddAsync(T entity)
     {
         try
         {
             await Collection.InsertOneAsync(entity);
-            return true;
         }
-        catch (MongoWriteException mwx) when (mwx.WriteError.Category == ServerErrorCategory.DuplicateKey)
+        catch (MongoWriteException mwx)
         {
-            Console.WriteLine("Duplicate key error: " + mwx.Message);
-            return false;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("An error occurred: " + ex.Message);
-            return false;
+            Helpers.HandleMongoWriteException(mwx);
         }
     }
     
-    public async Task<bool> ReplaceOneAsync(T replacement)
+    public async Task ReplaceOneAsync(T replacement)
     {
+        // Will throw ArgumentException if id property cannot be verified.
+        ObjectId id = Helpers.CheckIdExistsInDocument(replacement);
+        
+        var filter = Builders<T>.Filter.Eq("_id", id);
+        
         try
         {
-            // Will throw ArgumentException if id property cannot be verified.
-            ObjectId id = Helpers.CheckIdExistsInDocument(replacement);
-            
-            var filter = Builders<T>.Filter.Eq("_id", id);
-            var result = await Collection.ReplaceOneAsync(filter, replacement);
-
-            if (result.MatchedCount.Equals(0))
+            var operationResult = await Collection.ReplaceOneAsync(filter, replacement);
+        
+            if (operationResult.MatchedCount.Equals(0))
             {
-                throw new InvalidOperationException("No document matched the filter.");
+                throw new NotFoundException("No document matched the filter.");
             }
             
-            if (result.ModifiedCount.Equals(0))
+            if (operationResult.ModifiedCount.Equals(0))
             {
-                throw new NoChangeException("Document was found but no changes were made.");
+                throw new RepositoryError("Document was found but no changes were made.");
             }
         }
         catch (MongoWriteException mwx)
         {
-            throw new DatabaseException(
-                $"A write error occurred."
-                + $"\nMongoWriteException message: {mwx.Message}");
+            Helpers.HandleMongoWriteException(mwx);
         }
-        catch (Exception ex)
-        {
-            throw;
-        }
-        
-        return true;
     }
 
-    public async Task<bool> ReplaceManyAsync(List<T> replacementList)
+    public async Task ReplaceManyAsync(List<T> replacementList)
     {
         Dictionary <ObjectId, T> replacementsDict = new Dictionary <ObjectId, T>();
         Dictionary <ObjectId, T> existingDocsDict = new Dictionary <ObjectId, T>();
@@ -140,7 +140,7 @@ public class MongoRepository<T> : IRepository<T>
         
         return true;
     }
-    
+
     public async Task<bool> DeleteAsync(ObjectId id)
     {
         var filter = Builders<T>.Filter.Eq("_id", id);
