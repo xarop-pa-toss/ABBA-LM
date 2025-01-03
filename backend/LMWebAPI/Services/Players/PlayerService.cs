@@ -32,10 +32,9 @@ public class PlayerService
     #endregion
 
     #region CREATE
-    public async Task<Player> CreatePlayerAsync(Player player)
+    public async Task CreatePlayerAsync(Player player)
     {
-        var createResult = _playerRepository.AddAsync(player);
-        return await createResult;
+        await _playerRepository.AddOneAsync(player);
     }
     #endregion
     
