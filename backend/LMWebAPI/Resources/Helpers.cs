@@ -6,7 +6,7 @@ namespace LMWebAPI.Resources;
 
 public static class Helpers
 {
-    public static ObjectId CheckIdExistsInDocument<T>(T doc)
+    public static ObjectId GetIdIfExistsInDocument<T>(T doc)
     {
         var idPropInfo = typeof(T).GetProperty("_id");
         if (idPropInfo == null)
@@ -19,7 +19,6 @@ public static class Helpers
         {
             throw new ArgumentException($"'_id' is null or empty.");
         }
-        
         return (ObjectId)idValue;
     }
 

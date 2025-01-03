@@ -19,7 +19,7 @@ public class PlayerController : ControllerBase
     public async Task<ActionResult<List<Player>>> GetAllPlayers()
     {
         var players = await _playerService.GetAllPlayersAsync();
-
+        _playerService.
         if (players.Count == 0)
             return NotFound("No players found.");
         return Ok(players);

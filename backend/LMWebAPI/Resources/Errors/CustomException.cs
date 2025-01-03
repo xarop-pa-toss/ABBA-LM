@@ -25,3 +25,8 @@ public class RepositoryError(string message)
     : CustomException(StatusCodes.Status500InternalServerError, message)
 {
 }
+
+public class NoChangeException(string message)
+    : CustomException(StatusCodes.Status304NotModified, message)
+{
+}

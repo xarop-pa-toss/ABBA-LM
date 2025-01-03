@@ -12,6 +12,7 @@ public class PlayerService
         _playerRepository = playerRepository;
     }
     
+    #region GET
     public async Task<List<Player>> GetAllPlayersAsync()
     {
         return await _playerRepository.GetAllAsync();
@@ -19,15 +20,16 @@ public class PlayerService
 
     public async Task<List<Player>> GetPlayersByTeamIdAsync(ObjectId teamId)
     {
-        var players = _playerRepository.GetByTeamIdAsync(teamId);
-        return await players;
+        var players = await _playerRepository.GetByTeamIdAsync(teamId);
+        return players;
     }
 
     public async Task<Player> GetPlayerByIdAsync(ObjectId playerId)
     {
-        var player = _playerRepository.GetByIdAsync(playerId);
-        return await player;
+        var player = await _playerRepository.GetByIdAsync(playerId);
+        return player;
     }
+    #endregion
 
     #region CREATE
     public async Task<Player> CreatePlayerAsync(Player player)
