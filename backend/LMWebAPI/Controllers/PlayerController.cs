@@ -21,11 +21,11 @@ public class PlayerController : ControllerBase
         var players = await _playerService.GetAllPlayersAsync();
         if (players.Count == 0)
             return NotFound("No players found.");
-        return Ok(players);
+        return Ok(players);    
     }
 
     // [HttpGet]
-    // public async Task<ActionResult<Player>> GetPlayerById(string id)
+    // public async Task<ActionResult<Player>> GetPlayer(string id)
     // {
     //
     // }

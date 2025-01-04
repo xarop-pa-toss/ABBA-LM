@@ -4,6 +4,7 @@ using LMWebAPI.Resources.Errors;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using ZstdSharp;
 
 
 namespace LMWebAPI.Repositories;
@@ -24,7 +25,7 @@ public class MongoRepository<T> : IRepository<T>
         var resultList = await Collection.Find(Builders<T>.Filter.Empty).ToListAsync();
         if (resultList == null || resultList.Count == 0)
         {
-            throw new NotFoundException("No results found.");
+            throw new ProblemNotFoundException("No results found.");
         }
         
         return resultList;
@@ -36,7 +37,7 @@ public class MongoRepository<T> : IRepository<T>
         var result = await Collection.Find(filter).FirstOrDefaultAsync();
         if (result == null)
         {
-            throw new NotFoundException("No result found.");
+            throw new ProblemNotFoundException("No result found.");
         }
         
         return result;
@@ -66,12 +67,12 @@ public class MongoRepository<T> : IRepository<T>
 
             if (operationResult.MatchedCount.Equals(0))
             {
-                throw new NotFoundException("No document matched the filter.");
+                throw new ProblemNotFoundException("No document matched the filter.");
             }
 
             if (operationResult.ModifiedCount.Equals(0))
             {
-                throw new RepositoryError("Document was found but no changes were made.");
+                throw new ProblemDatabaseException("Document was found but no changes were made.");
             }
         }
         catch (MongoWriteException mwx)
@@ -130,7 +131,7 @@ public class MongoRepository<T> : IRepository<T>
                                 
             if (operationResult == null || operationResult.ModifiedCount.Equals(0))
             {
-                throw new NoChangeException("Document was found but no changes were made.");
+                throw new ProblemNoChangeException("Document was found but no changes were made.");
             }
         }
         catch (MongoWriteException mwx)

@@ -1,7 +1,10 @@
 using LMWebAPI.Models;
 using LMWebAPI.Repositories;
+using LMWebAPI.Resources.Errors;
 using LMWebAPI.Services.Players;
 using LMWebAPI.Services.Teams;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http.Features;
 using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,11 +36,29 @@ builder.Services.AddScoped<PlayerSkillService>();
 builder.Services.AddScoped<TeamService>();
 
 builder.Services.AddControllers();
+#endregion
+
+// Add Global Error Handling services
+builder.Services.AddProblemDetails(options =>
+{
+    options.CustomizeProblemDetails = context =>
+    {
+        context.ProblemDetails.Instance =
+            $"{context.HttpContext.Request.Method} {context.HttpContext.Request.Path}";
+
+        context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier);
+
+        var activity = context.HttpContext.Features.Get<IHttpActivityFeature>()?.Activity;
+        context.ProblemDetails.Extensions.TryAdd("traceId", activity?.Id);
+    };
+});
+
+builder.Services.AddExceptionHandler<ProblemExceptionHandler>();
 
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-#endregion
+
 
 var app = builder.Build();
 
@@ -48,6 +69,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();   
 }
 #endregion
+
+app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
 
