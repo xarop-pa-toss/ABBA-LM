@@ -1,10 +1,14 @@
+using System.Text;
+using LMWebAPI.Identity;
 using LMWebAPI.Models;
 using LMWebAPI.Repositories;
 using LMWebAPI.Resources.Errors;
 using LMWebAPI.Services.Players;
 using LMWebAPI.Services.Teams;
-using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Identity.Data;
 using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,14 +35,15 @@ builder.Services.AddScoped<IMongoDatabase>(sp =>
 builder.Services.AddScoped<PlayerRepository<Player>>();
 
 // Add Services
+builder.Services.AddSingleton<JwtGenerator>();
 builder.Services.AddScoped<PlayerService>();
 builder.Services.AddScoped<PlayerSkillService>();
 builder.Services.AddScoped<TeamService>();
-
-builder.Services.AddControllers();
 #endregion
+builder.Services.AddControllers();
 
-// Add Global Error Handling services
+#region Middleware
+// Add Global Error Handling
 builder.Services.AddProblemDetails(options =>
 {
     options.CustomizeProblemDetails = context =>
@@ -52,13 +57,35 @@ builder.Services.AddProblemDetails(options =>
         context.ProblemDetails.Extensions.TryAdd("traceId", activity?.Id);
     };
 });
-
 builder.Services.AddExceptionHandler<ProblemExceptionHandler>();
 
+// Swagger and OpenAPI
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// JWT
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true, 
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]
+            ))
+        };
+    });
+builder.Services.AddAuthorization();
+#endregion
 
 var app = builder.Build();
 
@@ -71,10 +98,20 @@ if (app.Environment.IsDevelopment())
 #endregion
 
 app.UseExceptionHandler();
-
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+app.UseAuthentication();
+
+app.MapPost("/login", (LoginRequest request, JwtGenerator jwtGenerator) =>
+{
+    var credentialsVerification = new IdentityService(request);
+    
+    return new
+    {
+        access_token = jwtGenerator.GenerateToken(request.Email)
+    }
+}
 
 app.MapControllers();
 

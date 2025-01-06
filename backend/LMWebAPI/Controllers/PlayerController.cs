@@ -1,9 +1,14 @@
 ﻿using LMWebAPI.Models;
 using LMWebAPI.Services.Players;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 
 namespace LMWebAPI.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/players")]
 public class PlayerController : ControllerBase
