@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity.Data;
 using MongoDB.Driver;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -58,11 +59,7 @@ builder.Services.AddProblemDetails(options =>
     };
 });
 builder.Services.AddExceptionHandler<ProblemExceptionHandler>();
-
-// Swagger and OpenAPI
 builder.Services.AddOpenApi();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 // JWT
 builder.Services.AddAuthentication(options =>
@@ -89,29 +86,27 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-#region Environment settings
+#region  Scalar (OpenAPI Documentation)
+app.MapOpenApi();
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();   
+    app.MapScalarApiReference();
 }
 #endregion
+
+// #region Environment settings
+// if (app.Environment.IsDevelopment())
+// {
+//     app.UseSwagger();
+//     app.UseSwaggerUI();   
+// }
+// #endregion
 
 app.UseExceptionHandler();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 app.UseAuthentication();
-
-app.MapPost("/login", (LoginRequest request, JwtGenerator jwtGenerator) =>
-{
-    var credentialsVerification = new IdentityService(request);
-    
-    return new
-    {
-        access_token = jwtGenerator.GenerateToken(request.Email)
-    }
-}
 
 app.MapControllers();
 
