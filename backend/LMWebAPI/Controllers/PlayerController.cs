@@ -37,7 +37,7 @@ public class PlayerController : ControllerBase
             throw new ProblemNotFoundException("Player ID is not a valid ID.");
         }
         
-        var player = await _playerService.GetPlayerByIdAsync(id);
+        var player = await _playerService.GetByPlayerIdAsync(id);
         return Ok(player);    
     }
 
@@ -49,15 +49,15 @@ public class PlayerController : ControllerBase
             throw new ProblemNotFoundException("Team ID is not a valid ID.");
         }
         
-        var players = await _playerService.GetPlayersByTeamIdAsync(id);
+        var players = await _playerService.GetByTeamIdAsync(id);
         return Ok(players);    
     }
 
     [HttpPost]
     public async Task<ActionResult<Player>> AddPlayer([FromBody] Player player)
     {
-        var result = await _playerService.AddPlayerAsync()
-            //
+        await _playerService.AddPlayerAsync(player);
+        return Ok(player);
     }
     
 }
