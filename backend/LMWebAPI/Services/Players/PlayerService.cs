@@ -12,30 +12,43 @@ public class PlayerService
         _playerRepository = playerRepository;
     }
     
+    
     #region GET
-    public async Task<List<Player>> GetAllPlayersAsync()
+    public async Task<List<Player>> GetAllAsync()
     {
         return await _playerRepository.GetAllAsync();
     }
-
-    public async Task<List<Player>> GetPlayersByTeamIdAsync(ObjectId teamId)
+    
+    public async Task<List<Player>> GetByTeamIdAsync(ObjectId teamId)
     {
         var players = await _playerRepository.GetByTeamIdAsync(teamId);
         return players;
     }
-
-    public async Task<Player> GetPlayerByIdAsync(ObjectId playerId)
+    
+    public async Task<Player> GetByPlayerIdAsync(ObjectId playerId)
     {
         var player = await _playerRepository.GetByIdAsync(playerId);
         return player;
     }
     #endregion
-
-    #region CREATE
-    public async Task CreatePlayerAsync(Player player)
+    
+    public async Task AddPlayerAsync(Player player)
     {
         await _playerRepository.AddOneAsync(player);
     }
-    #endregion
     
+    public async Task UpdatePlayerAsync(Player player)
+    {
+        await _playerRepository.ReplaceOneAsync(player);
+    }
+    
+    public async Task UpdatePlayersAsync(List<Player> players)
+    {
+        await _playerRepository.ReplaceManyAsync(players);
+    }
+
+    public async Task DeletePlayerAsync(ObjectId playerId)
+    {
+        await _playerRepository.DeleteOneAsync(playerId);
+    }
 }
