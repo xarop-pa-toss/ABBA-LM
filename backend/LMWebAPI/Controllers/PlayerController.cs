@@ -25,7 +25,7 @@ public class PlayerController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<Player>>> GetAllPlayers()
     {
-        var players = await _playerService.GetAllPlayersAsync();
+        var players = await _playerService.GetAllAsync();
         return Ok(players);    
     }
     
