@@ -11,7 +11,7 @@ public static class Helpers
         var idPropInfo = typeof(T).GetProperty("_id");
         if (idPropInfo == null)
         {
-            throw new ArgumentException($"Property '_id' is not set in type {typeof(T)}.");
+            throw new ArgumentException($"Property '_id' is not set in object of type {typeof(T)}.");
         }
 
         var idValue = idPropInfo.GetValue(doc);

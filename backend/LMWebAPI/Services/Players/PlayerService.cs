@@ -6,12 +6,11 @@ namespace LMWebAPI.Services.Players;
 
 public class PlayerService
 {
-    private readonly PlayerRepository<Player> _playerRepository;
-    public PlayerService(PlayerRepository<Player> playerRepository)
+    private readonly PlayerRepository _playerRepository;
+    public PlayerService(PlayerRepository playerRepository)
     {
         _playerRepository = playerRepository;
     }
-    
     
     #region GET
     public async Task<List<Player>> GetAllAsync()
@@ -25,6 +24,12 @@ public class PlayerService
         return players;
     }
     
+    public async Task<List<Player>> GetByTeamNameAsync(string teamName)
+    {
+        var players = await _playerRepository.GetByTeamNameAsync(teamName);
+        return players;
+    }
+    
     public async Task<Player> GetByPlayerIdAsync(ObjectId playerId)
     {
         var player = await _playerRepository.GetByIdAsync(playerId);
@@ -32,22 +37,29 @@ public class PlayerService
     }
     #endregion
     
-    public async Task AddPlayerAsync(Player player)
+    public async Task AddOneAsync(Player player)
     {
         await _playerRepository.AddOneAsync(player);
     }
     
-    public async Task UpdatePlayerAsync(Player player)
+    public async Task AddManyAsync(Player player)
+    {
+        // Uses "Distributed Transaction" to cancel all changes if an error occurs https://www.mongodb.com/docs/manual/core/transactions/
+        
+        await _playerRepository.AddOneAsync(player);
+    }
+    
+    public async Task ReplaceOneAsync(Player player)
     {
         await _playerRepository.ReplaceOneAsync(player);
     }
     
-    public async Task UpdatePlayersAsync(List<Player> players)
+    public async Task ReplaceManyAsync(List<Player> players)
     {
         await _playerRepository.ReplaceManyAsync(players);
     }
 
-    public async Task DeletePlayerAsync(ObjectId playerId)
+    public async Task DeleteOneAsync(ObjectId playerId)
     {
         await _playerRepository.DeleteOneAsync(playerId);
     }

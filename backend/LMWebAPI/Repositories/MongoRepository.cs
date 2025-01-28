@@ -13,11 +13,13 @@ public class MongoRepository<T> : IRepository<T>
 {
     protected readonly IMongoDatabase Database;
     protected readonly IMongoCollection<T> Collection;
+    protected readonly IMongoClient Client;
 
-    public MongoRepository(IMongoDatabase database, string collectionName)
+    public MongoRepository(IMongoDatabase database, string collectionName, IMongoClient client)
     {
         Database = database;
         Collection = Database.GetCollection<T>(collectionName);
+        Client = client;
     }
 
     public async Task<List<T>> GetAllAsync()

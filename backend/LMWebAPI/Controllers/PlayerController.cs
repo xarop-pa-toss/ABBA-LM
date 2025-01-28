@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
+using MongoDB.Driver;
 
 
 namespace LMWebAPI.Controllers;
@@ -23,14 +24,14 @@ public class PlayerController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<ActionResult<List<Player>>> GetAllPlayers()
+    public async Task<ActionResult<List<Player>>> GetAll()
     {
-        var players = await _playerService.GetAllPlayersAsync();
+        var players = await _playerService.GetAllAsync();
         return Ok(players);    
     }
     
     [HttpGet]
-    public async Task<ActionResult<Player>> GetPlayerById([FromBody]string playerId)
+    public async Task<ActionResult<Player>> GetById([FromBody]string playerId)
     {
         if (!ObjectId.TryParse(playerId, out ObjectId id))
         {
@@ -54,9 +55,23 @@ public class PlayerController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Player>> AddPlayer([FromBody] Player player)
+    public async Task<ActionResult<Player>> AddOne([FromBody] Player player)
     {
-        await _playerService.AddPlayerAsync(player);
+        await _playerService.AddOneAsync(player);
+        return Ok(player);
+    }
+    
+    [HttpPost]
+    public async Task<ActionResult<Player>> AddMany([FromBody] Player player)
+    {
+        await _playerService.AddManyAsync(player);
+        return Ok(player);
+    }
+
+    [HttpPut]
+    public async Task<ActionResult<Player>> UpdatePlayer([FromBody] Player player)
+    {
+        await _playerService.UpdatePlayerAsync(player);
         return Ok(player);
     }
     
