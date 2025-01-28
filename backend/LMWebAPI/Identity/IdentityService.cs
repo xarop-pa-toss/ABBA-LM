@@ -3,16 +3,20 @@ using LMWebAPI.Repositories;
 using LMWebAPI.Resources.Errors;
 using MongoDB.Driver;
 using BCrypt.Net;
+using LMWebAPI.Models;
 using LMWebAPI.Models.DTOs;
 
 namespace LMWebAPI.Identity;
 
-public class IdentityService<T>(IMongoDatabase database) : MongoRepository<T>(database, "users")
+public class IdentityService : MongoRepository<User>
 {
-    public async Task<IdentityService<T>> ValidateUserCredentials(LoginRequest loginRequest)
+    public IdentityService(IMongoDatabase database, IMongoClient client) : base(database, "users", client)
     {
-        var filter = Builders<T>.Filter.Eq("email", loginRequest.Email);
-        var projection = Builders<T>.Projection.Include("email");
+    }
+    public async Task<IdentityService> ValidateUserCredentials(LoginRequest loginRequest)
+    {
+        var filter = Builders<User>.Filter.Eq("email", loginRequest.Email);
+        var projection = Builders<User>.Projection.Include("email");
         
         var user = await Collection.Find(filter).Project(projection).FirstOrDefaultAsync();
         if (user is not null)

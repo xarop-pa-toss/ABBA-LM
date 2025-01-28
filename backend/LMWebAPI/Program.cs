@@ -1,6 +1,5 @@
 using System.Text;
 using LMWebAPI.Identity;
-using LMWebAPI.Models;
 using LMWebAPI.Repositories;
 using LMWebAPI.Resources.Errors;
 using LMWebAPI.Services.Players;
@@ -8,7 +7,6 @@ using LMWebAPI.Services.Teams;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.Identity.Data;
 using MongoDB.Driver;
 using Scalar.AspNetCore;
 
@@ -29,11 +27,13 @@ builder.Services.AddScoped<IMongoDatabase>(sp =>
     var client = sp.GetRequiredService<IMongoClient>();
     return client.GetDatabase(builder.Configuration["MONGO_DATABASE_NAME"]);
 });
+
+builder.Services.AddScoped(typeof(MongoRepository<>));
 #endregion
 
 #region Controllers / Services / Repositories
 // Add Repositories
-builder.Services.AddScoped<PlayerRepository<Player>>();
+builder.Services.AddScoped<PlayerRepository>();
 
 // Add Services
 builder.Services.AddSingleton<JwtGenerator>();
@@ -93,14 +93,6 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 #endregion
-
-// #region Environment settings
-// if (app.Environment.IsDevelopment())
-// {
-//     app.UseSwagger();
-//     app.UseSwaggerUI();   
-// }
-// #endregion
 
 app.UseExceptionHandler();
 app.UseHttpsRedirection();
