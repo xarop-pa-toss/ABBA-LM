@@ -62,17 +62,25 @@ public class PlayerController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<ActionResult<Player>> AddMany([FromBody] Player player)
+    public async Task<ActionResult<List<Player>>> AddMany([FromBody] List<Player> players)
     {
-        await _playerService.AddManyAsync(player);
+        await _playerService.AddManyAsync(players);
+        return Ok(players);
+    }
+    
+    [HttpPut]
+    public async Task<ActionResult<Player>> UpdatePlayer([FromBody] Player player)
+    {
+        await _playerService.ReplaceOneAsync(player);
         return Ok(player);
     }
 
     [HttpPut]
-    public async Task<ActionResult<Player>> UpdatePlayer([FromBody] Player player)
+    public async Task<ActionResult<List<Player>>> UpdateMany([FromBody] List<Player> players)
     {
-        await _playerService.UpdatePlayerAsync(player);
-        return Ok(player);
+        await _playerService.ReplaceManyAsync(players);
+        return Ok(players);
     }
-    
+
+
 }

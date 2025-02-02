@@ -1,6 +1,7 @@
 using LMWebAPI.Models;
 using LMWebAPI.Repositories;
 using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace LMWebAPI.Services.Players;
 
@@ -42,10 +43,8 @@ public class PlayerService
         await _playerRepository.AddOneAsync(player);
     }
     
-    public async Task AddManyAsync(Player player)
+    public async Task AddManyAsync(List<Player> players)
     {
-        // Uses "Distributed Transaction" to cancel all changes if an error occurs https://www.mongodb.com/docs/manual/core/transactions/
-        
         await _playerRepository.AddOneAsync(player);
     }
     

@@ -44,6 +44,7 @@ public class MongoRepository<T> : IRepository<T>
         
         return result;
     }
+    
 
     public async Task AddOneAsync(T entity)
     {
@@ -56,6 +57,34 @@ public class MongoRepository<T> : IRepository<T>
             Helpers.HandleMongoWriteException(mwx);
         }
     }
+    public async Task AddManyAsync(List<T> docList)
+    {
+        using var session = Client.StartSession();
+        {
+            CancellationToken cancellationToken = CancellationToken.None;
+            await session.WithTransactionAsync(
+                async (sessionHandle, cToken) =>
+                {
+                    try
+                    {
+                        foreach (var document in docList)
+                        {
+                            cancellationToken.ThrowIfCancellationRequested();
+                            Collection.InsertOneAsync(sessionHandle, document);
+                        }
+                    }
+                    catch (MongoWriteException mwx)
+                    {
+                        Helpers.HandleMongoWriteException(mwx);
+                        throw;
+                    }
+
+                    return true;
+                },
+                cancellationToken: cancellationToken);
+        }
+    }
+    
     
     public async Task ReplaceOneAsync(T replacement)
     {
@@ -141,6 +170,7 @@ public class MongoRepository<T> : IRepository<T>
             Helpers.HandleMongoWriteException(mwx);
         }
     }
+    
 
     public async Task DeleteOneAsync(ObjectId id)
     {
