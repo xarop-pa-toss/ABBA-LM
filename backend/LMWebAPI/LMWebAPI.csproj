@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>4a1db45f-ca4b-4ea4-96c7-4c0434256d80</UserSecretsId>
+    <AssemblyVersion>v1</AssemblyVersion>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,6 +31,16 @@
     <_ContentIncludedByDefault Remove="Models\MongoSchemas\teams_built.json" />
     <_ContentIncludedByDefault Remove="Models\MongoSchemas\team_templates.json" />
     <_ContentIncludedByDefault Remove="Models\MongoSchemas\users.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\.dockerignore">
+      <Link>.dockerignore</Link>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BloodTourney\BloodTourney.csproj" />
   </ItemGroup>
 
 </Project>

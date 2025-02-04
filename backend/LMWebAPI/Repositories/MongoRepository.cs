@@ -57,7 +57,7 @@ public class MongoRepository<T> : IRepository<T>
             Helpers.HandleMongoWriteException(mwx);
         }
     }
-    public async Task AddManyAsync(List<T> docList)
+    public async Task AddManyAsync(IEnumerable<T> docList)
     {
         using var session = Client.StartSession();
         {

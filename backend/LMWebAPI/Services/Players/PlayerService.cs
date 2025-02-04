@@ -45,7 +45,7 @@ public class PlayerService
     
     public async Task AddManyAsync(List<Player> players)
     {
-        await _playerRepository.AddOneAsync(player);
+        await _playerRepository.AddManyAsync(players);
     }
     
     public async Task ReplaceOneAsync(Player player)

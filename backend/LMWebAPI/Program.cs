@@ -1,4 +1,5 @@
 using System.Text;
+using BloodTourney.Core;
 using LMWebAPI.Identity;
 using LMWebAPI.Repositories;
 using LMWebAPI.Resources.Errors;
@@ -29,6 +30,7 @@ builder.Services.AddScoped<IMongoDatabase>(sp =>
 });
 
 builder.Services.AddScoped(typeof(MongoRepository<>));
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
 #endregion
 
 #region Controllers / Services / Repositories
@@ -36,6 +38,9 @@ builder.Services.AddScoped(typeof(MongoRepository<>));
 builder.Services.AddScoped<PlayerRepository>();
 
 // Add Services
+//From BloodTourney
+builder.Services.AddScoped<TournamentService>();
+//
 builder.Services.AddSingleton<JwtGenerator>();
 builder.Services.AddScoped<PlayerService>();
 builder.Services.AddScoped<PlayerSkillService>();

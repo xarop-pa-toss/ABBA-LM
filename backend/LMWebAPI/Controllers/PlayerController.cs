@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
-
 namespace LMWebAPI.Controllers;
 
 [Authorize]
@@ -69,7 +68,7 @@ public class PlayerController : ControllerBase
     }
     
     [HttpPut]
-    public async Task<ActionResult<Player>> UpdatePlayer([FromBody] Player player)
+    public async Task<ActionResult<Player>> UpdateOne([FromBody] Player player)
     {
         await _playerService.ReplaceOneAsync(player);
         return Ok(player);
