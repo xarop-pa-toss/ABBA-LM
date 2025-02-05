@@ -18,7 +18,8 @@ public class Team
     [BsonElement("players")]
     public List<TeamPlayer> Players { get; set; } = new List<TeamPlayer>();
 
-    [BsonElement("name")] public required string Name { get; set; } = "Not Named";
+    [BsonElement("name")]
+    public required string Name { get; set; } = "Not Named";
 }
 
 public class TeamPlayer

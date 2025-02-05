@@ -2,5 +2,8 @@
 
 public class CreateTournament(string name)
 {
-    
+    public TournamentService()
+    {
+
+    }
 }

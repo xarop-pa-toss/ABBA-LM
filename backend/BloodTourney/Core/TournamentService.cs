@@ -2,14 +2,11 @@
 
 namespace BloodTourney.Core;
 
-
 public class TournamentService
 {
-    private readonly IMongoCollection<Tournament> _tournamentCollection;
-
-    public TournamentService(IMongoDatabase database)
+    public TournamentService()
     {
-        _tournamentCollection = database.GetCollection<Tournament>("tournaments");
+        
     }
 
     public async Task CreateTournament(Tournament tournament)
