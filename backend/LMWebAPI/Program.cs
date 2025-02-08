@@ -12,6 +12,7 @@ using MongoDB.Driver;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddEnvironmentVariables();
 
 // This solution uses User Secrets, a .NET feature that can be created with "dotnet user-secrets init".
 // It only works in development environment which is set with "set ASPNETCORE_ENVIRONMENT=Development".
@@ -19,6 +20,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<IMongoClient>(sp =>
 {
+    Console.WriteLine(builder.Configuration["MONGO_CONNECTION_STRING_DEV"] + " - " + builder.Configuration["MONGO_DATABASE_NAME"]);
     var connectionString = builder.Configuration["MONGO_CONNECTION_STRING_DEV"];
     return new MongoClient(connectionString);
 });
@@ -39,7 +41,7 @@ builder.Services.AddScoped<PlayerRepository>();
 
 // Add Services
 //From BloodTourney
-builder.Services.AddScoped<TournamentService>();
+
 //
 builder.Services.AddSingleton<JwtGenerator>();
 builder.Services.AddScoped<PlayerService>();
@@ -67,25 +69,25 @@ builder.Services.AddExceptionHandler<ProblemExceptionHandler>();
 builder.Services.AddOpenApi();
 
 // JWT
-builder.Services.AddAuthentication(options =>
-    {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true, 
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-        };
-    });
-builder.Services.AddAuthorization();
+// builder.Services.AddAuthentication(options =>
+//     {
+//         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+//         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+//     })
+//     .AddJwtBearer(options =>
+//     {
+//         options.TokenValidationParameters = new TokenValidationParameters
+//         {
+//             ValidateIssuer = true,
+//             ValidateAudience = true,
+//             ValidateLifetime = true,
+//             ValidateIssuerSigningKey = true, 
+//             ValidIssuer = builder.Configuration["Jwt:Issuer"],
+//             ValidAudience = builder.Configuration["Jwt:Audience"],
+//             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+//         };
+//     });
+// builder.Services.AddAuthorization();
 #endregion
 
 var app = builder.Build();

@@ -26,7 +26,7 @@ public class TeamPlayer
 {
     [BsonElement("player_id")]
     [BsonRepresentation(BsonType.ObjectId)]
-    public required string PlayerId { get; set; }
+    public required string PlayerId { get; set; } 
 
     [BsonElement("list_position")]
     public required int ListPosition { get; set; }

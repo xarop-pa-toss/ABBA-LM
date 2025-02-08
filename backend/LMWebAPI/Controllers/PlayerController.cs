@@ -8,9 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
+
 namespace LMWebAPI.Controllers;
 
-[Authorize]
+// [Authorize]
 [ApiController]
 [Route("api/[controller]/[action]")]
 public class PlayerController : ControllerBase
