@@ -23,8 +23,9 @@ public class ProblemException : Exception
 
 public class ProblemNotFoundException : ProblemException
 {
+    private const string DefaultError = "Not Found";
     public ProblemNotFoundException(string message)
-        : base(StatusCodes.Status404NotFound, "Not Found", message)
+        : base(StatusCodes.Status404NotFound, DefaultError, message)
     {
     }
 
