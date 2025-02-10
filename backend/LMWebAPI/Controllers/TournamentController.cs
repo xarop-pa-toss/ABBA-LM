@@ -1,12 +1,4 @@
-﻿using LMWebAPI.Models;
-using LMWebAPI.Resources.Errors;
-using LMWebAPI.Services.Players;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
-using MongoDB.Driver;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace LMWebAPI.Controllers;
 
