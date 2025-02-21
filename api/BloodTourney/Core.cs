@@ -1,6 +1,6 @@
 ﻿namespace BloodTourney;
 
-public class Core  
+public partial class Core  
 {
     public struct BaseParameters
     {
@@ -9,30 +9,41 @@ public class Core
         /// </summary>
         public string TournamentOrganizerId { get; set; }
         /// <summary>
-        /// Display name for the Tournament. Duplicate named tournaments should not exist.
+        /// Display name of the Tournament. Duplicate named tournaments are not advised.
         /// </summary>
         public string TournamentName { get; set;}
         public int PlayerLimit { get; set;}
         public DateTime StartDate { get; set;}
         /// <summary>
-        /// No geolocation, just an arbitrary string.
+        /// Arbitrary string for locale, no geolocation involved.
         /// </summary>
         public string Location { get; set;}
-        /// <summary>
-        /// Round progression format. eg. Round Robin, Swiss, etc
-        /// </summary>
-        public TournamentFormats TournamentFormat { get; set; }
         /// <summary>
         /// Rulesets do not influence Tournament Format
         /// </summary>
         public Rulesets Ruleset { get; set; }
+        /// <summary>
+        /// Round progression format. e.g. Round Robin, Swiss, etc
+        /// </summary>
+        public TournamentFormats TournamentFormat { get; set; }
     }
-    public enum Rulesets
+
+    
+    
+    public enum TournamentFormats
     {
-        BloodBowl2020,
-        SardineBowl2025,
-        EuroBowl2025,
-        Custom
+        RoundRobin,
+        Swiss,
+        SingleElimination,
+        DoubleElimination,
+        KingOfTheHill
+    }
+
+    public enum SkillStacks
+    {
+        None,
+        OnlyPrimaries,
+        AllSkills
     }
 
     public struct RulesParameters
@@ -47,46 +58,28 @@ public class Core
         /// Otherwise, it is converted into Prayers To Nuffle.
         /// </summary>
         public bool UnspentCashConvertedToPrayers { get; set; }
-        
-        /// <summary>
-        /// 0 - No skill stacking allowed
-        /// 1 - Primary skills only
-        /// 2 - Secondary skills only
-        /// 3 - Both
-        /// </summary>
-        public SkillStack SkillStacking { get; set; }
         /// <summary>
         /// Any injury or death suffered by a player will be cleared after each match, and each coach will start their matches with the registered rosters.
         /// </summary>
         public bool RessurectionMode { get; set;}
+        
+        public SkillStacks SkillStacking { get; set; }
         /// <summary>
         /// Defines the rounds format for the tournament.
         /// Some formats might be non-eliminatory such as Round Robin, while others will cause the team to not proceed if they lose.
         /// </summary>
         public TournamentFormats TournamentFormat { get; set; }
+        
         /// <summary>
         /// If false, first round will be randomized as per the chosen format in TournamentFormat
         /// </summary>
         public bool FirstRoundRandomSort { get; set;}
     }
-    public eny
-
-    public enum TournamentFormats
-    {
-        RoundRobin,
-        Swiss,
-        SingleElimination,
-        DoubleElimination,
-        KingOfTheHill
-    }
     public struct FormatParameters
     {
         private 
-        
     }
-
-
-
+    
     private RulesParameters BloodBowl2020 = new RulesParameters()
     {
         TournamentOrganizerId = "",
