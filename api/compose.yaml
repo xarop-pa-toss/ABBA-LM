@@ -1,0 +1,18 @@
+﻿services:
+  bloodtourneyapi:
+    image: bloodtourneyapi
+    build:
+      context: .
+      dockerfile: BloodTourneyAPI/Dockerfile
+
+  lmwebapi:
+    image: lmwebapi
+    build:
+      context: .
+      dockerfile: LMWebAPI/Dockerfile
+
+  lmwebapi-1:
+    image: lmwebapi-1
+    build:
+      context: .
+      dockerfile: LMWebAPI/Dockerfile

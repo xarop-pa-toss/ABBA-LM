@@ -1,0 +1,74 @@
+﻿{
+  "$jsonSchema": {
+    "bsonType": "object",
+    "description": "Schema for the PlayerTemplate collection.",
+    "required": [
+      "_id",
+      "team_code",
+      "position",
+      "cost",
+      "stats",
+      "rank_description"
+    ],
+    "properties": {
+      "_id": {
+        "bsonType": "objectId",
+        "description": "Unique identifier for the player template."
+      },
+      "team_code": {
+        "bsonType": "string",
+        "description": "Code representing the team type for this template."
+      },
+      "position": {
+        "bsonType": "string",
+        "enum": ["Blitzer", "Thrower", "Catcher", "Lineman", "StarPlayer"],
+        "description": "Position of the player in the template."
+      },
+      "cost": {
+        "bsonType": "int",
+        "description": "Cost of the player template."
+      },
+      "stats": {
+        "bsonType": "object",
+        "description": "Stats for the player template.",
+        "required": ["movement", "strength", "agility", "armor"],
+        "properties": {
+          "movement": {
+            "bsonType": "int",
+            "description": "Movement stat for the player template."
+          },
+          "strength": {
+            "bsonType": "int",
+            "description": "Strength stat for the player template."
+          },
+          "agility": {
+            "bsonType": "int",
+            "description": "Agility stat for the player template."
+          },
+          "armor": {
+            "bsonType": "int",
+            "description": "Armor stat for the player template."
+          }
+        }
+      },
+      "skills": {
+        "bsonType": "array",
+        "description": "List of default skills for the player template.",
+        "items": {
+          "bsonType": "string"
+        }
+      },
+      "injuries": {
+        "bsonType": "array",
+        "description": "List of default injuries for the player template.",
+        "items": {
+          "bsonType": "string"
+        }
+      },
+      "rank_description": {
+        "bsonType": "string",
+        "description": "Description of the rank for this template."
+      }
+    }
+  }
+}

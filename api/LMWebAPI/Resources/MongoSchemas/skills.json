@@ -1,0 +1,33 @@
+﻿{
+  "$jsonSchema": {
+    "bsonType": "object",
+    "description": "Schema for the Skill collection.",
+    "required": ["_id", "type", "code", "name", "is_special_trait"],
+    "properties": {
+      "_id": {
+        "bsonType": "objectId",
+        "description": "Unique identifier for the skill."
+      },
+      "type": {
+        "bsonType": "string",
+        "description": "Type of the skill (e.g., passing, blocking, agility)."
+      },
+      "code": {
+        "bsonType": "string",
+        "description": "Short code representing the skill."
+      },
+      "name": {
+        "bsonType": "string",
+        "description": "Name of the skill."
+      },
+      "is_special_trait": {
+        "bsonType": "bool",
+        "description": "Indicates whether the skill is a special trait."
+      },
+      "description": {
+        "bsonType": "string",
+        "description": "Detailed description of the skill."
+      }
+    }
+  }
+}

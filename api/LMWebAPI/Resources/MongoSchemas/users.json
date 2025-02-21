@@ -1,0 +1,33 @@
+﻿{
+  "$jsonSchema": {
+    "bsonType": "object",
+    "description": "Schema for the User collection.",
+    "required": ["_id", "username", "first_name", "last_name", "password", "password_salt"],
+    "properties": {
+      "_id": {
+        "bsonType": "objectId",
+        "description": "Unique identifier for the user."
+      },
+      "username": {
+        "bsonType": "string",
+        "description": "Username for the user account."
+      },
+      "first_name": {
+        "bsonType": "string",
+        "description": "First name of the user."
+      },
+      "last_name": {
+        "bsonType": "string",
+        "description": "Last name of the user."
+      },
+      "password": {
+        "bsonType": "string",
+        "description": "Hashed password for the user account."
+      },
+      "password_salt": {
+        "bsonType": "string",
+        "description": "Salt used for hashing the password."
+      }
+    }
+  }
+}

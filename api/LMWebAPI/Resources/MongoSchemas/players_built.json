@@ -1,0 +1,93 @@
+﻿{
+  "$jsonSchema": {
+    "bsonType": "object",
+    "description": "Schema for the Player collection.",
+    "required": [
+      "_id",
+      "team_id",
+      "name",
+      "position",
+      "stats",
+      "spp_available",
+      "spp_spent",
+      "rank",
+      "value"
+    ],
+    "properties": {
+      "_id": {
+        "bsonType": "objectId",
+        "description": "Unique identifier for the player document."
+      },
+      "team_id": {
+        "bsonType": "objectId",
+        "description": "Reference to the team the player belongs to."
+      },
+      "name": {
+        "bsonType": "string",
+        "description": "Name of the player."
+      },
+      "position": {
+        "bsonType": "string",
+        "enum": ["Blitzer", "Thrower", "Catcher", "Lineman", "StarPlayer"],
+        "description": "Position of the player."
+      },
+      "stats": {
+        "bsonType": "object",
+        "description": "Stats for the player.",
+        "required": ["movement", "strength", "agility", "armor"],
+        "properties": {
+          "movement": {
+            "bsonType": "int",
+            "description": "Movement stat of the player."
+          },
+          "strength": {
+            "bsonType": "int",
+            "description": "Strength stat of the player."
+          },
+          "agility": {
+            "bsonType": "int",
+            "description": "Agility stat of the player."
+          },
+          "armor": {
+            "bsonType": "int",
+            "description": "Armor stat of the player."
+          }
+        }
+      },
+      "skills": {
+        "bsonType": "array",
+        "description": "List of skills the player possesses.",
+        "items": {
+          "bsonType": "string"
+        }
+      },
+      "injuries": {
+        "bsonType": "array",
+        "description": "List of injuries the player has sustained.",
+        "items": {
+          "bsonType": "string"
+        }
+      },
+      "spp_available": {
+        "bsonType": "int",
+        "description": "Star Player Points available for spending."
+      },
+      "spp_spent": {
+        "bsonType": "int",
+        "description": "Star Player Points already spent."
+      },
+      "rank": {
+        "bsonType": "string",
+        "description": "Current rank of the player."
+      },
+      "value": {
+        "bsonType": "int",
+        "description": "Current monetary value of the player."
+      },
+      "number": {
+        "bsonType": "int",
+        "description": "Player's number in the team."
+      }
+    }
+  }
+}
