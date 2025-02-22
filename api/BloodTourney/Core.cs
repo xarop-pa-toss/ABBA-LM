@@ -27,8 +27,6 @@ public partial class Core
         /// </summary>
         public TournamentFormats TournamentFormat { get; set; }
     }
-
-    
     
     public enum TournamentFormats
     {
@@ -38,15 +36,13 @@ public partial class Core
         DoubleElimination,
         KingOfTheHill
     }
-
     public enum SkillStacks
     {
         None,
         OnlyPrimaries,
         AllSkills
     }
-
-    public struct RulesParameters
+    public struct TournamentParameters
     {
         /// <summary>
         /// Base TV limit (before skills)
@@ -80,7 +76,7 @@ public partial class Core
         private 
     }
     
-    private RulesParameters BloodBowl2020 = new RulesParameters()
+    private TournamentParameters BloodBowl2020 = new TournamentParameters()
     {
         TournamentOrganizerId = "",
         TournamentName = "",
