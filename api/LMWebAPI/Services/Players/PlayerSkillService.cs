@@ -1,4 +1,4 @@
-using BloodTourney.Core;
+using BloodTourney;
 using ZstdSharp.Unsafe;
 namespace LMWebAPI.Services.Players;
 

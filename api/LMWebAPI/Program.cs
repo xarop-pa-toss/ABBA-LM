@@ -1,5 +1,5 @@
 using System.Text;
-using BloodTourney.Core;
+using BloodTourney;
 using LMWebAPI.Identity;
 using LMWebAPI.Repositories;
 using LMWebAPI.Resources.Errors;
