@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using System.Data;
+using System.Diagnostics;
 
 namespace BloodTourney;
 
@@ -20,18 +21,18 @@ public partial class Core
         TombKings, Undead, Underworld, Vampires, WoodElves
     }
     
-    public struct TierParameters
+    public readonly struct TierParameters
     {
-        public int TierNumber { get; set; }
-        public List<TeamCodeNames> TeamCodes { get; set; }
+        public required uint TierNumber { get; init; }
+        public required List<TeamCodeNames> TeamCodes { get; init; }
         /// <summary>
         /// Maximum TV before skills and inducements are applied.
         /// </summary>
-        public int Gps { get; set; }
-        public int MaxPrimarySkills { get; set; }
-        public int MaxSecondarySkills { get; set; }
-        public int SkillStackingPlayerLimit { get; set; }
-        public int MaxStarPlayers { get; set; }
+        public required uint Gps { get; init; }
+        public required uint MaxPrimarySkills { get; init; }
+        public required uint MaxSecondarySkills { get; init; }
+        public required uint SkillStackingPlayerLimit { get; init; }
+        public required uint MaxStarPlayers { get; init; }
     }
 
     public static readonly ImmutableArray<TierParameters> BloodBowl2020TierParameters = ImmutableArray.Create(
@@ -97,7 +98,7 @@ public partial class Core
         }
     );
     
-    public static readonly ImmutableArray<TierParameters> EuroBowl2025TierParameters = ImmutableArray.Create(
+    public static readonly ImmutableArray<TierParameters> SardineBowl2025TierParameters = ImmutableArray.Create(
         new TierParameters
         {
             TierNumber = 1,
@@ -153,6 +154,27 @@ public partial class Core
             MaxStarPlayers = 1
         }
     );
+
+    public void CreateCustomRuleset(string name, IEnumerable<TierParameters> tierParameters)
+    {
+        tierParametersList = tierParameters.ToImmutableArray();
+    }
+
+    public ImmutableArray<TierParameters> GetTiersForRuleset(Rulesets ruleset)
+    {
+        switch (ruleset)
+        {
+            case Rulesets.SardineBowl2025:
+                return SardineBowl2025TierParameters;
+            case Rulesets.BloodBowl2020:
+                return BloodBowl2020TierParameters;
+            case Rulesets.Custom:
+                return CustomTierParameters;
+            default:
+                return ImmutableArray<TierParameters>.Empty;
+        }
+        
+    }
     
     // public static GetTiersForRuleset  (Rulesets ruleset)
 }
