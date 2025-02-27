@@ -12,7 +12,6 @@ public partial class Core
         SardineBowl2025,
         Custom
     }
-
     public enum TeamCodeNames
     {
         Amazons, BlackOrcs, Chaos, ChaosDwarves, ChaosRenegades, DarkElves, Dwarves, ElvenUnion, Gnomes, Goblins,
@@ -154,10 +153,43 @@ public partial class Core
             MaxStarPlayers = 1
         }
     );
-
-    public void CreateCustomRuleset(string name, IEnumerable<TierParameters> tierParameters)
+    
+    /// <summary>
+    /// Custom ruleset validation,
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="tierParameters"></param>
+    /// <returns>List Errors will be empty if tournament is valid.</returns>
+    public ValidationResult ValidateCustomRuleset(string name, IEnumerable<TierParameters> tierParameters)
     {
-        tierParametersList = tierParameters.ToImmutableArray();
+        var valResult = new ValidationResult();
+
+        if (tierParameters.Count() == 0) {
+            valResult.Errors.Add("List of tierParameters is empty");
+        }
+        var tierParametersList = tierParameters.ToImmutableArray();
+
+        HashSet<int> givenTiers = new HashSet<int>();
+        foreach (int tierNumber in tierParameters.Select(tp => tp.TierNumber)) {
+            givenTiers.Add(tierNumber);
+        }
+
+        if (givenTiers.Count < tierParametersList.Length) {
+            valResult.Errors.Add("Tiers cannot share a level/number." );
+        }
+        
+        if (valResult.Errors.Count() > 0) {
+            valResult.IsValid = false;
+        } else {
+            valResult.IsValid = true;
+        }
+        
+        return valResult;
+    }
+    public struct ValidationResult
+    {
+        public bool IsValid;
+        public List<string> Errors ;
     }
 
     public ImmutableArray<TierParameters> GetTiersForRuleset(Rulesets ruleset)
@@ -175,6 +207,4 @@ public partial class Core
         }
         
     }
-    
-    // public static GetTiersForRuleset  (Rulesets ruleset)
 }
