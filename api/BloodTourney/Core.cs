@@ -21,12 +21,14 @@ public partial class Core
         /// <summary>
         /// Rulesets do not influence Tournament Format
         /// </summary>
-        public Rulesets Ruleset { get; set; }
+        public Ruleset Ruleset { get; set; }
         /// <summary>
         /// Round progression format. e.g. Round Robin, Swiss, etc
         /// </summary>
         public TournamentFormats TournamentFormat { get; set; }
     }
+    
+    public struct 
     
     public enum TournamentFormats
     {
