@@ -182,13 +182,13 @@ public partial class Core
         public List<string> Errors ;
     }
     
-    public ImmutableArray<TierParameters> GetTiersForBaseRuleset(Tiers tiers)
+    public ImmutableArray<TierParameters> GetTiersForRuleset(Rulesets ruleset)
     {
-        switch (tiers)
+        switch (ruleset)
         {
-            case Tiers.SardineBowl2025:
+            case Rulesets.SardineBowl2025:
                 return SardineBowl2025TierParameters;
-            case Tiers.EuroBowl2025:
+            case Rulesets.EuroBowl2025:
                 return EuroBowl2025TierParameters;
             default:
                 return ImmutableArray<TierParameters>.Empty;
