@@ -1,5 +1,6 @@
 ﻿namespace BloodTourney;
-
+//TODO 
+//Implement a Lock system after tournament is validated and accepted by user.
 public partial class Core  
 {
     public struct BaseParameters
@@ -38,12 +39,7 @@ public partial class Core
         DoubleElimination,
         KingOfTheHill
     }
-    public enum SkillStacks
-    {
-        None,
-        OnlyPrimaries,
-        AllSkills
-    }
+    
     public struct TournamentParameters
     {
         /// <summary>
