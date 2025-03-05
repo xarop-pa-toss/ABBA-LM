@@ -96,6 +96,7 @@ public partial class Core
         {
             TierNumber = 1,
             Gps = 1_150_000,
+            TeamCodes = new List<TeamCodeNames>{ TeamCodeNames.Amazons, TeamCodeNames.DarkElves, TeamCodeNames.Dwarves, TeamCodeNames.Lizardmen, TeamCodeNames.Undead, TeamCodeNames.Underworld },
             MaxPrimarySkills = 6,
             MaxSecondarySkills = 0,
             SkillStackingPlayerLimit = 0,
@@ -105,6 +106,7 @@ public partial class Core
         {
             TierNumber = 2,
             Gps = 1_160_000,
+            TeamCodes = new List<TeamCodeNames>{ TeamCodeNames.ChaosDwarves, TeamCodeNames.Necromantic, TeamCodeNames.Norse, TeamCodeNames.Orcs, TeamCodeNames.Skaven, TeamCodeNames.Vampires, TeamCodeNames.WoodElves },
             MaxPrimarySkills = 7,
             MaxSecondarySkills = 1,
             SkillStackingPlayerLimit = 0,
@@ -114,6 +116,7 @@ public partial class Core
         {
             TierNumber = 3,
             Gps = 1_170_000,
+            TeamCodes = new List<TeamCodeNames>{ TeamCodeNames.ElvenUnion, TeamCodeNames.Khorne, TeamCodeNames.HighElves, TeamCodeNames.Humans, TeamCodeNames.TombKings },
             MaxPrimarySkills = 8,
             MaxSecondarySkills = 1,
             SkillStackingPlayerLimit = 0,
@@ -123,6 +126,7 @@ public partial class Core
         {
             TierNumber = 4,
             Gps = 1_180_000,
+            TeamCodes = new List<TeamCodeNames>{ TeamCodeNames.ChaosRenegades, TeamCodeNames.Gnomes, TeamCodeNames.ImperialNobility, TeamCodeNames.OldWorldAlliance, TeamCodeNames.Slann },
             MaxPrimarySkills = 8,
             MaxSecondarySkills = 2,
             SkillStackingPlayerLimit = 2,
@@ -132,6 +136,7 @@ public partial class Core
         {
             TierNumber = 5,
             Gps = 1_200_000,
+            TeamCodes = new List<TeamCodeNames>{ TeamCodeNames.BlackOrcs, TeamCodeNames.Chaos, TeamCodeNames.Nurgle },
             MaxPrimarySkills = 9,
             MaxSecondarySkills = 2,
             SkillStackingPlayerLimit = 2,
@@ -141,6 +146,7 @@ public partial class Core
         {
             TierNumber = 6,
             Gps = 1_200_000,
+            TeamCodes = new List<TeamCodeNames>{ TeamCodeNames.Goblins, TeamCodeNames.Halflings, TeamCodeNames.Ogres, TeamCodeNames.Snotlings },
             MaxPrimarySkills = 10,
             MaxSecondarySkills = 3,
             SkillStackingPlayerLimit = 4,

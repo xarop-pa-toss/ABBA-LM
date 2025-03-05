@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloodTourney", "BloodTourney\BloodTourney.csproj", "{65FD35D6-78C2-4813-A9F3-5F01B6C19A1B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\TestProject.csproj", "{3DA1A02E-F454-4DF8-9697-07E020A689E0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloodTourney.Tests", "BloodTourney.tests\BloodTourney.Tests.csproj", "{4808005D-0EA9-4888-BB45-CB2F275E276F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,9 +31,9 @@ Global
 		{65FD35D6-78C2-4813-A9F3-5F01B6C19A1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65FD35D6-78C2-4813-A9F3-5F01B6C19A1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65FD35D6-78C2-4813-A9F3-5F01B6C19A1B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3DA1A02E-F454-4DF8-9697-07E020A689E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3DA1A02E-F454-4DF8-9697-07E020A689E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3DA1A02E-F454-4DF8-9697-07E020A689E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3DA1A02E-F454-4DF8-9697-07E020A689E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4808005D-0EA9-4888-BB45-CB2F275E276F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4808005D-0EA9-4888-BB45-CB2F275E276F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4808005D-0EA9-4888-BB45-CB2F275E276F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4808005D-0EA9-4888-BB45-CB2F275E276F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
