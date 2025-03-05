@@ -158,8 +158,8 @@ public partial class Core
     {
         var valResult = new ValidationResult();
 
-        if (tierParameters.Count() == 0) {
-            valResult.Errors.Add("List of tierParameters is empty");
+        if (!tierParameters.Any()) {
+            valResult.Errors.Add("Given list of Tier Parameters has no elements");
         }
         var tierParametersList = tierParameters.ToImmutableArray();
 
@@ -169,26 +169,26 @@ public partial class Core
         }
 
         if (givenTiers.Count < tierParametersList.Length) {
-            valResult.Errors.Add("Tiers cannot share a level/number." );
+            valResult.Errors.Add("Tiers must not share a level/number." );
         }
 
         valResult.IsValid = valResult.Errors.Count() > 0 ? false : true;
         
         return valResult;
     }
-    public struct ValidationResult
+    public struct ValidationResult()
     {
-        public bool IsValid;
-        public List<string> Errors ;
+        public bool IsValid = false;
+        public List<string> Errors = new List<string>();
     }
     
-    public ImmutableArray<TierParameters> GetTiersForRuleset(Rulesets ruleset)
+    public ImmutableArray<TierParameters> GetTiersForRuleset(RulesetPresets ruleset)
     {
         switch (ruleset)
         {
-            case Rulesets.SardineBowl2025:
+            case RulesetPresets.SardineBowl2025:
                 return SardineBowl2025TierParameters;
-            case Rulesets.EuroBowl2025:
+            case RulesetPresets.EuroBowl2025:
                 return EuroBowl2025TierParameters;
             default:
                 return ImmutableArray<TierParameters>.Empty;
