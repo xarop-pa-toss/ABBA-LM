@@ -70,7 +70,7 @@ public class MongoRepository<T> : IRepository<T>
                         foreach (var document in docList)
                         {
                             cancellationToken.ThrowIfCancellationRequested();
-                            Collection.InsertOneAsync(sessionHandle, document);
+                            await Collection.InsertOneAsync(sessionHandle, document);
                         }
                     }
                     catch (MongoWriteException mwx)
