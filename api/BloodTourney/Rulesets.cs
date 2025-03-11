@@ -137,10 +137,7 @@ public partial class Core
                         Max = 1,
                         Name = "Halfling Master Chef",
                         Cost = 300_000,
-                        CostForTeam = new Dictionary<string, uint>
-                        {
-                            ["halflings"] = 100_000
-                        }
+                        CostForTeam = new Dictionary<string, uint> { ["halflings"] = 100_000 }
                     },
                     new Inducement()
                     {
@@ -169,10 +166,7 @@ public partial class Core
                         Max = 3,
                         Name = "Bribes",
                         Cost = 100_000,
-                        CostForTeamTrait = new Dictionary<string, uint>
-                        {
-                            ["Bribery & Corruption"] = 50_000
-                        }
+                        CostForTeamTrait = new Dictionary<string, uint> { ["Bribery & Corruption"] = 50_000 }
                     },
                     new Inducement()
                     {
