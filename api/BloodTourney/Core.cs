@@ -1,8 +1,14 @@
 ﻿namespace BloodTourney;
 //TODO 
-//Implement a Lock system after tournament is validated and accepted by user.
+// Implement a Lock system after tournament is validated and accepted by user.
+
+
 public partial class Core  
 {
+    public Core()
+    {
+        CreateBaseRulesets();
+    }
     public struct BaseParameters
     {
         /// <summary>
@@ -80,6 +86,7 @@ public partial class Core
     /// <summary>
     /// Validate tournament's base parameters against given ruleset.
     /// </summary>
+    /// <param name="ruleset"></param>
     /// <param name="baseParams"></param>
     /// <returns></returns>
     public static async Task<(BaseParameters baseParameters, string err)> ValidateBaseParams(RulesetPresets ruleset, BaseParameters baseParams)
@@ -92,4 +99,10 @@ public partial class Core
 
         return (baseParams, err);
     }
+
+    private void CreateBaseRulesets()
+    {
+        
+    }
 }
+

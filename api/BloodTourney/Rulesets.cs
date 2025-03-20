@@ -90,7 +90,6 @@ public partial class Core
         /// Text only. Will not have mechanical effect.
         /// </summary>
         public IEnumerable<string>? AdditionalRules { get; set; }
-
     }
     
     public Ruleset GetBaseRuleset(RulesetPresets ruleset)
