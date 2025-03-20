@@ -16,7 +16,12 @@ public class CoreTests
     {
         _out = testOutputHelper;
     }
-    
+
+    [Theory]
+    public void CreateSardinebowlTournament_ShouldReturnValidTournament()
+    {
+        
+    }
     
     [Theory]
     [InlineData(Core.RulesetPresets.SardineBowl2025)]

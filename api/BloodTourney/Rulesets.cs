@@ -1,4 +1,7 @@
-﻿using System.Collections.Immutable;
+﻿//TODO
+// Implement Custom Ruleset creating
+
+using System.Collections.Immutable;
 using MongoDB.Driver.Authentication.Gssapi.Sspi;
 
 namespace BloodTourney;
@@ -7,6 +10,7 @@ public partial class Core
 {
     public enum RulesetPresets
     {
+        Custom,
         EuroBowl2025,
         SardineBowl2025,
     }
@@ -234,7 +238,7 @@ public partial class Core
                 }
             };
         default:
-            return new Ruleset();
+            throw new Exception("Unknown ruleset type");
         }
     }
 }
