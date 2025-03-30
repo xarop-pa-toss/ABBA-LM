@@ -175,7 +175,7 @@ public partial class Core
         }
 
         if (givenTiers.Count < tierParametersList.Length) {
-            valResult.Errors.Add("Tiers must not share a level/number." );
+            valResult.Errors.Add("Different tiers must not share a level/number." );
         }
 
         valResult.IsValid = valResult.Errors.Count() > 0 ? false : true;

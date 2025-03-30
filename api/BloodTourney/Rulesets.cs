@@ -13,28 +13,30 @@ public partial class Core
 
     public struct Ruleset
     {
-        public IEnumerable<TierParameters> Tiers { get; set; }
-        public VictoryPoints VictoryPoints { get; set; }
-        public IEnumerable<string> TieBreakers { get; set; }
-        public TimeKeeping Timekeeping { get; set; }
-        public SkillStacking Skillstacking { get; set; }
-        public IEnumerable<Inducement> Inducements { get; set; }
-        public IEnumerable<string> BannedStarPlayers { get; set; }
-        public IEnumerable<string> Guidelines { get; set; }
-        public OtherRules OtherRules { get; set; }
+        public required IEnumerable<TierParameters> Tiers { get; set; }
+        public required VictoryPoints VictoryPoints { get; set; }
+        public required IEnumerable<string> TieBreakers { get; set; }
+        public required TimeKeeping Timekeeping { get; set; }
+        public required SkillStacking Skillstacking { get; set; }
+        public required IEnumerable<Inducement> Inducements { get; set; }
+        public required IEnumerable<string> BannedStarPlayers { get; set; }
+        public required IEnumerable<string> Guidelines { get; set; }
+        public required OtherRules OtherRules { get; set; }
     }
 
     public enum SkillStacks
     {
-        None,
+        NotAllowed,
         OnlyPrimaries,
         AllSkills
     }
-    public struct SkillStacking
+    public struct SkillStacking()
     {
-        public required SkillStacks StackingType;
-        public Dictionary<HashSet<string>, uint> ExtraSkillstackCosts { get; init; }
-        public required bool ExtraCostAppliesToDefaultSkills { get; init; }
+        public required SkillStacks StackingType { get; set; } = SkillStacks.OnlyPrimaries;
+        /// <summary>
+        /// Skill combinations that will consume extra slots from the alloted skill allowance (based on Tier)
+        /// </summary>
+        public Dictionary<ImmutableHashSet<string>, uint>? ExtraSkillstackCosts { get; init; }
     }
     public struct Inducement
     {
@@ -44,19 +46,19 @@ public partial class Core
         public required uint Cost { get; set; }
 
         /// <summary>
-        /// Overrides Cost. Eg. Master Chef for Halflings
+        /// Overrides default cost of this inducement for a specific team. Eg. Master Chef for Halflings
         /// </summary>
-        public Dictionary<string, uint> CostForTeam { get; set; }
+        public Dictionary<string, uint>? CostOverrideForTeam { get; set; }
 
         /// <summary>
-        /// Overrides Cost. Eg. Bribes for Bribery & Corruption
+        /// Overrides default cost of this inducement for teams with a specific trait. Eg. Bribes for Bribery & Corruption teams
         /// </summary>
-        public Dictionary<string, uint> CostForTeamTrait { get; set; }
+        public Dictionary<string, uint>? CostOverrideForTeamTrait { get; set; }
 
         /// <summary>
         /// Team tiers allowed to purchase an inducement. All Tiers allowed if list is empty.
         /// </summary>
-        public IEnumerable<int> TiersAllowed { get; set; }
+        public IEnumerable<int>? TiersAllowed { get; set; }
     }
     public struct TimeKeeping
     {
@@ -92,156 +94,144 @@ public partial class Core
         public IEnumerable<string>? AdditionalRules { get; set; }
 
     }
-    
-    public Ruleset GetBaseRuleset(RulesetPresets ruleset)
+
+    public Ruleset GetPresetRuleset(RulesetPresets ruleset)
     {
-        switch (ruleset) {
-        case RulesetPresets.SardineBowl2025:
-            return new Ruleset()
-            {
-                Tiers = SardineBowl2025TierParameters,
-                VictoryPoints = new VictoryPoints(),
-                TieBreakers = ["Net TD's + Net CAS", "Most TD's", "Head to Head (Top 3)", "Random"],
-                Timekeeping = new TimeKeeping()
+        switch (ruleset)
+        {
+            case RulesetPresets.SardineBowl2025:
+                return new Ruleset()
                 {
-                    MatchTimelimitInMinutes = 135,
-                    ChessClockAllowed = true
-                },
-                Skillstacking = new SkillStacking()
-                {
-                    StackingType = SkillStacks.OnlyPrimaries,
-                    ExtraSkillstackCosts = new Dictionary<HashSet<string>, uint>()
+                    Tiers = SardineBowl2025TierParameters,
+                    VictoryPoints = new VictoryPoints(),
+                    TieBreakers = ["Net TD's + Net CAS", "Most TD's", "Head to Head (Top 3)", "Random"],
+                    Timekeeping = new TimeKeeping()
                     {
-                        [new HashSet<string>
-                        {
-                            "Tackle",
-                            "Mighty Blow"
-                        }] = 2,
-                        [new HashSet<string>
-                        {
-                            "Claw",
-                            "Mighty Blow"
-                        }] = 2,
-                        [new HashSet<string>
-                        {
-                            "Sneaky Git",
-                            "Dirty Player"
-                        }] = 3
+                        MatchTimelimitInMinutes = 135,
+                        ChessClockAllowed = true
                     },
-                    ExtraCostAppliesToDefaultSkills = false
-                },
-                Inducements = ImmutableArray.Create<Inducement>(
-                    new Inducement()
+                    Skillstacking = new SkillStacking()
                     {
-                        Min = 0,
-                        Max = 1,
-                        Name = "Halfling Master Chef",
-                        Cost = 300_000,
-                        CostForTeam = new Dictionary<string, uint>
+                        StackingType = SkillStacks.OnlyPrimaries,
+                        ExtraSkillstackCosts = new Dictionary<ImmutableHashSet<string>, uint>()
                         {
-                            ["halflings"] = 100_000
+                            [ImmutableHashSet.Create("Tackle", "Mighty Blow")]= 2,
+                            [ImmutableHashSet.Create("Claw", "Mighty Blow")]= 2,
+                            [ImmutableHashSet.Create("Sneaky Git", "Dirty Player")]= 3
+                        },
+                    },
+                    Inducements = ImmutableArray.Create<Inducement>(
+                        new Inducement()
+                        {
+                            Min = 0,
+                            Max = 1,
+                            Name = "Halfling Master Chef",
+                            Cost = 300_000,
+                            CostOverrideForTeam = new Dictionary<string, uint>
+                            {
+                                ["halflings"] = 100_000
+                            }
+                        },
+                        new Inducement()
+                        {
+                            Min = 0,
+                            Max = 6,
+                            Name = "Assistant Coach",
+                            Cost = 10_000
+                        },
+                        new Inducement()
+                        {
+                            Min = 0,
+                            Max = 12,
+                            Name = "Cheerleaders",
+                            Cost = 10_000
+                        },
+                        new Inducement()
+                        {
+                            Min = 0,
+                            Max = 2,
+                            Name = "Bloodweiser Kegs",
+                            Cost = 50_000
+                        },
+                        new Inducement()
+                        {
+                            Min = 0,
+                            Max = 3,
+                            Name = "Bribes",
+                            Cost = 100_000,
+                            CostOverrideForTeamTrait = new Dictionary<string, uint>
+                            {
+                                ["Bribery & Corruption"] = 50_000
+                            }
+                        },
+                        new Inducement()
+                        {
+                            Min = 0,
+                            Max = 2,
+                            Name = "Wandering Apothecaries",
+                            Cost = 100_000
+                        },
+                        new Inducement()
+                        {
+                            Min = 0,
+                            Max = 1,
+                            Name = "Morgue Assistant",
+                            Cost = 100_000
+                        },
+                        new Inducement()
+                        {
+                            Min = 0,
+                            Max = 1,
+                            Name = "Plague Doctor",
+                            Cost = 100_000
+                        },
+                        new Inducement()
+                        {
+                            Min = 0,
+                            Max = 1,
+                            Name = "Riotous Rookies",
+                            Cost = 100_000
+                        },
+                        new Inducement()
+                        {
+                            Min = 0,
+                            Max = 1,
+                            Name = "Star Players",
+                            Cost = 0, // Variable cost based on star player
+                            TiersAllowed = new[]
+                            {
+                                3, 4, 5, 6
+                            }
                         }
-                    },
-                    new Inducement()
+                    ),
+                    BannedStarPlayers = ImmutableArray.Create<string>(
+                        "Morg'N'Thorg",
+                        "Griff Oberwald",
+                        "Deeproot Strongbranch",
+                        "Hakflem Skuttlespike",
+                        "Kreek Rustgouger",
+                        "Bomber Dribblesnot",
+                        "Estelle la Veneaux",
+                        "Cindy Piewhistle",
+                        "Wilhem Chaney",
+                        "Ivan \"The Animal\" Deathshroud",
+                        "Skitter Stab Stab",
+                        "Varag Ghoulchewer",
+                        "Dribl and Drill",
+                        "H'Thark the Unstoppable",
+                        "Lord Borak"
+                    ),
+                    Guidelines = ImmutableArray<string>.Empty,
+                    OtherRules = new OtherRules()
                     {
-                        Min = 0,
-                        Max = 6,
-                        Name = "Assistant Coach",
-                        Cost = 10_000
-                    },
-                    new Inducement()
-                    {
-                        Min = 0,
-                        Max = 12,
-                        Name = "Cheerleaders",
-                        Cost = 10_000
-                    },
-                    new Inducement()
-                    {
-                        Min = 0,
-                        Max = 2,
-                        Name = "Bloodweiser Kegs",
-                        Cost = 50_000
-                    },
-                    new Inducement()
-                    {
-                        Min = 0,
-                        Max = 3,
-                        Name = "Bribes",
-                        Cost = 100_000,
-                        CostForTeamTrait = new Dictionary<string, uint>
-                        {
-                            ["Bribery & Corruption"] = 50_000
-                        }
-                    },
-                    new Inducement()
-                    {
-                        Min = 0,
-                        Max = 2,
-                        Name = "Wandering Apothecaries",
-                        Cost = 100_000
-                    },
-                    new Inducement()
-                    {
-                        Min = 0,
-                        Max = 1,
-                        Name = "Morgue Assistant",
-                        Cost = 100_000
-                    },
-                    new Inducement()
-                    {
-                        Min = 0,
-                        Max = 1,
-                        Name = "Plague Doctor",
-                        Cost = 100_000
-                    },
-                    new Inducement()
-                    {
-                        Min = 0,
-                        Max = 1,
-                        Name = "Riotous Rookies",
-                        Cost = 100_000
-                    },
-                    new Inducement()
-                    {
-                        Min = 0,
-                        Max = 1,
-                        Name = "Star Players",
-                        Cost = 0, // Variable cost based on star player
-                        TiersAllowed = new[]
-                        {
-                            3, 4, 5, 6
-                        }
+                        UseGPForNonPlayerExtras = true,
+                        RemovePlayersAddedDuringMatchAtGameEnd = true,
+                        AllowSameStarPlayerOnBothTeams = true,
+                        AdditionalRules = ["Undead, Necromantic and Nurgle teams are allowed to apply the Masters of Undeath and Plague Ridden special rules."]
                     }
-                ),
-                BannedStarPlayers = ImmutableArray.Create<string>(
-                    "Morg'N'Thorg",
-                    "Griff Oberwald",
-                    "Deeproot Strongbranch",
-                    "Hakflem Skuttlespike",
-                    "Kreek Rustgouger",
-                    "Bomber Dribblesnot",
-                    "Estelle la Veneaux",
-                    "Cindy Piewhistle",
-                    "Wilhem Chaney",
-                    "Ivan \"The Animal\" Deathshroud",
-                    "Skitter Stab Stab",
-                    "Varag Ghoulchewer",
-                    "Dribl and Drill",
-                    "H'Thark the Unstoppable",
-                    "Lord Borak"
-                ),
-                Guidelines = ImmutableArray<string>.Empty,
-                OtherRules = new OtherRules()
-                {
-                    UseGPForNonPlayerExtras = true,
-                    RemovePlayersAddedDuringMatchAtGameEnd = true,
-                    AllowSameStarPlayerOnBothTeams = true,
-                    AdditionalRules = ["Undead, Necromantic and Nurgle teams are allowed to apply the Masters of Undeath and Plague Ridden special rules."]
-                }
-            };
-        default:
-            return new Ruleset();
+                };
         }
+
+        throw new Exception("The ruleset you requested is not defined.");
     }
 }
