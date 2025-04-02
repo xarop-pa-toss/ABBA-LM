@@ -4,10 +4,10 @@
 
 <p align="center">
 <a href="#tech">Technologies</a>
-<a href="#started">Getting Started</a>
+<a href="#prerequisites">Getting Started</a>
 <a href="#routes">API Endpoints</a>
 <a href="#colab">Collaborators</a>
-<a href="#contribute">Contribute</a> 
+<a href="#contribute">Contribute</a>
 </p>
 
 
@@ -23,8 +23,8 @@
 The project is rather ambitious in regard to technologies used since it was my main objective to learn and apply new concepts as much as possible, within scope of course.
 The final product will have implemented the following:
 
-- HTMX frontend with some AlpineJS sprinkled in. The objective is to have it run as a webapp on mobile as well, either by building as a PWA or by using something like Hyperview. Will decide when I get to this part... 😊
-- Deno 2.0 used for the backend with as little unnecessary additions as I can avoid. Get request from frontend, get data from API, serve HTMX to the frontend. That's it.
+- [HTMX](https://htmx.org) frontend with some AlpineJS sprinkled in. The objective is to have it run as a webapp on mobile as well, either by building as a PWA or by using something like Hyperview. Will decide when I get to this part... 😊
+- [Deno 2.0](https://deno.com) with JS is used for the backend with as little unnecessary additions as I can avoid putting in. Get request from frontend, get data from API, serve HTMX to the frontend. That's it (for now).
 - ASP.NET Web API with MongoDB that can serve any frontend client with:
   - JWT and OAuth2 authentication and password hashing/data validation
   - Proper CORS policy to serve different frontend clients
@@ -37,6 +37,7 @@ The final product will have implemented the following:
   
 The backend follows a Repository pattern, and the MongoDB database is easy to figure out and can have an enforced schema (provided in the files as well as a default version of the DB). Could it be done with SQL? Absolutely... but as with everything in this project, I wanted to try out new stuff.
 
+The Tournament management part of the app is setup as a C# code library that is used by the main API, but isn't an integral part of it. I made it this way because I wanted it to stand alone and be usable elsewhere.
 <h2 id="prerequisites">🏈 Kicking it off!</h3>
 
 The frontend requires [Deno 2.0](https://deno.com/blog/v2.0) that you can download with the following commands.
@@ -83,12 +84,6 @@ NODE_AWS_SECRET={YOUR_AWS_SECRET}
 It supports JWT authentication and is implemented with with POST and GET request that attempt to create a new token and get current user info, respectively.
 
 All base CRUD operations can be performed on all entities as part of the base MongoRepository class, from which entity specific repository classes derive.
-​
-| route               | description                                          
-|----------------------|-----------------------------------------------------
-| <kbd>GET /authenticate</kbd>     | retrieves user info see [response details](#get-auth-detail)
-| <kbd>POST /authenticate</kbd>     | authenticate user into the api see [request details](#post-auth-detail)
-
 
 <h2 id="colab">🤝 Collaborators</h2>
 
@@ -107,6 +102,4 @@ Anyone can contribute by adding Issues, creating branches and makinhttg pull req
 
 3. Open a Pull Request explaining the problem solved or feature made, if exists, append screenshot of visual modifications and await review.
 
-<h3>Helpful Documentation</h3>
 
-[📝 How to create a Pull Request](https://www.atlassian.com/br/git/tutorials/making-a-pull-request)
