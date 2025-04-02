@@ -1,5 +1,3 @@
-
-
 <h1 align="center" style="font-weight: bold;">🏈 ABBA League Manager 🏈</h1>
 
 <p align="center">
@@ -17,6 +15,12 @@
 <p align="center">
 <a href="https://www.github.com/xarop-pa-toss/ABBA-LM">📱 <s>Try it out!</s> (soon)</a>
 </p>
+<p align="center">
+  <a href="https://gist.github.com/xarop-pa-toss/0c54592cbdc52ba396838d428d766788">API Roadmap</a>
+</p>  
+<p align="center">
+  <a href="https://gist.github.com/xarop-pa-toss/5518357d130d0aa33bf871b46a12957f">BloodTourney Roadmap</a>
+</p>  
 
 <h2 id="tech">🪛 What makes it tick!</h2>
 
