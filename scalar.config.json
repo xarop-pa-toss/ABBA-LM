@@ -7,14 +7,6 @@
           {
             "path": "docs/README.md",
             "type": "Project"
-          },
-          {
-            "path": "docs/api-roadmap.md",
-            "type": "API Roadmap"
-          },
-          {
-            "path": "docs/bloodtourney-roadmap.md",
-            "type": "BloodTourney Roadmap"
           }
         ]
       }
