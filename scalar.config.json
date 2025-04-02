@@ -7,7 +7,18 @@
         "sidebar": [
           {
             "path": "docs/README.md",
-            "type": "page"
+            "type": "page",
+            "description": "Introduction"
+          },
+          {
+            "path": "docs/api-roadmap.md",
+            "type": "page",
+            "description": "API Roadmap"
+          },
+          {
+            "path": "docs/bloodtourney-roadmap.md",
+            "type": "page",
+            "description": "Blood Tourney Roadmap"
           }
         ]
       }
