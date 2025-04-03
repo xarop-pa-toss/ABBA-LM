@@ -1,37 +1,52 @@
 #!/bin/bash
 
-echo "Welcome to ABBA League Manager dependency installer!"
+echo "====================================="
+echo "ABBA League Manager Dependency Install"
+echo "====================================="
+echo
 echo "What would you like to install?"
 echo "1) API dependencies"
 echo "2) Web dependencies"
 echo "3) Both"
 echo "4) Exit"
-
-read -p "Enter your choice (1-4): " choice
+echo
 
 install_api() {
-    echo "Installing API dependencies..."
+    echo "📦 Installing API dependencies..."
     if [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "win32" ]]; then
         # Windows
-        powershell -File ./api/requirements/install.ps1
+        if ! powershell -File ./api/requirements/install.ps1; then
+            echo "❌ API installation failed!"
+            return 1
+        fi
     else
         # Linux/macOS
-        cd api/requirements
+        cd api/requirements || exit 1
         chmod +x install.sh
-        ./install.sh
+        if ! ./install.sh; then
+            echo "❌ API installation failed!"
+            cd ../..
+            return 1
+        fi
         cd ../..
     fi
-    echo "✅ API dependencies installed!"
+    echo "✅ API dependencies installed successfully!"
 }
 
 install_web() {
-    echo "Installing Web dependencies..."
-    cd web/requirements
+    echo "📦 Installing Web dependencies..."
+    cd web/requirements || exit 1
     chmod +x install.sh
-    ./install.sh
+    if ! ./install.sh; then
+        echo "❌ Web installation failed!"
+        cd ../..
+        return 1
+    fi
     cd ../..
-    echo "✅ Web dependencies installed!"
+    echo "✅ Web dependencies installed successfully!"
 }
+
+read -p "Enter your choice (1-4): " choice
 
 case $choice in
     1)
@@ -54,4 +69,4 @@ case $choice in
         ;;
 esac
 
-echo "All requested dependencies installed successfully!"
+echo "🎉 Installation complete!"

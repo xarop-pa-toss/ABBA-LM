@@ -2,7 +2,7 @@
 
 <p align="center">
 <a href="#tech">Technologies</a>
-<a href="#prerequisites">Getting Started</a>
+<a href="#prerequisites">Kicking it off!</a>
 <a href="#routes">API Endpoints</a>
 <a href="#colab">Collaborators</a>
 <a href="#contribute">Contribute</a>
@@ -44,35 +44,53 @@ The backend follows a Repository pattern, and the MongoDB database is easy to fi
 The Tournament management part of the app is setup as a C# code library that is used by the main API, but isn't an integral part of it. I made it this way because I wanted it to stand alone and be usable elsewhere.
 <h2 id="prerequisites">🏈 Kicking it off!</h3>
 
-The frontend requires [Deno 2.0](https://deno.com/blog/v2.0) that you can download with the following commands.
+### Prerequisites
+All project dependencies can be installed using our interactive installation script:
 
 ```bash
-# Windows
-irm https://deno.land/install.ps1 | iex
-
-#MacOS/Linux
-curl -fsSL https://deno.land/install.sh | sh
-
-#Check that its properly installed with
-deno --version
-```
-Move into the frontend folder and run the following commands to install dependencies and run the app.
-```bash
-deno install
-deno task start
+cd dev_install
+chmod +x install_dependencies.sh
+./install_dependencies.sh
 ```
 
-For the API, you will need the [.NET 9.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0) to run the project.
+The script allows you to install:
+1. API dependencies only
+2. Web dependencies only 
+3. Both API and Web dependencies
 
-Afterwards, move into the backend folder (should contain the .sln file) and run the following commands to install dependencies and test run the program.
+### Manual Installation
 
+#### API Setup
+1. Install [.NET 9.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
+2. Install [MongoDB 7.0+](https://www.mongodb.com/try/download/community)
+3. Navigate to the API directory and run:
 ```bash
 dotnet restore
 dotnet build
 dotnet run
 ```
 
-<h3>Config .env variables</h2>
+#### Web Setup
+1. Install Deno 2.0+:
+```bash
+# Windows
+irm https://deno.land/install.ps1 | iex
+
+# MacOS/Linux
+curl -fsSL https://deno.land/install.sh | sh
+```
+
+2. Verify installation:
+```bash
+deno --version
+```
+
+3. Navigate to web directory and run:
+```bash
+deno task start
+```
+
+### Environment Configuration
 
 Use the `.env.example` as reference to create your configuration file `.env` with your AWS Credentials
 
@@ -96,7 +114,7 @@ Start by cloning the repo to your machine:
 
 `git clone https://github.com/xarop-pa-toss/ABBA-LM`
 
-Anyone can contribute by adding Issues, creating branches and makinhttg pull requests. Only a couple of rules are enforced to maintain clarity:
+Anyone can contribute by adding Issues, creating branches and making pull requests. Only a couple of rules are enforced to maintain clarity:
 
  1. Follow the [Conventional Commits](https://www.conventionalcommits.org/) specification. Type is mandatory, Scope and Summary are optional, but make sure to use ! or BREAKING CHANGE when needed.
  
