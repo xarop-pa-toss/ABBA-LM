@@ -23,7 +23,7 @@ public class CoreTests
     public void GetBaseRuleset_ShouldReturnValidRuleset(Core.RulesetPresets ruleset)
     {
         // Act
-        var result = new Core().GetBaseRuleset(ruleset);
+        var result = new Core().GetPresetRuleset(ruleset);
 
         var jsonSerializer = new Newtonsoft.Json.JsonSerializer
         {
