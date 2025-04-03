@@ -1,0 +1,18 @@
+# API Dependencies (Required)
+.NET SDK 9.0.0+
+MongoDB Server 7.0+
+MongoDB.Driver 3.1.0
+Microsoft.AspNetCore.Authentication.JwtBearer (latest)
+Scalar.AspNetCore 2.0.1
+Swashbuckle.AspNetCore 7.0.0
+
+# API Testing Dependencies
+Microsoft.NET.Test.Sdk 17.13.0
+xunit 2.9.3
+xunit.runner.visualstudio 2.8.2
+coverlet.collector 6.0.2
+
+# Web Dependencies (Required)
+Deno 2.0+
+HTMX 1.9.10
+AlpineJS 3.13.7

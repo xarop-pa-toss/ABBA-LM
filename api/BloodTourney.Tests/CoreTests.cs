@@ -3,7 +3,10 @@ using BloodTourney;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Xunit.Abstractions;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace BloodTourney.Tests;
 public class CoreTests
@@ -14,17 +17,30 @@ public class CoreTests
         _out = testOutputHelper;
     }
     
-    
     [Theory]
     [InlineData(Core.RulesetPresets.SardineBowl2025)]
     // [InlineData(Core.RulesetPresets.EuroBowl2025)]
     public void GetBaseRuleset_ShouldReturnValidRuleset(Core.RulesetPresets ruleset)
     {
         // Act
-        var result = new Core().GetPresetRuleset(ruleset);
+        var result = new Core().GetBaseRuleset(ruleset);
+
+        var jsonSerializer = new Newtonsoft.Json.JsonSerializer
+        {
+            Converters = { new StringEnumConverter(), new JavaScriptDateTimeConverter() },
+            NullValueHandling = NullValueHandling.Ignore,
+            Formatting = Formatting.Indented
+        };
         
-        var resultJson = JsonSerializer.Serialize(result, new JsonSerializerOptions { WriteIndented = true });
-        _out.WriteLine(resultJson);
+        using (var stringWriter = new StringWriter()) 
+        using (var jsonWriter = new JsonTextWriter(stringWriter))
+        {
+            jsonSerializer.Serialize(jsonWriter, result);
+            _out.WriteLine(stringWriter.ToString());
+        }
+
+
+        // Assert
         
         // Ensure Victory Points have correct defaults
         Assert.Equal(3u, result.VictoryPoints.Win);
@@ -42,7 +58,7 @@ public class CoreTests
         // Validate Inducements
         Assert.NotNull(result.Inducements);
         Assert.NotEmpty(result.Inducements);
-
+        
         // Specific case validation for SardineBowl2025
         if (ruleset == Core.RulesetPresets.SardineBowl2025)
         {

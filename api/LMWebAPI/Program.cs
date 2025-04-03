@@ -11,62 +11,66 @@ using Microsoft.AspNetCore.Http.Features;
 using MongoDB.Driver;
 using Scalar.AspNetCore;
 
-var builder = WebApplication.CreateBuilder(args);
-builder.Configuration.AddEnvironmentVariables();
+internal class Program
+{
+    public static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
+        builder.Configuration.AddEnvironmentVariables();
 
 // This solution uses User Secrets, a .NET feature that can be created with "dotnet user-secrets init".
 // It only works in development environment which is set with "set ASPNETCORE_ENVIRONMENT=Development".
-#region MongoDB connection/client
+        #region MongoDB connection/client
 
-builder.Services.AddSingleton<IMongoClient>(sp =>
-{
-    Console.WriteLine(builder.Configuration["MONGO_CONNECTION_STRING_DEV"] + " - " + builder.Configuration["MONGO_DATABASE_NAME"]);
-    var connectionString = builder.Configuration["MONGO_CONNECTION_STRING_DEV"];
-    return new MongoClient(connectionString);
-});
+        builder.Services.AddSingleton<IMongoClient>(sp =>
+        {
+            Console.WriteLine(builder.Configuration["MONGO_CONNECTION_STRING_DEV"] + " - " + builder.Configuration["MONGO_DATABASE_NAME"]);
+            var connectionString = builder.Configuration["MONGO_CONNECTION_STRING_DEV"];
+            return new MongoClient(connectionString);
+        });
 
-builder.Services.AddScoped<IMongoDatabase>(sp =>
-{
-    var client = sp.GetRequiredService<IMongoClient>();
-    return client.GetDatabase(builder.Configuration["MONGO_DATABASE_NAME"]);
-});
+        builder.Services.AddScoped<IMongoDatabase>(sp =>
+        {
+            var client = sp.GetRequiredService<IMongoClient>();
+            return client.GetDatabase(builder.Configuration["MONGO_DATABASE_NAME"]);
+        });
 
-builder.Services.AddScoped(typeof(MongoRepository<>));
-builder.Services.AddRouting(options => options.LowercaseUrls = true);
-#endregion
+        builder.Services.AddScoped(typeof(MongoRepository<>));
+        builder.Services.AddRouting(options => options.LowercaseUrls = true);
+        #endregion
 
-#region Controllers / Services / Repositories
+        #region Controllers / Services / Repositories
 // Add Repositories
-builder.Services.AddScoped<PlayerRepository>();
+        builder.Services.AddScoped<PlayerRepository>();
 
 // Add Services
 //From BloodTourney
 
 //
-builder.Services.AddSingleton<JwtGenerator>();
-builder.Services.AddScoped<PlayerService>();
-builder.Services.AddScoped<PlayerSkillService>();
-builder.Services.AddScoped<TeamService>();
-#endregion
-builder.Services.AddControllers();
+        builder.Services.AddSingleton<JwtGenerator>();
+        builder.Services.AddScoped<PlayerService>();
+        builder.Services.AddScoped<PlayerSkillService>();
+        builder.Services.AddScoped<TeamService>();
+        #endregion
+        builder.Services.AddControllers();
 
-#region Middleware
+        #region Middleware
 // Add Global Error Handling
-builder.Services.AddProblemDetails(options =>
-{
-    options.CustomizeProblemDetails = context =>
-    {
-        context.ProblemDetails.Instance =
-            $"{context.HttpContext.Request.Method} {context.HttpContext.Request.Path}";
+        builder.Services.AddProblemDetails(options =>
+        {
+            options.CustomizeProblemDetails = context =>
+            {
+                context.ProblemDetails.Instance =
+                    $"{context.HttpContext.Request.Method} {context.HttpContext.Request.Path}";
 
-        context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier);
+                context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier);
 
-        var activity = context.HttpContext.Features.Get<IHttpActivityFeature>()?.Activity;
-        context.ProblemDetails.Extensions.TryAdd("traceId", activity?.Id);
-    };
-});
-builder.Services.AddExceptionHandler<ProblemExceptionHandler>();
-builder.Services.AddOpenApi();
+                var activity = context.HttpContext.Features.Get<IHttpActivityFeature>()?.Activity;
+                context.ProblemDetails.Extensions.TryAdd("traceId", activity?.Id);
+            };
+        });
+        builder.Services.AddExceptionHandler<ProblemExceptionHandler>();
+        builder.Services.AddOpenApi();
 
 // JWT
 // builder.Services.AddAuthentication(options =>
@@ -88,24 +92,26 @@ builder.Services.AddOpenApi();
 //         };
 //     });
 // builder.Services.AddAuthorization();
-#endregion
+        #endregion
 
-var app = builder.Build();
+        var app = builder.Build();
 
-#region  Scalar (OpenAPI Documentation)
-app.MapOpenApi();
-if (app.Environment.IsDevelopment())
-{
-    app.MapScalarApiReference();
+        #region  Scalar (OpenAPI Documentation)
+        app.MapOpenApi();
+        if (app.Environment.IsDevelopment())
+        {
+            app.MapScalarApiReference();
+        }
+        #endregion
+
+        app.UseExceptionHandler();
+        app.UseHttpsRedirection();
+
+        app.UseAuthorization();
+        app.UseAuthentication();
+
+        app.MapControllers();
+
+        app.Run();
+    }
 }
-#endregion
-
-app.UseExceptionHandler();
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-app.UseAuthentication();
-
-app.MapControllers();
-
-app.Run();

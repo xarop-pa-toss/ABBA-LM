@@ -256,3 +256,35 @@ packages/
 # DotNetCore
 *.swp
 *.pidb
+
+# Deno specific
+deno.lock
+.deno/
+
+# Database files
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# Environment files (in addition to existing .env entries)
+config.local.ts
+
+# Generated API documentation
+/docs/
+
+# OS specific files (in addition to existing)
+.DS_Store
+*~
+
+# IDE specific (in addition to existing)
+*.sublime-workspace
+*.sublime-project
+
+# Testing
+test-results/
+
+# Temporary files
+tmp/
+temp/
+*.tmp

@@ -1,8 +1,14 @@
 ﻿namespace BloodTourney;
 //TODO 
-//Implement a Lock system after tournament is validated and accepted by user.
+// Implement a Lock system after tournament is validated and accepted by user.
+
 public partial class Core  
 {
+    
+    public Core()
+    {
+        CreateBaseRulesets();
+    }
     public struct BaseParameters
     {
         /// <summary>
@@ -42,27 +48,41 @@ public partial class Core
     public struct TournamentParameters
     {
         /// <summary>
-        /// Base TV limit (before skills)
+        /// Game rules to be used. If using Custom (default), send in BloodTourney.Ruleset object through the optional CustomRuleset parameter 
         /// </summary>
-        public int TeamValueLimit { get; set;}
-        /// <summary>
-        /// If false, all excess cash leftover from the team creation process will be lost.
-        /// Otherwise, it is converted into Prayers To Nuffle.
-        /// </summary>
-        public bool UnspentCashConvertedToPrayers { get; set; }
-        /// <summary>
-        /// Any injury or death suffered by a player will be cleared after each match, and each coach will start their matches with the registered rosters.
-        /// </summary>
-        public bool RessurectionMode { get; set;}
+        public required RulesetPresets Ruleset { get; init; } = RulesetPresets.Custom;
+        public Ruleset CustomRuleset { get; init; }
+
         /// <summary>
         /// Defines the rounds format for the tournament.
         /// Some formats might be non-eliminatory such as Round Robin, while others will cause the team to not proceed if they lose.
         /// </summary>
-        public TournamentFormats TournamentFormat { get; set; }
+        public required TournamentFormats TournamentFormat { get; init; }
+
         /// <summary>
         /// If false, first round will be randomized as per the chosen format in TournamentFormat
         /// </summary>
-        public bool FirstRoundRandomSort { get; set;}
+        public required bool FirstRoundRandomSort { get; init; }
+
+        /// <summary>
+        /// Base TV limit (before skills)
+        /// </summary>
+        public required int TeamValueLimit { get; set; }
+
+        /// <summary>
+        /// If false, all excess cash leftover from the team creation process will be lost.
+        /// Otherwise, it is converted into Prayers To Nuffle.
+        /// </summary>
+        public required bool UnspentCashConvertedToPrayers { get; init; }
+
+        /// <summary>
+        /// Any injury or death suffered by a player will be cleared after each match, and each coach will start their matches with the registered rosters.
+        /// </summary>
+        public required bool RessurectionMode { get; init; }
+        
+        public TournamentParameters()
+        {
+        }
     }
     
     // private TournamentParameters BloodBowl2020 = new TournamentParameters()
@@ -80,6 +100,7 @@ public partial class Core
     /// <summary>
     /// Validate tournament's base parameters against given ruleset.
     /// </summary>
+    /// <param name="ruleset"></param>
     /// <param name="baseParams"></param>
     /// <returns></returns>
     public static async Task<(BaseParameters baseParameters, string err)> ValidateBaseParams(RulesetPresets ruleset, BaseParameters baseParams)
@@ -91,5 +112,10 @@ public partial class Core
         if (baseParams.StartDate < DateTime.UtcNow) {err = "Start date must be today or in the future.";};
 
         return (baseParams, err);
+    }
+
+    private void CreateBaseRulesets()
+    {
+        
     }
 }

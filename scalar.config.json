@@ -1,0 +1,27 @@
+{
+    "$schema": "https://cdn.scalar.com/schema/scalar-config.json",
+    "subdomain": "abba-lm",
+    "guides": [
+      {
+        "name": "Blood Bowl League Manager",
+        "sidebar": [
+          {
+            "path": "docs/README.md",
+            "type": "page",
+            "description": "Introduction"
+          },
+          {
+            "path": "docs/api-roadmap.md",
+            "type": "page",
+            "description": "API Roadmap"
+          },
+          {
+            "path": "docs/bloodtourney-roadmap.md",
+            "type": "page",
+            "description": "Blood Tourney Roadmap"
+          }
+        ]
+      }
+    ],
+    "references": []
+  }
