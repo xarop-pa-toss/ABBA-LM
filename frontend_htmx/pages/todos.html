@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Todos - HTMX Demo</title>
+    <script src="https://unpkg.com/htmx.org@1.9.6"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        nav { margin-bottom: 20px; }
+        .todo-item { margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/" hx-get="/" hx-push-url="true">Home</a> |
+        <a href="/todos" hx-get="/todos" hx-push-url="true">Todos</a>
+    </nav>
+
+    <!-- Combined HTMX and AlpineJS todo list -->
+    <div x-data="{ newTodo: '' }">
+        <h2>Todo List</h2>
+        <!-- Form using both HTMX for submission and AlpineJS for state -->
+        <form hx-post="/api/todos"
+              hx-target="#todo-list"
+              x-on:submit="newTodo = ''"
+              hx-trigger="submit">
+            <input type="text" 
+                   x-model="newTodo"
+                   :value="newTodo"
+                   name="text"
+                   placeholder="Add new todo">
+            <button type="submit">Add</button>
+        </form>
+
+        <!-- Todo list with automatic updates -->
+        <div id="todo-list"
+             hx-get="/api/todos"
+             hx-trigger="load">
+        </div>
+    </div>
+</body>
+</html>
