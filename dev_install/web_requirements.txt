@@ -1,0 +1,4 @@
+# Web Dependencies (Required)
+Deno 2.0+
+HTMX 1.9.10
+AlpineJS 3.13.7

@@ -15,34 +15,26 @@ install_api() {
     echo "📦 Installing API dependencies..."
     if [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "win32" ]]; then
         # Windows
-        if ! powershell -File ./api/requirements/install.ps1; then
+        if ! powershell -c "Get-Content api_requirements.txt"; then
             echo "❌ API installation failed!"
             return 1
         fi
     else
         # Linux/macOS
-        cd api/requirements || exit 1
-        chmod +x install.sh
-        if ! ./install.sh; then
+        if ! cat api_requirements.txt; then
             echo "❌ API installation failed!"
-            cd ../..
             return 1
         fi
-        cd ../..
     fi
     echo "✅ API dependencies installed successfully!"
 }
 
 install_web() {
     echo "📦 Installing Web dependencies..."
-    cd web/requirements || exit 1
-    chmod +x install.sh
-    if ! ./install.sh; then
+    if ! cat web_requirements.txt; then
         echo "❌ Web installation failed!"
-        cd ../..
         return 1
     fi
-    cd ../..
     echo "✅ Web dependencies installed successfully!"
 }
 
@@ -56,8 +48,7 @@ case $choice in
         install_web
         ;;
     3)
-        install_api
-        install_web
+        install_api && install_web
         ;;
     4)
         echo "Exiting..."
