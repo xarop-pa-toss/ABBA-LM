@@ -50,7 +50,7 @@ public partial class Core
         /// <summary>
         /// Game rules to be used. If using Custom (default), send in BloodTourney.Ruleset object through the optional CustomRuleset parameter 
         /// </summary>
-        public required RulesetPresets Ruleset { get; init; } = RulesetPresets.Custom;
+        public required RulesetPresets Ruleset { get; init; } = RulesetPresets.SardineBowl2025;
         public Ruleset CustomRuleset { get; init; }
 
         /// <summary>
