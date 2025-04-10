@@ -19,34 +19,32 @@ export function generateBackgroundImage(width: number, height: number, gridDivis
     return buffer;
 }
 
-function drawGrid(ctx: CanvasRenderingContext2D, width: number, height: number, gridDivisions: number, lineWidth: number) {
-
-    // Grid cells are squares based on width, not height.
-    const zoneRegularWidth: number = width / gridDivisions;
-    let zoneEdgeSize: number = 0
-
-    const gridDivisionLeftover: number = zoneRegularWidth % gridDivisions
-    if (gridDivisionLeftover % gridDivisions != 0) {
-        zoneEdgeSize = gridDivisionLeftover / 2
-    }
-
+function drawGrid(ctx: CanvasRenderingContext2D, width: number, height: number, gridDivisions: number, lineWidth: number) {    
     ctx.strokeStyle = "#ffaed7"
     ctx.lineWidth = lineWidth
+    
+    // Grid cells are squares. Width was chosen as the base measurement.
+    const zoneWidth: number = width / gridDivisions;
+    const zoneWidthLeftover: number = width % gridDivisions;
+    const zoneEdgeSize: number = (zoneWidthLeftover !== 0) ? (zoneWidthLeftover / 2) : 0;
+
+
+    console.log("zoneWidth: " + zoneWidth)
+    console.log("zoneWidthLeftover: " + zoneWidthLeftover)
+    console.log("zoneEdgeSize: " + zoneEdgeSize)
 
     // Vertical Lines
-    const verticalStartPos = zoneEdgeSize
     for (let i = 1; i < gridDivisions; i++) {
-        const x = i * zoneRegularWidth;
+        const x = i === 1 ? zoneEdgeSize : i * zoneWidth;
         ctx.beginPath();
         ctx.moveTo(x, 0);
         ctx.lineTo(x, height);
         ctx.stroke()
     }
-
+    
     // Horizontal lines
-    const horizontalStartPos = zoneEdgeSize
     for (let i = 1; i < gridDivisions; i++) {
-        let y = i === 1 ? horizontalStartPos : i * zoneRegularWidth - horizontalStartPos;
+        const y = i === 1 ? zoneEdgeSize : i * zoneWidth;
 
         ctx.beginPath();
         ctx.moveTo(0, y);
@@ -54,5 +52,5 @@ function drawGrid(ctx: CanvasRenderingContext2D, width: number, height: number, 
         ctx.stroke()
     }
 
-    return {zoneRegularWidth, zoneEdgeSize}
+    return {zoneWidth, zoneEdgeSize}
 }
