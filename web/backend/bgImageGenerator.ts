@@ -22,12 +22,11 @@ export function generateBackgroundImage(width: number, height: number, gridDivis
 function drawGrid(ctx: CanvasRenderingContext2D, width: number, height: number, gridDivisions: number, lineWidth: number) {    
     ctx.strokeStyle = "#ffaed7"
     ctx.lineWidth = lineWidth
-    
+
     // Grid cells are squares. Width was chosen as the base measurement.
     const zoneWidth: number = width / gridDivisions;
     const zoneWidthLeftover: number = width % gridDivisions;
     const zoneEdgeSize: number = (zoneWidthLeftover !== 0) ? (zoneWidthLeftover / 2) : 0;
-
 
     console.log("zoneWidth: " + zoneWidth)
     console.log("zoneWidthLeftover: " + zoneWidthLeftover)

@@ -1,7 +1,8 @@
-import { Hono } from 'hono'
-import { generateBackgroundImage } from "./bgImageGenerator.ts"
+import { Hono } from 'hono';
+import { generateBackgroundImage } from "./bgImageGenerator.ts";
 
-const app = new Hono()
+
+const app = new Hono();
 
 app.get('/', async (c) => {
   const img = await generateBackgroundImage(1024, 768, 33);
@@ -10,7 +11,6 @@ app.get('/', async (c) => {
       "Content-Type": "image/png"
     }
   });
-
 })
 
-Deno.serve({port: 8787}, app.fetch)
+await Deno.serve({port: 8787}, app.fetch);
