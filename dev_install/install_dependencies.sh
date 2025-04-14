@@ -11,30 +11,79 @@ echo "3) Both"
 echo "4) Exit"
 echo
 
-install_api() {
-    echo "📦 Installing API dependencies..."
+install_dotnet() {
+    echo "Installing .NET SDK..."
     if [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "win32" ]]; then
-        # Windows
-        if ! powershell -c "Get-Content api_requirements.txt"; then
-            echo "❌ API installation failed!"
-            return 1
-        fi
+        winget install Microsoft.DotNet.SDK.9
     else
         # Linux/macOS
-        if ! cat api_requirements.txt; then
-            echo "❌ API installation failed!"
-            return 1
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+            brew install dotnet@9
+        else
+            # Linux
+            wget https://dot.net/v1/dotnet-install.sh
+            chmod +x dotnet-install.sh
+            ./dotnet-install.sh --version latest
+            rm dotnet-install.sh
         fi
     fi
+}
+
+install_mongodb() {
+    echo "Installing MongoDB..."
+    if [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "win32" ]]; then
+        winget install MongoDB.Server
+    else
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+            brew tap mongodb/brew
+            brew install mongodb-community@7.0
+        else
+            # Linux
+            wget -qO - https://www.mongodb.org/static/pgp/server-7.0.asc | sudo apt-key add -
+            echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+            sudo apt-get update
+            sudo apt-get install -y mongodb-org
+        fi
+    fi
+}
+
+install_deno() {
+    echo "Installing Deno..."
+    if [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "win32" ]]; then
+        irm https://deno.land/install.ps1 | iex
+    else
+        curl -fsSL https://deno.land/install.sh | sh
+    fi
+}
+
+install_api() {
+    echo "📦 Installing API dependencies..."
+    if ! install_dotnet; then
+        echo "❌ .NET SDK installation failed!"
+        return 1
+    fi
+    
+    if ! install_mongodb; then
+        echo "❌ MongoDB installation failed!"
+        return 1
+    fi
+
+    # Install NuGet packages
+    dotnet restore api/LMWebAPI/LMWebAPI.csproj
+    
     echo "✅ API dependencies installed successfully!"
 }
 
 install_web() {
     echo "📦 Installing Web dependencies..."
-    if ! cat web_requirements.txt; then
-        echo "❌ Web installation failed!"
+    if ! install_deno; then
+        echo "❌ Deno installation failed!"
         return 1
     fi
+    
+    # Install HTMX and AlpineJS via npm
+    cd web && deno cache main.ts
+    
     echo "✅ Web dependencies installed successfully!"
 }
 
