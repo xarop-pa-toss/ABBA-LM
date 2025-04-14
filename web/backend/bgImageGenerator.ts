@@ -25,17 +25,24 @@ function drawGrid(ctx: CanvasRenderingContext2D, width: number, height: number, 
     
     // Grid cells are squares. Width was chosen as the base measurement.
     const zoneWidth: number = width / gridDivisions;
-    const zoneWidthLeftover: number = width % gridDivisions;
-    const zoneEdgeSize: number = (zoneWidthLeftover !== 0) ? (zoneWidthLeftover / 2) : 0;
-
+    const zoneWidthLeftover: number = (width % gridDivisions !== 0)  ? (width % gridDivisions / 2) : 0;
 
     console.log("zoneWidth: " + zoneWidth)
     console.log("zoneWidthLeftover: " + zoneWidthLeftover)
-    console.log("zoneEdgeSize: " + zoneEdgeSize)
+
+    // Border
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(width, 0);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(0, height);
+    ctx.stroke()
 
     // Vertical Lines
     for (let i = 1; i < gridDivisions; i++) {
-        const x = i === 1 ? zoneEdgeSize : i * zoneWidth;
+        const x = i * zoneWidth + zoneWidthLeftover;
         ctx.beginPath();
         ctx.moveTo(x, 0);
         ctx.lineTo(x, height);
@@ -44,13 +51,12 @@ function drawGrid(ctx: CanvasRenderingContext2D, width: number, height: number, 
     
     // Horizontal lines
     for (let i = 1; i < gridDivisions; i++) {
-        const y = i === 1 ? zoneEdgeSize : i * zoneWidth;
-
+        const y = i * zoneWidth - zoneWidthLeftover;
         ctx.beginPath();
         ctx.moveTo(0, y);
         ctx.lineTo(width, y);
         ctx.stroke()
     }
 
-    return {zoneWidth, zoneEdgeSize}
+    return {zoneWidth, zoneWidthLeftover}
 }
