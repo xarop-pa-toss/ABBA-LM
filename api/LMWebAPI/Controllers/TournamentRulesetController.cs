@@ -5,11 +5,11 @@ namespace LMWebAPI.Controllers;
 
 // [Authorize]
 [ApiController]
-[Route("api/[controller]/[action]")]
-public class TournamentController : ControllerBase
+[Route("api/tournament/ruleset/[action]")]
+public class TournamentRulesetController : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult> GetPresetRuleset([FromBody] string presetRulesetName)
+    public async Task<ActionResult> GetPresetRuleset([FromQuery] string presetRulesetName)
     {
         (var ruleset, string err) = await BloodTourney.Core.GetRuleset(presetRulesetName);
 
@@ -35,7 +35,7 @@ public class TournamentController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> CreateCustomRuleset([FromBody] Core.Ruleset ruleset)
+    public async Task<ActionResult> CreateCustomRuleset([FromBody] Core.RulesetDTO ruleset)
     {
         
     }
