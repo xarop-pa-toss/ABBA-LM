@@ -82,5 +82,10 @@ public class PlayerController : ControllerBase
         return Ok(players);
     }
 
-
+    [HttpDelete]
+    public async Task<ActionResult<List<Player>>> DeleteOne([FromBody] ObjectId playerId)
+    {
+        await _playerService.DeleteOneAsync(playerId);
+        return Ok(playerId);
+    }
 }
