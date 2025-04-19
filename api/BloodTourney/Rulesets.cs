@@ -5,23 +5,76 @@ namespace BloodTourney;
 
 public partial class Core
 {
-    public enum RulesetPresets
-    {
+    public enum RulesetPresets {
         EuroBowl2025,
-        SardineBowl2025,
+        SardineBowl2025
     }
 
-    public struct Ruleset
-    {
-        public required IEnumerable<TierParameters> Tiers { get; set; }
-        public required VictoryPoints VictoryPoints { get; set; }
-        public required IEnumerable<string> TieBreakers { get; set; }
-        public required TimeKeeping Timekeeping { get; set; }
-        public required SkillStacking Skillstacking { get; set; }
-        public required IEnumerable<Inducement> Inducements { get; set; }
-        public required IEnumerable<string> BannedStarPlayers { get; set; }
-        public required IEnumerable<string> Guidelines { get; set; }
-        public required OtherRules OtherRules { get; set; }
+    public class Ruleset {
+        public required IEnumerable<TierParameters> Tiers { get; init; }
+        public required VictoryPoints VictoryPoints { get; init; }
+        public required IEnumerable<string> TieBreakers { get; init; }
+        public required TimeKeeping Timekeeping { get; init; }
+        public required SkillStacking Skillstacking { get; init; }
+        public required IEnumerable<Inducement> Inducements { get; init; }
+        public required IEnumerable<string> BannedStarPlayers { get; init; }
+        public required IEnumerable<string> Guidelines { get; init; }
+        public required OtherRules OtherRules { get; init; }
+        
+        // Default constructor
+        private Ruleset() { }
+        
+        public class Builder {
+        
+            public IEnumerable<TierParameters> tiers;
+            public VictoryPoints victoryPoints;
+            public IEnumerable<string> tieBreakers;
+            public TimeKeeping timekeeping;
+            public SkillStacking skillstacking;
+            public IEnumerable<Inducement> inducements;
+            public IEnumerable<string> bannedStarPlayers;
+            public IEnumerable<string> guidelines;
+            public OtherRules otherRules;
+            public Builder WithTiers(IEnumerable<TierParameters> tiers)
+            {
+                this.tiers = tiers;
+                return this;
+            }
+
+            public Builder WithVictoryPoints(VictoryPoints victoryPoints)
+            {
+                this.victoryPoints = victoryPoints;
+                return this;
+            }
+
+            public Builder WithTieBreakers(IEnumerable<string> tieBreakers)
+            {
+                this.tieBreakers = tieBreakers;
+                return this;
+            }
+
+            public Builder WithTimeKeeping(TimeKeeping timekeeping)
+            {
+                this.timekeeping = timekeeping;
+                return this;
+            }
+
+            public Builder WithSkillStacking(SkillStacking skillStacking)
+            {
+                this.skillstacking = skillStacking;
+                return this;
+            }
+            
+            public Ruleset Build()
+            {
+                // Validation
+                if (tiers == null)
+                {
+                    throw new InvalidOperationException("tiers must not be null");
+                }
+                if ()
+            }
+        }
     }
 
     public enum SkillStacks

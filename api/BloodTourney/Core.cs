@@ -4,7 +4,6 @@
 
 public partial class Core
 {
-
     public Core()
     {
         CreateBaseRulesets();
