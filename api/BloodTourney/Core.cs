@@ -2,7 +2,7 @@
 //TODO 
 // Implement a Lock system after tournament is validated and accepted by user.
 
-public partial class Core
+public class Core
 {
     public Core()
     {
@@ -83,19 +83,7 @@ public partial class Core
         {
         }
     }
-
-    // private TournamentParameters BloodBowl2020 = new TournamentParameters()
-    // {
-    //     TournamentOrganizerId = "",
-    //     TournamentName = "",
-    //     PlayerLimit = 0,
-    //     TeamValueLimit = 0,
-    //     StartDate = new DateTime(2020, 01, 01),
-    //     Location = "",
-    //     IsInvitationOnly = false
-    // };
-
-    // private Dictionary<RulesetPresets, BaseParameters>  = new Dictionary<RulesetPresets, BaseParameters>();
+    
     /// <summary>
     /// Validate tournament's base parameters against given ruleset.
     /// </summary>

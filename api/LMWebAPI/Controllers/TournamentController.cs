@@ -36,12 +36,14 @@ public class TournamentController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreateCustomRuleset([FromBody] BloodTourney.RulesetDTO ruleset)
     {
-        var builder = new BloodTourney.Core.Rulesets.Builder()
+        var newRuleset = new BloodTourney.Core.Rulesets.Builder()
             .WithTiers(ruleset.Tiers)
             .WithVictoryPoints(ruleset.VictoryPoints)
             .WithTieBreakers(ruleset.TieBreakers)
             .WithSkillStacking(ruleset.Skillstacking)
             .WithTimeKeeping(ruleset.Timekeeping)
             .Build();
+        
+        return newRuleset;
     }
 }
