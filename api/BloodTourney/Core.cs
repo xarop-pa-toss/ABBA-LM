@@ -4,8 +4,10 @@
 
 public class Core
 {
+    private readonly Dictionary<RulesetPresets, Ruleset> _presetRulesets;
     public Core()
     {
+        _presetRulesets = new Dictionary<RulesetPresets, Ruleset>();
         CreateBaseRulesets();
     }
     public struct BaseParameters
@@ -104,6 +106,6 @@ public class Core
 
     private void CreateBaseRulesets()
     {
-
+        
     }
 }
