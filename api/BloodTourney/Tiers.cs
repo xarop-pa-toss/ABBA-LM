@@ -56,7 +56,7 @@ public class Tiers
         public required uint MaxStarPlayers { get; init; }
     }
 
-    public static readonly ImmutableArray<TierParameters> SardineBowl2025TierParameters = ImmutableArray.Create(
+    public static readonly ImmutableArray<TierParameters> SardineBowl2025 = ImmutableArray.Create(
         new TierParameters
         {
             TierNumber = 1,
@@ -302,18 +302,5 @@ public class Tiers
     {
         public bool IsValid = false;
         public List<string> Errors = new List<string>();
-    }
-
-    public ImmutableArray<TierParameters> GetTiersForRuleset(RulesetPresets ruleset)
-    {
-        switch (ruleset)
-        {
-            case RulesetPresets.SardineBowl2025:
-                return SardineBowl2025TierParameters;
-            case RulesetPresets.EuroBowl2025:
-                return EuroBowl2025TierParameters;
-            default:
-                return ImmutableArray<TierParameters>.Empty;
-        }
     }
 }

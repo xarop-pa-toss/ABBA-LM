@@ -3,12 +3,6 @@ using MongoDB.Driver.Authentication.Gssapi.Sspi;
 
 namespace BloodTourney;
 
-public enum RulesetPresets
-{
-    EuroBowl2025,
-    SardineBowl2025
-}
-
 public class Ruleset
 {
     public required IEnumerable<Tiers.TierParameters> Tiers { get; init; }
@@ -136,6 +130,7 @@ public class Ruleset
         }
         public static Builder CreateBuilder() => new Builder();
     }
+    
 
     public enum SkillStacks
     {
@@ -152,6 +147,7 @@ public class Ruleset
         /// Skill combinations that will consume extra slots from the alloted skill allowance (based on Tier)
         /// </summary>
         public Dictionary<ImmutableHashSet<string>, uint>? ExtraSkillstackCosts { get; init; }
+        public required bool ExtraCostAppliesToDefaultSkills { get; init; }
     }
 
     public struct Inducement
@@ -162,7 +158,7 @@ public class Ruleset
         public required uint Cost { get; set; }
 
         /// <summary>
-        /// Overrides default cost of this inducement for a specific team. Eg. Master Chef for Halflings
+        /// Overrides the default cost of this inducement for a specific team. E.g., Master Chef for Halflings
         /// </summary>
         public Dictionary<string, uint>? CostOverrideForTeam { get; set; }
 
@@ -172,7 +168,7 @@ public class Ruleset
         public Dictionary<string, uint>? CostOverrideForTeamsWithTrait { get; set; }
 
         /// <summary>
-        /// Team tiers allowed to purchase an inducement. All Tiers allowed if list is empty.
+        /// Team tiers allowed purchasing an inducement. All Tiers allowed if list is empty.
         /// </summary>
         public IEnumerable<int>? TiersAllowed { get; set; }
     }
