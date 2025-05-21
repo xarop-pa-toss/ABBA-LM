@@ -33,4 +33,7 @@ public interface ITournament
     /// Any injury or death suffered by a player will be cleared after each match, and each coach will start their matches with the registered rosters.
     /// </summary>
     public bool RessurectionMode { get; init; }
+    
+    IEnumerable<Guid> CreateFirstRoundsRandom(IEnumerable<Guid> playerIds);
+    IEnumerable<Guid> CreateFirstRoundsWithSeed(Dictionary<Guid, uint> playerIdWithNafScore);
 }
