@@ -28,8 +28,6 @@ public interface ITournamentFormat
     IEnumerable<(Guid playerA, Guid playerB)> GetNextRoundPairings(
         Dictionary<Guid, (uint wins, uint losses, uint touchdowns)> playerStandings,
         IEnumerable<(Guid playerA, Guid playerB)> completedMatches);
-    
-    
 }
 
 public enum MatchResult

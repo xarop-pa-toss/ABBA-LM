@@ -1,39 +1,26 @@
-﻿namespace BloodTourney.Tournament;
+﻿using BloodTourney;
+
+namespace BloodTourney.Tournament;
 
 public interface ITournament
 {
     /// <summary>
-    /// Game rules to be used. If using Custom (default), send in BloodTourney.Ruleset object through the optional CustomRuleset parameter 
+    /// Get the current configuration of the tournament
     /// </summary>
-    public Ruleset Ruleset { get; init; }
+    TournamentConfig Configuration { get; }
 
     /// <summary>
-    /// Defines the round format for the tournament.
-    /// Some formats might be non-eliminatory such as Round Robin, while others will cause the team to not proceed if they lose.
+    /// Get the format implementation for this tournament
     /// </summary>
-    public Tournament.TournamentFormats TournamentFormat { get; init; }
+    ITournamentFormat Format { get; }
 
     /// <summary>
-    /// If false, the first round will be randomized as per the chosen format in TournamentFormat
+    /// Validates if a team is legal for this tournament
     /// </summary>
-    public bool FirstRoundRandomSort { get; init; }
+    (bool isValid, string error) ValidateTeam(Models.Team team);
 
     /// <summary>
-    /// Base TV limit (before skills)
+    /// Returns true if the tournament can begin (enough players, etc.)
     /// </summary>
-    public int TeamValueLimit { get; init; }
-
-    /// <summary>
-    /// If false, all excess cash leftover from the team creation process will be lost.
-    /// Otherwise, it is converted into Prayers To Nuffle.
-    /// </summary>
-    public bool UnspentCashConvertedToPrayers { get; init; }
-
-    /// <summary>
-    /// Any injury or death suffered by a player will be cleared after each match, and each coach will start their matches with the registered rosters.
-    /// </summary>
-    public bool RessurectionMode { get; init; }
-    
-    IEnumerable<Guid> CreateFirstRoundsRandom(IEnumerable<Guid> playerIds);
-    IEnumerable<Guid> CreateFirstRoundsWithSeed(Dictionary<Guid, uint> playerIdWithNafScore);
+    (bool canStart, string reason) CanStartTournament();
 }
