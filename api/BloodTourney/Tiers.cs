@@ -49,7 +49,6 @@ public class Tiers
         /// Maximum TV before skills and inducements are applied.
         /// </summary>
         public required uint Gps { get; init; }
-
         public required uint MaxPrimarySkills { get; init; }
         public required uint MaxSecondarySkills { get; init; }
         public required uint SkillStackingPlayerLimit { get; init; }

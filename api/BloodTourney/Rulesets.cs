@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using MongoDB.Driver.Authentication.Gssapi.Sspi;
 
 namespace BloodTourney;
 
@@ -18,6 +17,7 @@ public class Ruleset
     // Default constructor
     private Ruleset()
     {
+        
     }
 
     public class Builder
@@ -131,7 +131,8 @@ public class Ruleset
         public static Builder CreateBuilder() => new Builder();
     }
     
-
+    
+    #region STRUCTS/ENUMS
     public enum SkillStacks
     {
         NotAllowed,
@@ -211,4 +212,5 @@ public class Ruleset
         /// </summary>
         public IEnumerable<string>? AdditionalRules { get; set; }
     }
+    #endregion
 }
