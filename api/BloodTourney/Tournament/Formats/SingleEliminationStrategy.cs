@@ -3,7 +3,7 @@ namespace BloodTourney.Tournament.Formats;
 internal class SingleEliminationStrategy : ITournamentFormat
 {
     /// <summary>
-    /// First round will have 'byes' if total number of teams is not a power of two.
+    /// The first round will have 'byes' if total number of teams is not a power of two.
     /// 'Byes' are represented by MatchNode objects that have TeamA set but TeamB as null.
     /// </summary>
     /// <param name="teamGuids"></param>
@@ -68,6 +68,8 @@ internal class SingleEliminationStrategy : ITournamentFormat
 
     IEnumerable<MatchNode> ITournamentFormat.CreateNextRound(IEnumerable<MatchNode> completedRound)
     {
+        // TODO: Account for players leaving mid tournament, creating Byes.
+        // If player leaves on bracket finals, the last player is immediately champion
         List<MatchNode> completeRoundList = completedRound.ToList();
 
         if (completeRoundList.Any(w => w.Winner == null))
