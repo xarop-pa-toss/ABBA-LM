@@ -10,11 +10,6 @@ public interface ITournament
     TournamentConfig Configuration { get; }
 
     /// <summary>
-    /// Get the format implementation for this tournament
-    /// </summary>
-    ITournamentFormat Format { get; }
-
-    /// <summary>
     /// Validates if a team is legal for this tournament
     /// </summary>
     (bool isValid, string error) ValidateTeam(Models.Team team);

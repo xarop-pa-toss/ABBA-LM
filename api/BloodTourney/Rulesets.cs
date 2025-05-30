@@ -145,7 +145,7 @@ public class Ruleset
         public required SkillStacks StackingType { get; set; } = SkillStacks.OnlyPrimaries;
 
         /// <summary>
-        /// Skill combinations that will consume extra slots from the alloted skill allowance (based on Tier)
+        /// Skill combinations that will consume extra slots from the allotted skill allowance (based on Tier)
         /// </summary>
         public Dictionary<ImmutableHashSet<string>, uint>? ExtraSkillstackCosts { get; init; }
         public required bool ExtraCostAppliesToDefaultSkills { get; init; }
@@ -164,7 +164,7 @@ public class Ruleset
         public Dictionary<string, uint>? CostOverrideForTeam { get; set; }
 
         /// <summary>
-        /// Overrides default cost of this inducement for teams with a specific trait. Eg. Bribes for Bribery & Corruption teams
+        /// Overrides default cost of this inducement for teams with a specific trait. E.g. Bribes for Bribery & Corruption teams
         /// </summary>
         public Dictionary<string, uint>? CostOverrideForTeamsWithTrait { get; set; }
 
@@ -198,7 +198,7 @@ public class Ruleset
         public required bool UseGpForNonPlayerExtras = true;
 
         /// <summary>
-        /// Players added to a roster during a match due to special rules are removed at the end of the match. Eg. Nurgle rotters
+        /// Players added to a roster during a match due to special rules are removed at the end of the match. E.g. Nurgle rotters
         /// </summary>
         public required bool RemovePlayersAddedDuringMatchAtGameEnd = true;
 

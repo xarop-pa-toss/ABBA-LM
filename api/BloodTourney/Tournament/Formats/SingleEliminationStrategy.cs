@@ -3,48 +3,57 @@ namespace BloodTourney.Tournament.Formats;
 internal class SingleEliminationStrategy : ITournamentFormat
 {
     /// <summary>
-    /// The first round will have 'byes' if total number of teams is not a power of two.
+    /// The first round will have 'byes' if the total number of teams is not a power of two.
     /// 'Byes' are represented by MatchNode objects that have TeamA set but TeamB as null.
+    /// 'Byes' are attributed randomly.
     /// </summary>
     /// <param name="teamGuids"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     IEnumerable<MatchNode> ITournamentFormat.CreateFirstRoundRandom(IEnumerable<Guid> teamGuids)
     {
-        List<Guid> teamGuidList = teamGuids.ToList();
-        if (!teamGuidList.Any())
+        // Generate a pseudo-random list of indexes.
+        var teamArray = teamGuids.ToArray();
+        new Random().Shuffle(teamArray);
+        var finalTeamList = teamArray.ToList();
+        
+        return CreateFirstRound(finalTeamList);
+    }
+    
+    IEnumerable<MatchNode> ITournamentFormat.CreateFirstRoundSeeded(IEnumerable<(Guid, uint)> teamGuidsWithRank)
+    {
+        // TODO: Implement Seeding
+        return new List<MatchNode>();
+    }
+
+    private IEnumerable<MatchNode> CreateFirstRound(IList<Guid> teamGuids)
+    {
+        if (!teamGuids.Any())
         {
             throw new ArgumentOutOfRangeException(nameof(teamGuids));
         }
         
-        int totalTeams = teamGuidList.Count();
+        int totalTeams = teamGuids.Count();
         int nextPowerOfTwo = Helpers.GetNextPowerOfTwo(totalTeams);
-        int previousPowerOfTwo = nextPowerOfTwo / 2;
-        
         int amountOfByes = nextPowerOfTwo - totalTeams;
         int amountOfPlayingTeams = totalTeams - amountOfByes;
-        int amountOfMatches = amountOfPlayingTeams * 2;
         
+        // Split into playing teams and byes
+        var playingTeams = teamGuids.Take(amountOfPlayingTeams).ToArray();
+        var byes = teamGuids.Skip(amountOfPlayingTeams).ToArray();
         
-        List<int> randomizer = Enumerable.Range(1, totalTeams).ToArray().ToList();
-        var playingTeamsRandomized = randomizer.Take(new Range(0, amountOfPlayingTeams - 1)).ToArray();
-        var byesRandomized = randomizer.Take(new Range(amountOfPlayingTeams, randomizer.Count - 1)).ToArray();
+        // Splitting the randomised teams indexes into chunks of 2, creating MatchNodes accordingly
+        IEnumerable<Guid[]> playingTeamsChunks = playingTeams.Chunk(2);
+        IEnumerable<Guid[]> byesChunks = byes.Chunk(2);
         
-        new Random().Shuffle(playingTeamsRandomized);
-        new Random().Shuffle(byesRandomized);
-        
-        // Splitting the randomized teams indexes into chunks of 2, creating MatchNodes accordingly
         List<MatchNode> matches = new List<MatchNode>();
-        IEnumerable<int[]> playingTeamsChunks = playingTeamsRandomized.Chunk(2);
-        IEnumerable<int[]> byesChunks = byesRandomized.Chunk(2);
-        
         foreach (var chunk in playingTeamsChunks)
         {
             matches.Add(new MatchNode()
             {
-                IsBye = false,
-                TeamA = teamGuidList[chunk[0]],
-                TeamB = teamGuidList[chunk[1]]
+                // IsBye = false,
+                TeamA = chunk[0],
+                TeamB = chunk[1]
             });
         }
 
@@ -52,18 +61,12 @@ internal class SingleEliminationStrategy : ITournamentFormat
         {
             matches.Add(new MatchNode()
             {
-                IsBye = true,
-                TeamA = teamGuidList[chunk[0]],
-                TeamB = teamGuidList[chunk[1]]
+                // IsBye = true,
+                TeamA = chunk[0],
+                TeamB = null
             });
         }
         return matches;
-    }
-
-    IEnumerable<MatchNode> ITournamentFormat.CreateFirstRoundSeeded(Dictionary<Guid, uint> teamGuidsWithRank)
-    {
-        // TODO: Implement Seeding
-        return new List<MatchNode>();
     }
 
     IEnumerable<MatchNode> ITournamentFormat.CreateNextRound(IEnumerable<MatchNode> completedRound)
@@ -83,7 +86,7 @@ internal class SingleEliminationStrategy : ITournamentFormat
         {
             matches.Add(new MatchNode()
             {
-                IsBye = false,
+                // IsBye = false,
                 TeamA = matchPairs[0].Winner,
                 TeamB = matchPairs[1].Winner,
                 Winner = null,
