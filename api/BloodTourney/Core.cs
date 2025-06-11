@@ -1,4 +1,6 @@
-﻿namespace BloodTourney;
+﻿using BloodTourney.Tournament;
+
+namespace BloodTourney;
 //TODO 
 // Implement a Lock system after tournament is validated and accepted by user.
 
@@ -33,8 +35,8 @@ public class Core
         /// <summary>
         /// Round progression format. E.g. Round Robin, Swiss, etc.
         /// </summary>
-        public required TournamentFormats TournamentFormat { get; set; }
-        public required TournamentParameters TournamentSettings { get; set; }
+        public required Tournament.Tournament.TournamentFormats TournamentFormat { get; set; }
+        public required TournamentConfig TournamentSettings { get; set; }
     }
     
     /// <summary>

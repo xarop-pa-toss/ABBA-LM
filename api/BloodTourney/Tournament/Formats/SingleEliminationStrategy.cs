@@ -1,6 +1,6 @@
 namespace BloodTourney.Tournament.Formats;
 
-internal class SingleEliminationStrategy : ITournamentFormat
+public class SingleEliminationStrategy : ITournamentFormat
 {
     /// <summary>
     /// The first round will have 'byes' if the total number of teams is not a power of two.
@@ -12,12 +12,16 @@ internal class SingleEliminationStrategy : ITournamentFormat
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     IEnumerable<MatchNode> ITournamentFormat.CreateFirstRoundRandom(IEnumerable<Guid> teamGuids)
     {
-        // Generate a pseudo-random list of indexes.
         var teamArray = teamGuids.ToArray();
+        if (teamArray.Count() <= 1)
+        {
+            throw new ArgumentOutOfRangeException(nameof(teamGuids));
+        }
+     
+        // Generate a pseudo-random list of indexes.
         new Random().Shuffle(teamArray);
-        var finalTeamList = teamArray.ToList();
         
-        return CreateFirstRound(finalTeamList);
+        return CreateFirstRound(teamArray.ToList());
     }
     
     IEnumerable<MatchNode> ITournamentFormat.CreateFirstRoundSeeded(IEnumerable<(Guid, uint)> teamGuidsWithRank)
@@ -42,7 +46,7 @@ internal class SingleEliminationStrategy : ITournamentFormat
         var playingTeams = teamGuids.Take(amountOfPlayingTeams).ToArray();
         var byes = teamGuids.Skip(amountOfPlayingTeams).ToArray();
         
-        // Splitting the randomised teams indexes into chunks of 2, creating MatchNodes accordingly
+        // Creating MatchNode pairs
         IEnumerable<Guid[]> playingTeamsChunks = playingTeams.Chunk(2);
         IEnumerable<Guid[]> byesChunks = byes.Chunk(2);
         
