@@ -10,7 +10,7 @@ public class TournamentController : ControllerBase
     [HttpGet]
     public async Task<ActionResult> GetPresetRuleset([FromBody] string presetRulesetName)
     {
-        (var ruleset, string err) = await BloodTourney.GetRuleset(presetRulesetName);
+        (var ruleset, string err) = await BloodTourney.Ruleset.GetPreset(presetRulesetName);
 
         if (!string.IsNullOrWhiteSpace(err))
         {
@@ -23,7 +23,7 @@ public class TournamentController : ControllerBase
     [HttpGet]
     public async Task<ActionResult> ValidateRuleset([FromBody] BloodTourney.Ruleset ruleset)
     {
-        List<string> errors = await BloodTourney.Rulesets.ValidateRuleset(ruleset);
+        List<string> errors = await BloodTourney.Ruleset.ValidateRuleset(ruleset);
 
         if (errors.Any())
         {

@@ -9,18 +9,8 @@ public class RulesetPresets
         EuroBowl2025,
         SardineBowl2025
     }
-
-    public static Ruleset GetPresetRuleset(RulesetPresetsEnum preset)
-    {
-        return preset switch
-        {
-            RulesetPresetsEnum.SardineBowl2025 => CreateSardineBowl2025Ruleset(),
-            // RulesetPresetsEnum.EuroBowl2025 => CreateEuroBowl2025Ruleset(),
-            _ => throw new ArgumentException($"Unknown preset: {preset}")
-        };
-    }
-
-    private static Ruleset CreateSardineBowl2025Ruleset()
+    
+    internal static Ruleset CreateSardineBowl2025Ruleset()
     {
         var skillstacking = new Ruleset.SkillStacking()
         {

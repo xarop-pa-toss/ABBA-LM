@@ -19,6 +19,16 @@ public class Ruleset
     {
         
     }
+    
+    public static Ruleset GetPresetRuleset(RulesetPresets.RulesetPresetsEnum preset)
+    {
+        return preset switch
+        {
+            RulesetPresets.RulesetPresetsEnum.SardineBowl2025 => RulesetPresets.CreateSardineBowl2025Ruleset(),
+            // RulesetPresets.RulesetPresetsEnum.EuroBowl2025 => CreateEuroBowl2025Ruleset(),
+            _ => throw new ArgumentException($"Unknown preset: {preset}")
+        };
+    }
 
     public class Builder
     {
@@ -208,7 +218,7 @@ public class Ruleset
         public required bool AllowSameStarPlayerOnBothTeams = true;
 
         /// <summary>
-        /// Text only. Will not have mechanical effect.
+        /// Text only. Will not have a mechanical effect.
         /// </summary>
         public IEnumerable<string>? AdditionalRules { get; set; }
     }

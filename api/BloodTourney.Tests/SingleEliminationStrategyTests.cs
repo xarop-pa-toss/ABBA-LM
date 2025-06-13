@@ -1,26 +1,40 @@
 ﻿using BloodTourney.Tournament;
 using BloodTourney.Tournament.Formats;
+using System.Diagnostics;
+using Xunit.Abstractions;
 
 namespace BloodTourney.Tests
 {
     public class SingleEliminationStrategyTests
     {
         private readonly SingleEliminationStrategy _strategy;
+        private readonly ITestOutputHelper _output;
 
-        public SingleEliminationStrategyTests()
+        public SingleEliminationStrategyTests(ITestOutputHelper output)
         {
             _strategy = new SingleEliminationStrategy();
+            _output = output;
         }
 
         [Fact]
         public void CreateFirstRoundRandom_WithTwoTeams_ReturnsOneMatch()
         {
             // Arrange
-            var teams = new List<Guid> { Guid.NewGuid(), Guid.NewGuid() };
+            var team1 = Guid.NewGuid();
+            var team2 = Guid.NewGuid();
+            var teams = new List<Guid> { team1, team2 };
+            var teamNames = new Dictionary<Guid, string>
+            {
+                { team1, "Red Rockets" },
+                { team2, "Blue Bombers" }
+            };
 
             // Act
             var result = ((ITournamentFormat)_strategy).CreateFirstRoundRandom(teams);
             var matches = result.ToList();
+
+            // Output tournament visualization
+            _output.WriteLine(TournamentTestHelpers.VisualizeMatches(matches, teamNames));
 
             // Assert
             Assert.Single(matches);
@@ -35,16 +49,23 @@ namespace BloodTourney.Tests
         public void CreateFirstRoundRandom_WithThreeTeams_ReturnsTwoMatchesWithOneBye()
         {
             // Arrange
-            var teams = new List<Guid> 
-            { 
-                Guid.NewGuid(), 
-                Guid.NewGuid(), 
-                Guid.NewGuid() 
+            var team1 = Guid.NewGuid();
+            var team2 = Guid.NewGuid();
+            var team3 = Guid.NewGuid();
+            var teams = new List<Guid> { team1, team2, team3 };
+            var teamNames = new Dictionary<Guid, string>
+            {
+                { team1, "Dwarven Diggers" },
+                { team2, "Elven Archers" },
+                { team3, "Orc Crushers" }
             };
 
             // Act
             var result = ((ITournamentFormat)_strategy).CreateFirstRoundRandom(teams);
             var matches = result.ToList();
+
+            // Output tournament visualization
+            _output.WriteLine(TournamentTestHelpers.VisualizeMatches(matches, teamNames));
 
             // Assert
             Assert.Equal(2, matches.Count);
@@ -70,17 +91,25 @@ namespace BloodTourney.Tests
         public void CreateFirstRoundRandom_WithFourTeams_ReturnsTwoFullMatches()
         {
             // Arrange
-            var teams = new List<Guid>
+            var team1 = Guid.NewGuid();
+            var team2 = Guid.NewGuid();
+            var team3 = Guid.NewGuid();
+            var team4 = Guid.NewGuid();
+            var teams = new List<Guid> { team1, team2, team3, team4 };
+            var teamNames = new Dictionary<Guid, string>
             {
-                Guid.NewGuid(),
-                Guid.NewGuid(),
-                Guid.NewGuid(),
-                Guid.NewGuid()
+                { team1, "Skaven Sneakers" },
+                { team2, "Human Heroes" },
+                { team3, "Chaos Chosen" },
+                { team4, "Undead Undertakers" }
             };
 
             // Act
             var result = ((ITournamentFormat)_strategy).CreateFirstRoundRandom(teams);
             var matches = result.ToList();
+
+            // Output tournament visualization
+            _output.WriteLine(TournamentTestHelpers.VisualizeMatches(matches, teamNames));
 
             // Assert
             Assert.Equal(2, matches.Count);

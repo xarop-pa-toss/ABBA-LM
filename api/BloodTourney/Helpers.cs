@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 namespace BloodTourney;
 
 public static class Helpers
@@ -11,5 +13,10 @@ public static class Helpers
         }
 
         return powerOfTwo;
+    }
+
+    public static string ParseToJsonString (Tournament.Tournament tournament)
+    { 
+        return JsonSerializer.Serialize(tournament);
     }
 }
