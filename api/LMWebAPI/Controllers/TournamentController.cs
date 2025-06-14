@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.Json.Nodes;
+using LMWebAPI.Models.DTOs;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LMWebAPI.Controllers;
 
@@ -34,11 +36,11 @@ public class TournamentController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> CreateCustomRuleset([FromBody] BloodTourney.RulesetDTO ruleset)
+    public async Task<JsonObject> CreateCustomRuleset([FromBody] BloodTourney.Ruleset ruleset)
     {
-        var newRuleset = new BloodTourney.Core.Rulesets.Builder()
+        var newRuleset = new BloodTourney.Ruleset.Builder()
             .WithTiers(ruleset.Tiers)
-            .WithVictoryPoints(ruleset.VictoryPoints)
+            .WithVictoryPoints(ruleset.MatchVictoryPoints)
             .WithTieBreakers(ruleset.TieBreakers)
             .WithSkillStacking(ruleset.Skillstacking)
             .WithTimeKeeping(ruleset.Timekeeping)

@@ -14,10 +14,10 @@ public static class Encryption
 
     public static byte[] EncryptStringToFile(string stringToEncrypt)
     {
-        byte[] jsonBytes = Encoding.UTF8.GetBytes(stringToEncrypt);
+        byte[] bytesToEncrypt = Encoding.UTF8.GetBytes(stringToEncrypt);
         
         HMACSHA256 hmac = new(HmacKey);
-        byte[] hmacHash = hmac.ComputeHash(jsonBytes);
+        byte[] hmacHash = hmac.ComputeHash(bytesToEncrypt);
         
         using Aes aes = Aes.Create();
         aes.Key = Key;
@@ -25,7 +25,7 @@ public static class Encryption
         
         using MemoryStream ms = new();
         using CryptoStream cs = new(ms, aes.CreateEncryptor(), CryptoStreamMode.Write);
-        cs.Write(jsonBytes, 0, jsonBytes.Length);
+        cs.Write(bytesToEncrypt, 0, bytesToEncrypt.Length);
         cs.FlushFinalBlock();
         
         byte[] encryptedBytes = ms.ToArray();

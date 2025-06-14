@@ -1,4 +1,6 @@
 ﻿using System.Collections.Immutable;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace BloodTourney;
 
@@ -29,7 +31,19 @@ public class Ruleset
             _ => throw new ArgumentException($"Unknown preset: {preset}")
         };
     }
+    
+    public Byte[] GetEncryptedRulesetFile(Ruleset ruleset)
+    {
+        string json = JsonSerializer.Serialize(ruleset);
+        return Encryption.EncryptStringToFile(json);
+    }
 
+    public Ruleset DecryptRulesetFile(byte[] encryptedRulesetFile)
+    {
+        string jsonDecrypted = Encryption.DecryptFromFileToString(encryptedRulesetFile);
+        return JsonSerializer.Deserialize<Ruleset>(jsonDecrypted);
+    }
+    
     public class Builder
     {
         private IEnumerable<Tiers.TierParameters>? _tiers;
@@ -43,55 +57,55 @@ public class Ruleset
         private OtherRules? _otherRules;
         public Builder WithTiers(IEnumerable<Tiers.TierParameters> tiers)
         {
-            this._tiers = tiers;
+            _tiers = tiers;
             return this;
         }
 
         public Builder WithVictoryPoints(VictoryPoints victoryPoints)
         {
-            this._victoryPoints = victoryPoints;
+            _victoryPoints = victoryPoints;
             return this;
         }
 
         public Builder WithTieBreakers(IEnumerable<string> tieBreakers)
         {
-            this._tieBreakers = tieBreakers;
+            _tieBreakers = tieBreakers;
             return this;
         }
 
         public Builder WithTimeKeeping(TimeKeeping timekeeping)
         {
-            this._timekeeping = timekeeping;
+            _timekeeping = timekeeping;
             return this;
         }
 
         public Builder WithSkillStacking(SkillStacking skillStacking)
         {
-            this._skillstacking = skillStacking;
+            _skillstacking = skillStacking;
             return this;
         }
 
         public Builder WithInducements(IEnumerable<Inducement> inducements)
         {
-            this._inducements = inducements;
+            _inducements = inducements;
             return this;
         }
 
         public Builder WithBannedStarPlayers(IEnumerable<string> bannedStarPlayers)
         {
-            this._bannedStarPlayers = bannedStarPlayers;
+            _bannedStarPlayers = bannedStarPlayers;
             return this;
         }
 
         public Builder WithGuidelines(IEnumerable<string> guidelines)
         {
-            this._guidelines = guidelines;
+            _guidelines = guidelines;
             return this;
         }
 
         public Builder WithAdditionalRules(OtherRules otherRules)
         {
-            this._otherRules = otherRules;
+            _otherRules = otherRules;
             return this;
         }
 
@@ -140,7 +154,6 @@ public class Ruleset
         }
         public static Builder CreateBuilder() => new Builder();
     }
-    
     
     #region STRUCTS/ENUMS
     public enum SkillStacks
