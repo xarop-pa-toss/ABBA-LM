@@ -46,6 +46,8 @@ public class Ruleset
     
     public class Builder
     {
+        private readonly HashSet<string> _setProperties = new();
+        
         private IEnumerable<Tiers.TierParameters>? _tiers;
         private VictoryPoints? _victoryPoints;
         private IEnumerable<string>? _tieBreakers;
@@ -55,60 +57,7 @@ public class Ruleset
         private IEnumerable<string>? _bannedStarPlayers;
         private IEnumerable<string>? _guidelines;
         private OtherRules? _otherRules;
-        public Builder WithTiers(IEnumerable<Tiers.TierParameters> tiers)
-        {
-            _tiers = tiers;
-            return this;
-        }
-
-        public Builder WithVictoryPoints(VictoryPoints victoryPoints)
-        {
-            _victoryPoints = victoryPoints;
-            return this;
-        }
-
-        public Builder WithTieBreakers(IEnumerable<string> tieBreakers)
-        {
-            _tieBreakers = tieBreakers;
-            return this;
-        }
-
-        public Builder WithTimeKeeping(TimeKeeping timekeeping)
-        {
-            _timekeeping = timekeeping;
-            return this;
-        }
-
-        public Builder WithSkillStacking(SkillStacking skillStacking)
-        {
-            _skillstacking = skillStacking;
-            return this;
-        }
-
-        public Builder WithInducements(IEnumerable<Inducement> inducements)
-        {
-            _inducements = inducements;
-            return this;
-        }
-
-        public Builder WithBannedStarPlayers(IEnumerable<string> bannedStarPlayers)
-        {
-            _bannedStarPlayers = bannedStarPlayers;
-            return this;
-        }
-
-        public Builder WithGuidelines(IEnumerable<string> guidelines)
-        {
-            _guidelines = guidelines;
-            return this;
-        }
-
-        public Builder WithAdditionalRules(OtherRules otherRules)
-        {
-            _otherRules = otherRules;
-            return this;
-        }
-
+        
         public Ruleset Build()
         {
             // Validation
@@ -152,7 +101,71 @@ public class Ruleset
                 }
             };
         }
-        public static Builder CreateBuilder() => new Builder();
+        
+        public Builder WithTiers(IEnumerable<Tiers.TierParameters> tiers)
+        {
+            _tiers = tiers;
+            _setProperties.Add(nameof(Tiers));
+            return this;
+        }
+
+        public Builder WithVictoryPoints(VictoryPoints victoryPoints)
+        {
+            _victoryPoints = victoryPoints;
+            _setProperties.Add(nameof(VictoryPoints));
+            return this;
+        }
+
+        public Builder WithTieBreakers(IEnumerable<string> tieBreakers)
+        {
+            _tieBreakers = tieBreakers;
+            _setProperties.Add("TieBreakers");
+            return this;
+        }
+
+        public Builder WithTimeKeeping(TimeKeeping timekeeping)
+        {
+            _timekeeping = timekeeping;
+            _setProperties.Add(nameof(TimeKeeping));
+            return this;
+        }
+
+        public Builder WithSkillStacking(SkillStacking skillStacking)
+        {
+            _skillstacking = skillStacking;
+            _setProperties.Add(nameof(SkillStacking));
+            return this;
+        }
+
+        public Builder WithInducements(IEnumerable<Inducement> inducements)
+        {
+            _inducements = inducements;
+            _setProperties.Add("Inducements");
+            return this;
+        }
+
+        public Builder WithBannedStarPlayers(IEnumerable<string> bannedStarPlayers)
+        {
+            _bannedStarPlayers = bannedStarPlayers;
+            _setProperties.Add("BannedStarPlayers");
+            return this;
+        }
+
+        public Builder WithGuidelines(IEnumerable<string> guidelines)
+        {
+            _guidelines = guidelines;
+            _setProperties.Add("Guidelines");
+            return this;
+        }
+
+        public Builder WithAdditionalRules(OtherRules otherRules)
+        {
+            _otherRules = otherRules;
+            _setProperties.Add(nameof(OtherRules));
+            return this;
+        }
+        
+        public static Builder Create() => new Builder();
     }
     
     #region STRUCTS/ENUMS

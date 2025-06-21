@@ -74,7 +74,7 @@ public class Tournament : ITournament
     /// Builder for creating Tournament instances. Allows for creation of custom rulesets.
     /// Use WithExistingRuleset to send in a BloodTourney.Ruleset (enum) choice, ConfigureRuleset to use Ruleset.Builder, or FromFile to import a previously created Ruleset..
     /// </summary>
-    public class Builder
+    public class RulesetBuilder
     {
         private Ruleset.Builder? _rulesetBuilder;
         private Ruleset? _ruleset;
@@ -83,11 +83,10 @@ public class Tournament : ITournament
         private bool _firstRoundRandomSort = true;
         private bool _unspentCashConvertedToPrayers;
         private bool _resurrectionMode = true;
-
         /// <summary>
         /// Sets the tournament format
         /// </summary>
-        public Builder WithFormat(TournamentFormats format)
+        public RulesetBuilder WithFormat(TournamentFormats format)
         {
             _format = format;
             return this;
@@ -96,7 +95,7 @@ public class Tournament : ITournament
         /// <summary>
         /// Sets the team value limit
         /// </summary>
-        public Builder WithTeamValueLimit(int limit)
+        public RulesetBuilder WithTeamValueLimit(int limit)
         {
             _teamValueLimit = limit;
             return this;
@@ -105,7 +104,7 @@ public class Tournament : ITournament
         /// <summary>
         /// Sets whether the first round should be randomly sorted
         /// </summary>
-        public Builder WithFirstRoundRandomSort(bool randomSort = true)
+        public RulesetBuilder WithFirstRoundRandomSort(bool randomSort = true)
         {
             _firstRoundRandomSort = randomSort;
             return this;
@@ -114,7 +113,7 @@ public class Tournament : ITournament
         /// <summary>
         /// Sets whether unspent cash should be converted to Prayers to Nuffle or lost entirely
         /// </summary>
-        public Builder WithUnspentCashConvertedToPrayers(bool convert = true)
+        public RulesetBuilder WithUnspentCashConvertedToPrayers(bool convert = true)
         {
             _unspentCashConvertedToPrayers = convert;
             return this;
@@ -124,7 +123,7 @@ public class Tournament : ITournament
         /// Sets whether resurrection mode is enabled.
         /// Resurrection mode means that injury or death suffered by a player will be cleared after each match, and each coach will start their matches with the registered rosters. 
         /// </summary>
-        public Builder WithResurrectionMode(bool resurrect = true)
+        public RulesetBuilder WithResurrectionMode(bool resurrect = true)
         {
             _resurrectionMode = resurrect;
             return this;
@@ -133,7 +132,7 @@ public class Tournament : ITournament
         /// <summary>
         /// Uses a default ruleset for the tournament. Takes a BloodTourney.Ruleset enum object as parameter.
         /// </summary>
-        public Builder WithExistingRuleset(Ruleset ruleset)
+        public RulesetBuilder WithExistingRuleset(Ruleset ruleset)
         {
             _ruleset = ruleset;
             _rulesetBuilder = null;
@@ -144,9 +143,9 @@ public class Tournament : ITournament
         /// Starts configuring a new ruleset for the tournament with the Ruleset.Builder.
         /// </summary>
         /// <returns>A Ruleset.Builder for configuring the ruleset</returns>
-        public Ruleset.Builder ConfigureRuleset()
+        public Ruleset.Builder BuildRuleset()
         {
-            _rulesetBuilder = Ruleset.Builder.CreateBuilder();
+            _rulesetBuilder = Ruleset.Builder.Create();
             return _rulesetBuilder;
         }
 
@@ -193,6 +192,6 @@ public class Tournament : ITournament
         /// <summary>
         /// Creates a new Tournament builder
         /// </summary>
-        public static Builder CreateBuilder() => new Builder();
+        public static RulesetBuilder CreateBuilder() => new RulesetBuilder();
     }
 }

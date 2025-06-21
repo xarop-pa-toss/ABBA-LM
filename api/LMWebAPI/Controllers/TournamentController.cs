@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Nodes;
+using BloodTourney;
 using LMWebAPI.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,7 +13,7 @@ public class TournamentController : ControllerBase
     [HttpGet]
     public async Task<ActionResult> GetPresetRuleset([FromBody] string presetRulesetName)
     {
-        (var ruleset, string err) = await BloodTourney.Ruleset.GetPreset(presetRulesetName);
+        (var ruleset, string err) = await BloodTourney.Ruleset.GetPresetRuleset(RulesetPresets.RulesetPresetsEnum.SardineBowl2025);
 
         if (!string.IsNullOrWhiteSpace(err))
         {

@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Text.Json;
 
 namespace BloodTourney;
@@ -18,5 +19,13 @@ public static class Helpers
     public static string ParseToJsonString (Tournament.Tournament tournament)
     { 
         return JsonSerializer.Serialize(tournament);
+    }
+    
+    public readonly record struct ValidationResult()
+    {
+        public ImmutableList<string> Errors { get; init; } = ImmutableList<string>.Empty;
+        
+        public static ValidationResult Valid() => new ValidationResult();
+        public static ValidationResult Failure(params string[] errors) => new ValidationResult { Errors = errors.ToImmutableList() };
     }
 }

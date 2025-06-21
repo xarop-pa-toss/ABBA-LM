@@ -1,66 +1,38 @@
 ﻿using System.Collections.Immutable;
 using System.Data;
 using System.Diagnostics;
+using static BloodTourney.Helpers;
 
 namespace BloodTourney;
 
 public class Tiers
 {
-    public enum TeamCodeNames
-    {
-        Amazons,
-        BlackOrcs,
-        Chaos,
-        ChaosDwarves,
-        ChaosRenegades,
-        DarkElves,
-        Dwarves,
-        ElvenUnion,
-        Gnomes,
-        Goblins,
-        Halflings,
-        HighElves,
-        Humans,
-        ImperialNobility,
-        Khorne,
-        Lizardmen,
-        Necromantic,
-        Norse,
-        Nurgle,
-        Ogres,
-        OldWorldAlliance,
-        Orcs,
-        Skaven,
-        Slann,
-        Snotlings,
-        TombKings,
-        Undead,
-        Underworld,
-        Vampires,
-        WoodElves
-    }
-
+    /// <summary>
+    /// Represents the restrictions and parameters for a tournament Tier
+    /// </summary>
     public readonly struct TierParameters
     {
         public required uint TierNumber { get; init; }
-        public required List<TeamCodeNames> TeamCodes { get; init; }
+        public required List<TeamCodeNames> AllowedTeams { get; init; }
 
         /// <summary>
-        /// Maximum TV before skills and inducements are applied.
+        /// Maximum Team Value (gold pieces) before skills and inducements are applied.
         /// </summary>
-        public required uint Gps { get; init; }
+        public required uint MaxBaseTeamValue { get; init; }
         
         public required uint MaxPrimarySkills { get; init; }
         public required uint MaxSecondarySkills { get; init; }
         public required uint SkillStackingPlayerLimit { get; init; }
         public required uint MaxStarPlayers { get; init; }
+        
+        public bool IsTeamAllowed(TeamCodeNames team) => AllowedTeams.Contains(team);
     }
-
-    public static readonly ImmutableArray<TierParameters> SardineBowl2025 = ImmutableArray.Create(
+    
+    public readonly static ImmutableArray<TierParameters> SardineBowl2025 = ImmutableArray.Create(
         new TierParameters
         {
             TierNumber = 1,
-            TeamCodes = new List<TeamCodeNames>
+            AllowedTeams = new List<TeamCodeNames>
             {
                 TeamCodeNames.Amazons,
                 TeamCodeNames.DarkElves,
@@ -69,7 +41,7 @@ public class Tiers
                 TeamCodeNames.Undead,
                 TeamCodeNames.Underworld
             },
-            Gps = 1_150_000,
+            MaxBaseTeamValue = 1_150_000,
             MaxPrimarySkills = 6,
             MaxSecondarySkills = 0,
             SkillStackingPlayerLimit = 0,
@@ -78,7 +50,7 @@ public class Tiers
         new TierParameters
         {
             TierNumber = 2,
-            TeamCodes = new List<TeamCodeNames>
+            AllowedTeams = new List<TeamCodeNames>
             {
                 TeamCodeNames.ChaosDwarves,
                 TeamCodeNames.Necromantic,
@@ -88,7 +60,7 @@ public class Tiers
                 TeamCodeNames.Vampires,
                 TeamCodeNames.WoodElves
             },
-            Gps = 1_160_000,
+            MaxBaseTeamValue = 1_160_000,
             MaxPrimarySkills = 7,
             MaxSecondarySkills = 1,
             SkillStackingPlayerLimit = 0,
@@ -97,8 +69,8 @@ public class Tiers
         new TierParameters
         {
             TierNumber = 3,
-            Gps = 1_170_000,
-            TeamCodes = new List<TeamCodeNames>
+            MaxBaseTeamValue = 1_170_000,
+            AllowedTeams = new List<TeamCodeNames>
             {
                 TeamCodeNames.ElvenUnion,
                 TeamCodeNames.Khorne,
@@ -114,7 +86,7 @@ public class Tiers
         new TierParameters
         {
             TierNumber = 4,
-            TeamCodes = new List<TeamCodeNames>
+            AllowedTeams = new List<TeamCodeNames>
             {
                 TeamCodeNames.ChaosRenegades,
                 TeamCodeNames.Gnomes,
@@ -122,7 +94,7 @@ public class Tiers
                 TeamCodeNames.OldWorldAlliance,
                 TeamCodeNames.Slann
             },
-            Gps = 1_180_000,
+            MaxBaseTeamValue = 1_180_000,
             MaxPrimarySkills = 8,
             MaxSecondarySkills = 2,
             SkillStackingPlayerLimit = 2,
@@ -131,13 +103,13 @@ public class Tiers
         new TierParameters
         {
             TierNumber = 5,
-            TeamCodes = new List<TeamCodeNames>
+            AllowedTeams = new List<TeamCodeNames>
             {
                 TeamCodeNames.BlackOrcs,
                 TeamCodeNames.Chaos,
                 TeamCodeNames.Nurgle
             },
-            Gps = 1_200_000,
+            MaxBaseTeamValue = 1_200_000,
             MaxPrimarySkills = 9,
             MaxSecondarySkills = 2,
             SkillStackingPlayerLimit = 2,
@@ -146,14 +118,14 @@ public class Tiers
         new TierParameters
         {
             TierNumber = 6,
-            TeamCodes = new List<TeamCodeNames>
+            AllowedTeams = new List<TeamCodeNames>
             {
                 TeamCodeNames.Goblins,
                 TeamCodeNames.Halflings,
                 TeamCodeNames.Ogres,
                 TeamCodeNames.Snotlings
             },
-            Gps = 1_200_000,
+            MaxBaseTeamValue = 1_200_000,
             MaxPrimarySkills = 10,
             MaxSecondarySkills = 3,
             SkillStackingPlayerLimit = 4,
@@ -161,12 +133,12 @@ public class Tiers
         }
     );
 
-    public static readonly ImmutableArray<TierParameters> EuroBowl2025 = ImmutableArray.Create(
+    public readonly static ImmutableArray<TierParameters> EuroBowl2025 = ImmutableArray.Create(
         new TierParameters
         {
             TierNumber = 1,
-            Gps = 1_150_000,
-            TeamCodes = new List<TeamCodeNames>
+            MaxBaseTeamValue = 1_150_000,
+            AllowedTeams = new List<TeamCodeNames>
             {
                 TeamCodeNames.Amazons,
                 TeamCodeNames.DarkElves,
@@ -183,8 +155,8 @@ public class Tiers
         new TierParameters
         {
             TierNumber = 2,
-            Gps = 1_160_000,
-            TeamCodes = new List<TeamCodeNames>
+            MaxBaseTeamValue = 1_160_000,
+            AllowedTeams = new List<TeamCodeNames>
             {
                 TeamCodeNames.ChaosDwarves,
                 TeamCodeNames.Necromantic,
@@ -202,8 +174,8 @@ public class Tiers
         new TierParameters
         {
             TierNumber = 3,
-            Gps = 1_170_000,
-            TeamCodes = new List<TeamCodeNames>
+            MaxBaseTeamValue = 1_170_000,
+            AllowedTeams = new List<TeamCodeNames>
             {
                 TeamCodeNames.ElvenUnion,
                 TeamCodeNames.Khorne,
@@ -219,8 +191,8 @@ public class Tiers
         new TierParameters
         {
             TierNumber = 4,
-            Gps = 1_180_000,
-            TeamCodes = new List<TeamCodeNames>
+            MaxBaseTeamValue = 1_180_000,
+            AllowedTeams = new List<TeamCodeNames>
             {
                 TeamCodeNames.ChaosRenegades,
                 TeamCodeNames.Gnomes,
@@ -236,8 +208,8 @@ public class Tiers
         new TierParameters
         {
             TierNumber = 5,
-            Gps = 1_200_000,
-            TeamCodes = new List<TeamCodeNames>
+            MaxBaseTeamValue = 1_200_000,
+            AllowedTeams = new List<TeamCodeNames>
             {
                 TeamCodeNames.BlackOrcs,
                 TeamCodeNames.Chaos,
@@ -251,8 +223,8 @@ public class Tiers
         new TierParameters
         {
             TierNumber = 6,
-            Gps = 1_200_000,
-            TeamCodes = new List<TeamCodeNames>
+            MaxBaseTeamValue = 1_200_000,
+            AllowedTeams = new List<TeamCodeNames>
             {
                 TeamCodeNames.Goblins,
                 TeamCodeNames.Halflings,
@@ -267,40 +239,76 @@ public class Tiers
     );
 
     /// <summary>
-    /// Custom ruleset validation,
+    /// Custom set of Tiers validation
     /// </summary>
     /// <param name="name"></param>
     /// <param name="tierParameters"></param>
     /// <returns>List Errors will be empty if tournament is valid.</returns>
-    public ValidationResult ValidateCustomRuleset(string name, IEnumerable<TierParameters> tierParameters)
+    public ValidationResult ValidateCustomTiers(string name, IEnumerable<TierParameters> tierParameters)
     {
-        var valResult = new ValidationResult();
-
+        var errors = new List<string>();
+        
         if (!tierParameters.Any())
         {
-            valResult.Errors.Add("Given list of Tier Parameters has no elements");
+            errors.Add("List of tiers is empty.");
         }
-        var tierParametersList = tierParameters.ToImmutableArray();
-
-        HashSet<int> givenTiers = new HashSet<int>();
-        foreach (int tierNumber in tierParameters.Select(tp => tp.TierNumber))
+        
+        List<uint> orderedTierNumbers = tierParameters.Select(t => t.TierNumber).Order().ToList();
+        
+        // Check for duplicate tier numbers/levels.
+        if (orderedTierNumbers.Distinct().Count() < tierParameters.Count())
         {
-            givenTiers.Add(tierNumber);
+            errors.Add("Duplicate tier numbers/levels found.");
         }
-
-        if (givenTiers.Count < tierParametersList.Length)
+        
+        // Check if Tier Numbers start at 1 and os numbered sequentially up to the number of tiers submitted
+        if (orderedTierNumbers.First() == 1 && orderedTierNumbers.Last() == tierParameters.Count())
         {
-            valResult.Errors.Add("Different tiers must not share a level/number.");
+            errors.Add("Tier numbers are not sequential.");
+        }
+        
+        // TODO: Check if there are duplicate teams
+        List<TeamCodeNames> orderedTeamValues = tierParameters.Select(t => t.AllowedTeams).Order().ToList();
+        if (tierParameters.SelectMany(t => t.AllowedTeams).Distinct().Count() < tierParameters.Count())
+        {
+            
         }
 
-        valResult.IsValid = valResult.Errors.Count() > 0 ? false : true;
-
+        // TODO: Check if all teams in the AllowedTeams property are present in the tier list
         return valResult;
     }
+}
 
-    public struct ValidationResult()
-    {
-        public bool IsValid = false;
-        public List<string> Errors = new List<string>();
-    }
+public enum TeamCodeNames
+{
+    Amazons,
+    BlackOrcs,
+    Chaos,
+    ChaosDwarves,
+    ChaosRenegades,
+    DarkElves,
+    Dwarves,
+    ElvenUnion,
+    Gnomes,
+    Goblins,
+    Halflings,
+    HighElves,
+    Humans,
+    ImperialNobility,
+    Khorne,
+    Lizardmen,
+    Necromantic,
+    Norse,
+    Nurgle,
+    Ogres,
+    OldWorldAlliance,
+    Orcs,
+    Skaven,
+    Slann,
+    Snotlings,
+    TombKings,
+    Undead,
+    Underworld,
+    Vampires,
+    WoodElves
 }

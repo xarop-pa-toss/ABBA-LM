@@ -162,7 +162,7 @@ public class RulesetPresets
             ]
         };
         
-        return Ruleset.Builder.CreateBuilder()
+        return Ruleset.Builder.Create()
             .WithTiers(tierParameters)
             .WithVictoryPoints(victoryPoints)
             .WithTieBreakers(tieBreakers)
