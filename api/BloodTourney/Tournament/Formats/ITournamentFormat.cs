@@ -1,4 +1,5 @@
-﻿namespace BloodTourney.Tournament;
+﻿using MongoDB.Bson.Serialization.Serializers;
+namespace BloodTourney.Tournament;
 
 public interface ITournamentFormat
 {
@@ -21,16 +22,18 @@ public interface ITournamentFormat
     /// </summary>
     /// <param name="completedMatches">History of completed matches to avoid rematches</param>
     /// <returns>List of player pairs for the next round</returns>
-    IEnumerable<MatchNode> CreateNextRound(IEnumerable<MatchNode> completedMatches);
+    IEnumerable<MatchNode> CreateNextRound(IEnumerable<MatchNode> completedMatches, IEnumerable<Guid> teamsThatAbandoned = null);
 }
 
 public class MatchNode
 {
     // public bool IsBye { get; set; } = false;
-    public Guid? TeamA { get; set; }
-    public Guid? TeamB { get; set; }
+    public required Guid? TeamA { get; init; }
+    public required Guid? TeamB { get; init; }
     public Guid? Winner { get; set; } = null;
     public Guid? Loser { get; set; } = null;
+    public bool? TeamAAbandoned { get; set; } = false;
+    public bool? TeamBAbandoned { get; set; } = false;
 }
 
 public enum MatchResult

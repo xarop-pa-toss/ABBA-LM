@@ -29,10 +29,9 @@ namespace BloodTourney.Tests
             sb.AppendLine(new string('-', 40));
             sb.AppendLine($"Format: {results.Config.TournamentFormat}");
             sb.AppendLine($"Ruleset: {results.Config.Ruleset}");
-            sb.AppendLine($"Team Value Limit: {results.Config.TeamValueLimit:N0} gold");
             sb.AppendLine($"First Round Sort: {(results.Config.FirstRoundRandomSort ? "Random" : "Seeded")}");
             sb.AppendLine($"Unspent Cash to Prayers: {results.Config.UnspentCashConvertedToPrayers}");
-            sb.AppendLine($"Resurrection Mode: {results.Config.RessurectionMode}");
+            sb.AppendLine($"Resurrection Mode: {results.Config.ResurrectionMode}");
 
             // Tournament Statistics
             sb.AppendLine("\nTOURNAMENT STATISTICS:");

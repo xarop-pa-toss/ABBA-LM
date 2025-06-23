@@ -46,10 +46,9 @@ namespace BloodTourney.Tests
             {
                 Ruleset = Ruleset.GetPresetRuleset(RulesetPresets.RulesetPresetsEnum.SardineBowl2025),
                 TournamentFormat = Tournament.Tournament.TournamentFormats.SingleElimination,
-                TeamValueLimit = 1_000_000,
                 FirstRoundRandomSort = true,
                 UnspentCashConvertedToPrayers = true,
-                RessurectionMode = true
+                ResurrectionMode = true
             };
 
             var startTime = DateTime.UtcNow.AddHours(-3); // Simulate tournament started 3 hours ago
@@ -135,10 +134,9 @@ namespace BloodTourney.Tests
             {
                 Ruleset = Ruleset.GetPresetRuleset(RulesetPresets.RulesetPresetsEnum.SardineBowl2025),
                 TournamentFormat = Tournament.Tournament.TournamentFormats.SingleElimination,
-                TeamValueLimit = 1_200_000,
                 FirstRoundRandomSort = false, // Seeded tournament
                 UnspentCashConvertedToPrayers = false,
-                RessurectionMode = false // Injuries persist between matches
+                ResurrectionMode = false // Injuries persist between matches
             };
 
             var startTime = DateTime.UtcNow.AddDays(-1); // Tournament started yesterday

@@ -50,16 +50,9 @@ public class SingleEliminationStrategy : ITournamentFormat
         IEnumerable<Guid[]> playingTeamsChunks = playingTeams.Chunk(2);
         IEnumerable<Guid[]> byesChunks = byes.Chunk(2);
         
-        List<MatchNode> matches = new List<MatchNode>();
-        foreach (var chunk in playingTeamsChunks)
-        {
-            matches.Add(new MatchNode()
-            {
-                // IsBye = false,
-                TeamA = chunk[0],
-                TeamB = chunk[1]
-            });
-        }
+        List<MatchNode> matches = playingTeamsChunks
+            .Select(chunk => new MatchNode() { TeamA = chunk[0], TeamB = chunk[1]} )
+            .ToList();
 
         foreach (var chunk in byesChunks)
         {
@@ -73,7 +66,7 @@ public class SingleEliminationStrategy : ITournamentFormat
         return matches;
     }
 
-    IEnumerable<MatchNode> ITournamentFormat.CreateNextRound(IEnumerable<MatchNode> completedRound)
+    IEnumerable<MatchNode> ITournamentFormat.CreateNextRound(IEnumerable<MatchNode> completedRound, IEnumerable<Guid> teamsThatAbandoned)
     {
         // TODO: Account for players leaving mid tournament, creating Byes.
         // If player leaves on bracket finals, the last player is immediately champion

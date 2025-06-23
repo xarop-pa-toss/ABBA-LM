@@ -50,9 +50,7 @@ public class Core
         string err = String.Empty;
 
         if (baseParams.PlayerLimit < 2) { err = "Player limit must be 2 or more."; }
-        if (baseParams.TournamentSettings.TeamValueLimit < 0) { err = "Team limit must be greater than 0."; }
         if (baseParams.StartDate < DateTime.UtcNow) { err = "Start date must be today or in the future."; }
-        
 
         return (baseParams, err);
     }

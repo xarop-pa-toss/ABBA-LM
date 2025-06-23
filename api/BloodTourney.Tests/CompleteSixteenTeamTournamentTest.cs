@@ -77,10 +77,9 @@ namespace BloodTourney.Tests
             {
                 Ruleset = Ruleset.GetPresetRuleset(RulesetPresets.RulesetPresetsEnum.SardineBowl2025),
                 TournamentFormat = Tournament.Tournament.TournamentFormats.SingleElimination,
-                TeamValueLimit = 1_100_000,
                 FirstRoundRandomSort = true,
                 UnspentCashConvertedToPrayers = true,
-                RessurectionMode = true
+                ResurrectionMode = true
             };
 
             var startTime = DateTime.UtcNow.AddHours(-5); // Tournament started 5 hours ago

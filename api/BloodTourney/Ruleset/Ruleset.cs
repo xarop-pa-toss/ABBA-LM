@@ -32,7 +32,7 @@ public class Ruleset
         };
     }
     
-    public Byte[] GetEncryptedRulesetFile(Ruleset ruleset)
+    public Byte[] EncryptRulesetIntoFile(Ruleset ruleset)
     {
         string json = JsonSerializer.Serialize(ruleset);
         return Encryption.EncryptStringToFile(json);

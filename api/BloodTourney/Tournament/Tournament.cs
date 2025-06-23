@@ -164,7 +164,7 @@ public class Tournament : ITournament
         }
 
         /// <summary>
-        /// Builds the Tournament instance
+        /// Creates a new tournament instance
         /// </summary>
         public Tournament Build()
         {
@@ -177,10 +177,9 @@ public class Tournament : ITournament
             {
                 Ruleset = _ruleset ?? _rulesetBuilder!.Build(),
                 TournamentFormat = _format,
-                TeamValueLimit = _teamValueLimit,
                 FirstRoundRandomSort = _firstRoundRandomSort,
                 UnspentCashConvertedToPrayers = _unspentCashConvertedToPrayers,
-                RessurectionMode = _resurrectionMode
+                ResurrectionMode = _resurrectionMode
             };
 
             return new Tournament
