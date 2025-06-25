@@ -102,10 +102,7 @@ public class RulesetPresets
                 Max = 1,
                 Name = "Star Players",
                 Cost = 0, // Variable cost based on star player
-                TiersAllowed = new[]
-                {
-                    3, 4, 5, 6
-                }
+                TiersAllowed = new[] { 3, 4, 5, 6 }
             }
         );
 

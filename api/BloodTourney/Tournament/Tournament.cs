@@ -1,9 +1,28 @@
-﻿using BloodTourney.Models;
+﻿using System.ComponentModel.DataAnnotations;
+using BloodTourney.Models;
 
 namespace BloodTourney.Tournament;
 
 public interface ITournament
 {
+    /// <summary>
+    /// User ID of organiser.
+    /// </summary>
+    public string TournamentOrganizerId { get; init; }
+    
+    /// <summary>
+    /// Display the name of the Tournament. Duplicate named tournaments are not advised.
+    /// </summary>
+    public string TournamentName { get; set; }
+    public int PlayerLimit { get; set; }
+    public DateOnly StartDate { get; set; }
+    public TimeOnly StartTime { get; set; }
+    
+    /// <summary>
+    /// Place where the tournament takes place (no geolocation involved).
+    /// </summary>
+    public string Location { get; set; }
+    
     /// <summary>
     /// Get the current configuration of the tournament
     /// </summary>
@@ -12,30 +31,28 @@ public interface ITournament
     /// <summary>
     /// Set the configuration of the tournament
     /// </summary>
-    TournamentConfig SetConfiguration { set; }
+    TournamentConfig SetConfiguration { init; }
     
     /// <summary>
     /// Validates if a team is legal for this tournament
     /// </summary>
-    (bool isValid, string? error) ValidateTeam(Models.Team team);
+    Helpers.ValidationResult ValidateTeam(Models.Team team);
 
     /// <summary>
     /// Returns true if the tournament can begin (enough players, etc.)
     /// </summary>
-    (bool canStart, string? error) CanStartTournament();
+    Helpers.ValidationResult CheckIntegrityOfTournamentFile();
 }
 
 public class Tournament : ITournament
 {
+    public string TournamentOrganizerId { get; init; }
+    public string TournamentName { get; set; }
+    public int PlayerLimit { get; set; }
+    public DateOnly StartDate { get; set; }
+    public TimeOnly StartTime { get; set; }
+    public string Location { get; set; }
     private TournamentConfig _configuration;
-    public enum TournamentFormats
-    {
-        RoundRobin,
-        Swiss,
-        SingleElimination,
-        DoubleElimination,
-        KingOfTheHill
-    }
     
     // Empty constructor to force use of builder
     private Tournament() { }
@@ -46,17 +63,17 @@ public class Tournament : ITournament
     /// <param name="team"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public (bool isValid, string? error) ValidateTeam(Team team)
+    public Helpers.ValidationResult ValidateTeam(Team team)
     {
         throw new NotImplementedException();
     }
 
     /// <summary>
-    /// Validate if all teams are legal for this tournament
+    /// Check integrity of given .bloodtourney file
     /// </summary>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public (bool canStart, string? error) CanStartTournament()
+    public Helpers.ValidationResult CheckIntegrityOfTournamentFile()
     {
         throw new NotImplementedException();
     }
@@ -68,7 +85,7 @@ public class Tournament : ITournament
     /// <summary>
     /// Set configuration for this tournament (ruleset and additional rules)
     /// </summary>
-    public TournamentConfig SetConfiguration { set => _configuration = value; }
+    public TournamentConfig SetConfiguration { init => _configuration = value; }
 
     /// <summary>
     /// Builder for creating Tournament instances. Allows for creation of custom rulesets.

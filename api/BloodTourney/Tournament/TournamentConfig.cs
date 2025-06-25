@@ -12,7 +12,7 @@ public class TournamentConfig
     /// Defines the round format for the tournament.
     /// Some formats might be non-eliminatory such as Round Robin, while others will cause the team to not proceed if they lose.
     /// </summary>
-    public required Tournament.TournamentFormats TournamentFormat { get; init; }
+    public required TournamentFormats TournamentFormat { get; init; }
     
     /// <summary>
     /// If false, the first round will be randomized as per the chosen format in TournamentFormat
@@ -29,4 +29,13 @@ public class TournamentConfig
     /// If true, any injury or death suffered by a player will be cleared after each match, and each coach will start their matches with the registered rosters.
     /// </summary>
     public bool ResurrectionMode { get; init; } = true;
+}
+
+public enum TournamentFormats
+{
+    RoundRobin,
+    Swiss,
+    SingleElimination,
+    DoubleElimination,
+    KingOfTheHill
 }

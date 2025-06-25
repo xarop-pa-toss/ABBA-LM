@@ -243,7 +243,7 @@ public class Tiers
     /// <param name="name"></param>
     /// <param name="tierParameters"></param>
     /// <returns>ValidationResult can return Valid or Failure (with error list)</returns>
-    public ValidationResult ValidateCustomTiers(string name, IEnumerable<TierParameters> tierParameters)
+    public ValidationResult ValidateCustomTierset(IEnumerable<TierParameters> tierParameters)
     {
         var errors = new List<string>();
         var tierParametersList = tierParameters.ToList();
@@ -258,7 +258,7 @@ public class Tiers
         // Check if tier levels start at 1 and are numbered sequentially up to the number of tiers submitted
         if (orderedTierLevels.First() == 1 && orderedTierLevels.Last() == tierParametersList.Count())
         {
-            errors.Add("tier levels are not sequential.\n");
+            errors.Add("Tier levels are not sequential.\n");
         }
         
         // Check for duplicate tier levels.
@@ -281,38 +281,4 @@ public class Tiers
 
         return errors.Any() ? ValidationResult.Failure(errors) : ValidationResult.Valid();
     }
-}
-
-public enum TeamCodeNames
-{
-    Amazons,
-    BlackOrcs,
-    Chaos,
-    ChaosDwarves,
-    ChaosRenegades,
-    DarkElves,
-    Dwarves,
-    ElvenUnion,
-    Gnomes,
-    Goblins,
-    Halflings,
-    HighElves,
-    Humans,
-    ImperialNobility,
-    Khorne,
-    Lizardmen,
-    Necromantic,
-    Norse,
-    Nurgle,
-    Ogres,
-    OldWorldAlliance,
-    Orcs,
-    Skaven,
-    Slann,
-    Snotlings,
-    TombKings,
-    Undead,
-    Underworld,
-    Vampires,
-    WoodElves
 }

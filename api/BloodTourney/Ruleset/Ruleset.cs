@@ -17,10 +17,7 @@ public class Ruleset
     public OtherRules AdditionalRules { get; init; }
 
     // Default constructor
-    private Ruleset()
-    {
-        
-    }
+    private Ruleset() { }
     
     public static Ruleset GetPresetRuleset(RulesetPresets.RulesetPresetsEnum preset)
     {
@@ -40,8 +37,11 @@ public class Ruleset
 
     public Ruleset DecryptRulesetFile(byte[] encryptedRulesetFile)
     {
+
         string jsonDecrypted = Encryption.DecryptFromFileToString(encryptedRulesetFile);
-        return JsonSerializer.Deserialize<Ruleset>(jsonDecrypted);
+        var deserialized = JsonSerializer.Deserialize<Ruleset>(jsonDecrypted);
+        
+        return deserialized;
     }
     
     public class Builder
@@ -167,6 +167,7 @@ public class Ruleset
         
         public static Builder Create() => new Builder();
     }
+    
     
     #region STRUCTS/ENUMS
     public enum SkillStacks
