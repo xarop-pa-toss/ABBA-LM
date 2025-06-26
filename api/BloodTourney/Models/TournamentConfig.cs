@@ -1,4 +1,4 @@
-﻿namespace BloodTourney.Tournament;
+namespace BloodTourney.Models;
 
 public class TournamentConfig
 {
@@ -12,7 +12,7 @@ public class TournamentConfig
     /// Defines the round format for the tournament.
     /// Some formats might be non-eliminatory such as Round Robin, while others will cause the team to not proceed if they lose.
     /// </summary>
-    public required TournamentFormats TournamentFormat { get; init; }
+    public required TournamentFormatType TournamentFormat { get; init; }
     
     /// <summary>
     /// If false, the first round will be randomized as per the chosen format in TournamentFormat
@@ -23,15 +23,15 @@ public class TournamentConfig
     /// If false, all excess cash leftover from the team creation process will be lost.
     /// Otherwise, it is converted into Prayers To Nuffle.
     /// </summary>
-    public bool UnspentCashConvertedToPrayers { get; init; } = false;
+    public required bool UnspentCashConvertedToPrayers { get; init; } = false;
 
     /// <summary>
     /// If true, any injury or death suffered by a player will be cleared after each match, and each coach will start their matches with the registered rosters.
     /// </summary>
-    public bool ResurrectionMode { get; init; } = true;
+    public required bool ResurrectionMode { get; init; } = true;
 }
 
-public enum TournamentFormats
+public enum TournamentFormatType
 {
     RoundRobin,
     Swiss,

@@ -16,16 +16,44 @@ public static class Helpers
         return powerOfTwo;
     }
 
-    public static string ParseToJsonString (Tournament.Tournament tournament)
-    { 
-        return JsonSerializer.Serialize(tournament);
+    public static string ParseToJsonString<T>(T input)
+    {
+        string serialized = JsonSerializer.Serialize(input);
+        
+        if (string.IsNullOrEmpty(serialized))
+        {
+            throw new ArgumentException($"Failed to serialize {typeof(T)} object to JSON string.");
+        }
+        return serialized;   
     }
     
     public readonly record struct ValidationResult()
     {
-        public ImmutableList<string> Errors { get; init; } = ImmutableList<string>.Empty;
+        public ImmutableList<string> Errors { get; private init; } = ImmutableList<string>.Empty;
+        
+        public bool IsValid => Errors.IsEmpty;
+        public bool HasErrors => !Errors.IsEmpty;
+        
+        public void ThrowIfInvalid()
+        {
+            if (HasErrors)
+                throw new ArgumentException(string.Join(Environment.NewLine, Errors));   
+        }
         
         public static ValidationResult Valid() => new ValidationResult();
         public static ValidationResult Failure(IEnumerable<string> errors) => new ValidationResult { Errors = errors.ToImmutableList() };
+    }
+
+    /// <summary>
+    /// Returns a list with an error if the collection is null or empty.
+    /// </summary>
+    /// <param name="collection"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns name="ValidationResult"></returns>
+    public static ValidationResult CheckIfCollectionNullOrEmpty<T>(IEnumerable<T>? collection)
+    {
+        return collection == null || collection.Any()
+            ? ValidationResult.Failure(new List<string> { $"{nameof(collection)} collection object is null or empty." })
+            : ValidationResult.Valid();
     }
 }

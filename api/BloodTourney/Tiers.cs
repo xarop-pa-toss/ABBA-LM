@@ -19,7 +19,6 @@ public class Tiers
         /// Maximum Team Value (gold pieces) before skills and inducements are applied.
         /// </summary>
         public required uint MaxBaseTeamValue { get; init; }
-        
         public required uint MaxPrimarySkills { get; init; }
         public required uint MaxSecondarySkills { get; init; }
         public required uint SkillStackingPlayerLimit { get; init; }

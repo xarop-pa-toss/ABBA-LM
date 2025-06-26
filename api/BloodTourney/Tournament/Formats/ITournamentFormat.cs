@@ -1,5 +1,4 @@
-﻿using MongoDB.Bson.Serialization.Serializers;
-namespace BloodTourney.Tournament;
+﻿namespace BloodTourney.Tournament.Formats;
 
 public interface ITournamentFormat
 {

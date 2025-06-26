@@ -2,7 +2,7 @@
 using System.Text;
 // ReSharper disable ArrangeObjectCreationWhenTypeEvident
 
-namespace BloodTourney.Encryption;
+namespace BloodTourney.Security;
 
 public static class Encryption
 {
