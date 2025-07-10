@@ -1,19 +1,15 @@
 ﻿using BloodTourney.Tournament;
 using BloodTourney.Tournament.Formats;
+using BloodTourney.Models;
+using BloodTourney.Ruleset;
 using Xunit.Abstractions;
 
 namespace BloodTourney.Tests
 {
-    public class CompleteTournamentTests
+    public class CompleteTournamentTests(ITestOutputHelper output)
     {
-        private readonly SingleEliminationStrategy _strategy;
-        private readonly ITestOutputHelper _output;
-
-        public CompleteTournamentTests(ITestOutputHelper output)
-        {
-            _strategy = new SingleEliminationStrategy();
-            _output = output;
-        }
+        private readonly SingleEliminationStrategy _strategy = new SingleEliminationStrategy();
+        RulesetPresetFactory rulesetFactory = new RulesetPresetFactory((new RulesetBuilder()));
 
         [Fact]
         public void SixteenTeamTournament_GenerateCompleteSummary()
@@ -44,8 +40,8 @@ namespace BloodTourney.Tests
             // Create tournament configuration
             var config = new TournamentConfig
             {
-                Ruleset = Ruleset.GetPresetRuleset(RulesetPresets.RulesetPresetsEnum.SardineBowl2025),
-                TournamentFormat = Tournament.Tournament.TournamentFormats.SingleElimination,
+                Ruleset = rulesetFactory.CreatePreset(RulesetPresetType.SardineBowl2025),
+                TournamentFormat = TournamentFormatType.SingleElimination,
                 FirstRoundRandomSort = true,
                 UnspentCashConvertedToPrayers = true,
                 ResurrectionMode = true
@@ -56,29 +52,29 @@ namespace BloodTourney.Tests
 
             // First Round (Round of 16)
             var firstRound = ((ITournamentFormat)_strategy).CreateFirstRoundRandom(teamIds).ToList();
-            _output.WriteLine("\nRound of 16 Matches:");
-            _output.WriteLine(TournamentTestHelpers.VisualizeMatches(firstRound, teamNames));
+            output.WriteLine("\nRound of 16 Matches:");
+            output.WriteLine(TournamentTestHelpers.VisualizeMatches(firstRound, teamNames));
             AssignRandomWinners(firstRound);
             roundResults.Add(firstRound);
 
             // Second Round (Quarter-Finals)
             var secondRound = ((ITournamentFormat)_strategy).CreateNextRound(firstRound).ToList();
-            _output.WriteLine("\nQuarter-Final Matches:");
-            _output.WriteLine(TournamentTestHelpers.VisualizeMatches(secondRound, teamNames));
+            output.WriteLine("\nQuarter-Final Matches:");
+            output.WriteLine(TournamentTestHelpers.VisualizeMatches(secondRound, teamNames));
             AssignRandomWinners(secondRound);
             roundResults.Add(secondRound);
 
             // Third Round (Semi-Finals)
             var thirdRound = ((ITournamentFormat)_strategy).CreateNextRound(secondRound).ToList();
-            _output.WriteLine("\nSemi-Final Matches:");
-            _output.WriteLine(TournamentTestHelpers.VisualizeMatches(thirdRound, teamNames));
+            output.WriteLine("\nSemi-Final Matches:");
+            output.WriteLine(TournamentTestHelpers.VisualizeMatches(thirdRound, teamNames));
             AssignRandomWinners(thirdRound);
             roundResults.Add(thirdRound);
 
             // Fourth Round (Final)
             var finalRound = ((ITournamentFormat)_strategy).CreateNextRound(thirdRound).ToList();
-            _output.WriteLine("\nFinal Match:");
-            _output.WriteLine(TournamentTestHelpers.VisualizeMatches(finalRound, teamNames));
+            output.WriteLine("\nFinal Match:");
+            output.WriteLine(TournamentTestHelpers.VisualizeMatches(finalRound, teamNames));
             AssignRandomWinners(finalRound);
             roundResults.Add(finalRound);
 
@@ -97,8 +93,8 @@ namespace BloodTourney.Tests
 
             // Generate and output summary
             string summary = TournamentSummaryHelper.GenerateTournamentSummary(tournamentResults);
-            _output.WriteLine("\n\nCOMPLETE TOURNAMENT SUMMARY:");
-            _output.WriteLine(summary);
+            output.WriteLine("\n\nCOMPLETE TOURNAMENT SUMMARY:");
+            output.WriteLine(summary);
 
             // Assertions
             Assert.Equal(8, firstRound.Count);   // 8 matches in Round of 16
@@ -132,8 +128,8 @@ namespace BloodTourney.Tests
             // Create tournament configuration
             var config = new TournamentConfig
             {
-                Ruleset = Ruleset.GetPresetRuleset(RulesetPresets.RulesetPresetsEnum.SardineBowl2025),
-                TournamentFormat = Tournament.Tournament.TournamentFormats.SingleElimination,
+                Ruleset = rulesetFactory.CreatePreset(RulesetPresetType.SardineBowl2025),
+                TournamentFormat = TournamentFormatType.SingleElimination,
                 FirstRoundRandomSort = false, // Seeded tournament
                 UnspentCashConvertedToPrayers = false,
                 ResurrectionMode = false // Injuries persist between matches
@@ -208,15 +204,15 @@ namespace BloodTourney.Tests
 
             // Generate and output summary
             string summary = TournamentSummaryHelper.GenerateTournamentSummary(tournamentResults);
-            _output.WriteLine("\nEIGHT-TEAM TOURNAMENT SUMMARY:");
-            _output.WriteLine(summary);
+            output.WriteLine("\nEIGHT-TEAM TOURNAMENT SUMMARY:");
+            output.WriteLine(summary);
 
             // Output detailed match reports
-            _output.WriteLine("\nDETAILED MATCH REPORTS:");
-            _output.WriteLine(new string('-', 40));
+            output.WriteLine("\nDETAILED MATCH REPORTS:");
+            output.WriteLine(new string('-', 40));
             foreach (var match in matchDescriptions)
             {
-                _output.WriteLine($"Match {match.Key}: {match.Value}");
+                output.WriteLine($"Match {match.Key}: {match.Value}");
             }
 
             // Assertions

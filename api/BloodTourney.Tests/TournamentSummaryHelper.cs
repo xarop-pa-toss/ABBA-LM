@@ -1,6 +1,7 @@
 ﻿using BloodTourney.Tournament;
 using System.Text;
 using BloodTourney.Tournament.Formats;
+using BloodTourney.Models;
 
 namespace BloodTourney.Tests
 {

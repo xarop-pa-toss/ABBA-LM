@@ -5,13 +5,13 @@ using BloodTourney.Security;
 
 namespace BloodTourney.Tournament;
 
-// public interface ITournamentManager
-// {
-//     ValidationResult ValidateTeam(Tournament tournament, Team team);
-//     ValidationResult ValidateTournament(Tournament tournament);
-// }
+public interface ITournamentManager
+{
+    ValidationResult ValidateTeams(Models.Ruleset tournament, IEnumerable<Team> teams);
+    ValidationResult ValidateTournament(Models.Tournament tournament);
+}
 
-public class TournamentManager
+public class TournamentManager : ITournamentManager
 {
     // Empty constructor to force use of builder
     private TournamentManager() { }

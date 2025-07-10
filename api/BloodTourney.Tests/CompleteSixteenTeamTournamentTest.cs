@@ -1,6 +1,8 @@
 ﻿using BloodTourney.Tournament;
 using BloodTourney.Tournament.Formats;
+using BloodTourney.Models;
 using System.Text;
+using BloodTourney.Ruleset;
 using Xunit.Abstractions;
 
 namespace BloodTourney.Tests
@@ -9,7 +11,7 @@ namespace BloodTourney.Tests
     {
         private readonly SingleEliminationStrategy _strategy;
         private readonly ITestOutputHelper _output;
-
+        private readonly RulesetPresetFactory _rulesetPresetFactory = new RulesetPresetFactory((new RulesetBuilder()));
         public CompleteSixteenTeamTournamentTest(ITestOutputHelper output)
         {
             _strategy = new SingleEliminationStrategy();
@@ -75,8 +77,8 @@ namespace BloodTourney.Tests
             // Create tournament configuration
             var config = new TournamentConfig
             {
-                Ruleset = Ruleset.GetPresetRuleset(RulesetPresets.RulesetPresetsEnum.SardineBowl2025),
-                TournamentFormat = Tournament.Tournament.TournamentFormats.SingleElimination,
+                Ruleset = _rulesetPresetFactory.CreatePreset(RulesetPresetType.SardineBowl2025),
+                TournamentFormat = TournamentFormatType.SingleElimination,
                 FirstRoundRandomSort = true,
                 UnspentCashConvertedToPrayers = true,
                 ResurrectionMode = true

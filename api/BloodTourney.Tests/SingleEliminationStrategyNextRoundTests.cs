@@ -1,5 +1,6 @@
 ﻿using BloodTourney.Tournament;
 using BloodTourney.Tournament.Formats;
+using BloodTourney.Models;
 using Xunit.Abstractions;
 
 namespace BloodTourney.Tests
