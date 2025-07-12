@@ -1,0 +1,27 @@
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- main
+
+pool:
+  vmImage: 'windows-latest'
+
+steps:
+- task: UseDotNet@2
+  inputs:
+    version: '9.x'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'restore'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
