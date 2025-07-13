@@ -9,7 +9,7 @@ namespace BloodTourney.Tests
     public class CompleteTournamentTests(ITestOutputHelper output)
     {
         private readonly SingleEliminationStrategy _strategy = new SingleEliminationStrategy();
-        RulesetPresetFactory rulesetFactory = new RulesetPresetFactory((new RulesetBuilder()));
+        private readonly RulesetManager _rulesetManager = new RulesetManager();
 
         [Fact]
         public void SixteenTeamTournament_GenerateCompleteSummary()
@@ -40,7 +40,7 @@ namespace BloodTourney.Tests
             // Create tournament configuration
             var config = new TournamentConfig
             {
-                Ruleset = rulesetFactory.CreatePreset(RulesetPresetType.SardineBowl2025),
+                Ruleset = _rulesetManager.GetPresetRuleset(RulesetPresetType.SardineBowl2025),
                 TournamentFormat = TournamentFormatType.SingleElimination,
                 FirstRoundRandomSort = true,
                 UnspentCashConvertedToPrayers = true,
@@ -128,7 +128,7 @@ namespace BloodTourney.Tests
             // Create tournament configuration
             var config = new TournamentConfig
             {
-                Ruleset = rulesetFactory.CreatePreset(RulesetPresetType.SardineBowl2025),
+                Ruleset = _rulesetManager.GetPresetRuleset(RulesetPresetType.SardineBowl2025),
                 TournamentFormat = TournamentFormatType.SingleElimination,
                 FirstRoundRandomSort = false, // Seeded tournament
                 UnspentCashConvertedToPrayers = false,

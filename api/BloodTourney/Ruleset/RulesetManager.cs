@@ -13,12 +13,7 @@ public interface IRulesetManager
 
 public class RulesetManager : IRulesetManager
 {
-    private readonly IRulesetPresetFactory _presetFactory;
-
-    public RulesetManager(IRulesetPresetFactory presetFactory)
-    {
-        _presetFactory = presetFactory ?? throw new ArgumentNullException(nameof(presetFactory));
-    }
+    private readonly IRulesetPresetFactory _presetFactory = new RulesetPresetFactory() ?? throw new ArgumentNullException(nameof(_presetFactory));
 
     public Models.Ruleset GetPresetRuleset(RulesetPresetType preset)
     {

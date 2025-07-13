@@ -16,9 +16,9 @@ public enum RulesetPresetType
     EuroBowl2025
 }
 
-public class RulesetPresetFactory(RulesetBuilder builder) : IRulesetPresetFactory
+internal class RulesetPresetFactory : IRulesetPresetFactory
 {
-    private readonly IRulesetBuilder _builder = builder ?? throw new ArgumentNullException(nameof(builder));
+    // private readonly IRulesetBuilder _builder = new RulesetBuilder() ?? throw new ArgumentNullException(nameof(_builder));
 
     public Models.Ruleset CreatePreset(RulesetPresetType presetType)
     {

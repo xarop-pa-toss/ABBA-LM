@@ -5,7 +5,7 @@ namespace BloodTourney.Tests
 {
     public class TournamentConfigTests
     {
-        readonly RulesetPresetFactory _rulesetFactory = new RulesetPresetFactory((new RulesetBuilder()));
+        private readonly RulesetManager _rulesetManager = new RulesetManager();
         
         [Fact]
         public void TournamentConfig_Properties()
@@ -14,7 +14,7 @@ namespace BloodTourney.Tests
             // Arrange & Act
             var config = new TournamentConfig
             {
-                Ruleset = _rulesetFactory.CreatePreset(RulesetPresetType.SardineBowl2025),
+                Ruleset = _rulesetManager.GetPresetRuleset(RulesetPresetType.SardineBowl2025),
                 TournamentFormat = TournamentFormatType.SingleElimination,
                 FirstRoundRandomSort = true,
                 UnspentCashConvertedToPrayers = true,
@@ -38,7 +38,7 @@ namespace BloodTourney.Tests
                 // Arrange & Act
                 var config = new TournamentConfig
                 {
-                    Ruleset = _rulesetFactory.CreatePreset(RulesetPresetType.SardineBowl2025),
+                    Ruleset = _rulesetManager.GetPresetRuleset(RulesetPresetType.SardineBowl2025),
                     TournamentFormat = formatType,
                     FirstRoundRandomSort = true,
                     UnspentCashConvertedToPrayers = false,
@@ -56,7 +56,7 @@ namespace BloodTourney.Tests
             // Arrange & Act
             var config = new TournamentConfig
             {
-                Ruleset = _rulesetFactory.CreatePreset(RulesetPresetType.SardineBowl2025),
+                Ruleset = _rulesetManager.GetPresetRuleset(RulesetPresetType.SardineBowl2025),
                 TournamentFormat = TournamentFormatType.SingleElimination,
                 FirstRoundRandomSort = false,
                 UnspentCashConvertedToPrayers = false,
