@@ -1,7 +1,7 @@
-﻿using System.Text.Json.Nodes;
-using BloodTourney;
+﻿using System.Text.Json;
 using BloodTourney.Ruleset;
 using LMWebAPI.Models.DTOs;
+using BT = BloodTourney;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LMWebAPI.Controllers;
@@ -9,57 +9,50 @@ namespace LMWebAPI.Controllers;
 // [Authorize]
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class TournamentController : ControllerBase
+public class TournamentController(RulesetManager rulesetManager) : ControllerBase
 {
-    /// <summary>
-    /// Get list of all Preset Rulesets names.
-    /// </summary>
-    /// <returns>List of strings with preset ruleset names.</returns>
     [HttpGet]
-    public ActionResult GetPresetRulesetList()
+    public ActionResult GetPresetRuleset([FromBody] string presetRulesetName)
     {
-        List<string> rulesetList = Enum.GetNames(typeof(RulesetPresets)).ToList();
-
-        return rulesetList.Count == 0 ? Ok(rulesetList) : NotFound("No preset rulesets found.");
-    }
-    
-    [HttpGet]
-    public async Task<ActionResult> GetPresetRuleset([FromBody] string presetRulesetName)
-    {
-        (var ruleset, string err) = await BloodTourney.Ruleset.GetPresetRuleset(RulesetPresets.RulesetPresetsEnum.SardineBowl2025);
-
-        if (!string.IsNullOrWhiteSpace(err))
-        {
-            return new NotFoundObjectResult("Could not get requested Ruleset: " + err);
-        }
-
-        return Ok(ruleset);
+        throw new NotImplementedException("");
+        // (var ruleset, string err) = rulesetManager.GetPresetRuleset(RulesetPresets.SardineBowl2025);
+        //
+        // if (!string.IsNullOrWhiteSpace(err))    
+        // {
+        //     return new NotFoundObjectResult("Could not get requested Ruleset: " + err);
+        // }
+        //
+        // return Ok(ruleset);
     }
 
     [HttpGet]
-    public async Task<ActionResult> ValidateRuleset([FromBody] BloodTourney.Ruleset ruleset)
+    public async Task<ActionResult> ValidateRuleset([FromBody] RulesetDTO rulesetDto)
     {
-        List<string> errors = await BloodTourney.Ruleset.ValidateRuleset(ruleset);
-
-        if (errors.Any())
-        {
-            return new BadRequestObjectResult(errors);
-        }
-
-        return Ok();
+        throw new NotImplementedException("");
+        // List<string> errors = await BT.Ruleset.ValidateIntegrity(ruleset);
+        //
+        // if (errors.Any())
+        // {
+        //     return new BadRequestObjectResult(errors);
+        // }
+        //
+        // return Ok();
     }
 
-    [HttpPost]
-    public async Task<JsonObject> CreateCustomRuleset([FromBody] BloodTourney.Ruleset ruleset)
+    [HttpGet]
+    public async Task<ActionResult<string>> CreateCustomRuleset([FromBody] RulesetDTO rulesetDto)
     {
-        var newRuleset = new BloodTourney.Ruleset.Builder()
-            .WithTiers(ruleset.Tiers)
-            .WithVictoryPoints(ruleset.MatchVictoryPoints)
-            .WithTieBreakers(ruleset.TieBreakers)
-            .WithSkillStacking(ruleset.Skillstacking)
-            .WithTimeKeeping(ruleset.Timekeeping)
+        var newRuleset = new BT.Ruleset.RulesetBuilder()
+            .WithTiers(rulesetDto.Tiers)
+            .WithVictoryPoints(rulesetDto.MatchVictoryPoints)
+            .WithTieBreakers(rulesetDto.TieBreakers)
+            .WithSkillStacking(rulesetDto.Skillstacking)
+            .WithTimeKeeping(rulesetDto.Timekeeping)
             .Build();
         
-        return newRuleset;
+        var serializedRuleset = JsonSerializer.Serialize(newRuleset);
+        return !string.IsNullOrEmpty(serializedRuleset)
+            ? Ok(serializedRuleset)
+               : BadRequest("Could not serialize ruleset.");
     }
 }

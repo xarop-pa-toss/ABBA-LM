@@ -1,5 +1,4 @@
-using System.Text;
-using BloodTourney;
+using BloodTourney.Ruleset;
 using LMWebAPI.Identity;
 using LMWebAPI.Repositories;
 using LMWebAPI.Resources.Errors;
@@ -17,11 +16,17 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder(args);
         builder.Configuration.AddEnvironmentVariables();
+        // Forces verification of DI on build instead of runtime
+        builder.Host.UseDefaultServiceProvider((context, options) =>
+            {
+                options.ValidateScopes = true;
+                options.ValidateOnBuild = true;
+            }
+        );
 
 // This solution uses User Secrets, a .NET feature that can be created with "dotnet user-secrets init".
 // It only works in development environment which is set with "set ASPNETCORE_ENVIRONMENT=Development".
         #region MongoDB connection/client
-
         builder.Services.AddSingleton<IMongoClient>(sp =>
         {
             Console.WriteLine(builder.Configuration["MONGO_CONNECTION_STRING_DEV"] + " - " + builder.Configuration["MONGO_DATABASE_NAME"]);
@@ -45,8 +50,9 @@ internal class Program
 
 // Add Services
 //From BloodTourney
-
+        builder.Services.AddSingleton<RulesetManager>();
 //
+
         builder.Services.AddSingleton<JwtGenerator>();
         builder.Services.AddScoped<PlayerService>();
         builder.Services.AddScoped<PlayerSkillService>();
