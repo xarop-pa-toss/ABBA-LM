@@ -7,10 +7,10 @@ public interface IRulesetPresetFactory
 {
     Models.Ruleset CreateSardineBowl2025();
     Models.Ruleset CreateEuroBowl2025();
-    Models.Ruleset CreatePreset(RulesetPresetType presetType);
+    Models.Ruleset CreatePreset(RulesetPresets presetType);
 }
 
-public enum RulesetPresetType
+public enum RulesetPresets
 {
     SardineBowl2025,
     EuroBowl2025
@@ -20,12 +20,12 @@ internal class RulesetPresetFactory : IRulesetPresetFactory
 {
     // private readonly IRulesetBuilder _builder = new RulesetBuilder() ?? throw new ArgumentNullException(nameof(_builder));
 
-    public Models.Ruleset CreatePreset(RulesetPresetType presetType)
+    public Models.Ruleset CreatePreset(RulesetPresets presetType)
     {
         return presetType switch
         {
-            RulesetPresetType.SardineBowl2025 => CreateSardineBowl2025(),
-            // RulesetPresetType.EuroBowl2025 => CreateEuroBowl2025(),
+            RulesetPresets.SardineBowl2025 => CreateSardineBowl2025(),
+            // RulesetPresets.EuroBowl2025 => CreateEuroBowl2025(),
             _ => throw new ArgumentException($"Unknown preset type: {presetType}", nameof(presetType))
         };
     }

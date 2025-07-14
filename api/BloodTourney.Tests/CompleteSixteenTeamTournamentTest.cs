@@ -76,7 +76,7 @@ namespace BloodTourney.Tests
             // Create tournament configuration
             var config = new TournamentConfig
             {
-                Ruleset = _rulesetManager.GetPresetRuleset(RulesetPresetType.SardineBowl2025),
+                Ruleset = _rulesetManager.GetPresetRuleset(RulesetPresets.SardineBowl2025),
                 TournamentFormat = TournamentFormatType.SingleElimination,
                 FirstRoundRandomSort = true,
                 UnspentCashConvertedToPrayers = true,

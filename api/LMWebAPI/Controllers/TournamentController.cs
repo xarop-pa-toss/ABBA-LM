@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Nodes;
 using BloodTourney;
+using BloodTourney.Ruleset;
 using LMWebAPI.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +11,18 @@ namespace LMWebAPI.Controllers;
 [Route("api/[controller]/[action]")]
 public class TournamentController : ControllerBase
 {
+    /// <summary>
+    /// Get list of all Preset Rulesets names.
+    /// </summary>
+    /// <returns>List of strings with preset ruleset names.</returns>
+    [HttpGet]
+    public ActionResult GetPresetRulesetList()
+    {
+        List<string> rulesetList = Enum.GetNames(typeof(RulesetPresets)).ToList();
+
+        return rulesetList.Count == 0 ? Ok(rulesetList) : NotFound("No preset rulesets found.");
+    }
+    
     [HttpGet]
     public async Task<ActionResult> GetPresetRuleset([FromBody] string presetRulesetName)
     {

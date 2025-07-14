@@ -5,7 +5,7 @@ namespace BloodTourney.Ruleset;
 
 public interface IRulesetManager
 {
-    Models.Ruleset GetPresetRuleset(RulesetPresetType preset);
+    Models.Ruleset GetPresetRuleset(RulesetPresets preset);
     byte[] SerializeAndEncrypt(Models.Ruleset ruleset);
     Models.Ruleset DecryptAndDeserialize(byte[] encryptedData);
 }
@@ -15,7 +15,7 @@ public class RulesetManager : IRulesetManager
 {
     private readonly IRulesetPresetFactory _presetFactory = new RulesetPresetFactory() ?? throw new ArgumentNullException(nameof(_presetFactory));
 
-    public Models.Ruleset GetPresetRuleset(RulesetPresetType preset)
+    public Models.Ruleset GetPresetRuleset(RulesetPresets preset)
     {
         return _presetFactory.CreatePreset(preset);
     }
