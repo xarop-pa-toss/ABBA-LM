@@ -1,6 +1,5 @@
 using System.Collections.Immutable;
 using System.ComponentModel.DataAnnotations;
-using System.Runtime.InteropServices.JavaScript;
 using System.Text.Json;
 
 namespace BloodTourney;
