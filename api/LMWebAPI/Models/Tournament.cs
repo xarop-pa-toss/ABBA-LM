@@ -1,3 +1,6 @@
+using System.Numerics;
+using System.Configuration;
+using BloodTourney;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -10,26 +13,34 @@ public class Tournament
     public ObjectId Id { get; set; }
     
     // Meta
-    [BsonElement("creator_user_id")]
-    public required string CreatorUserId { get; set; }
+    [BsonElement("creator_id")]
+    public required string CreatorId { get; set; }
     
-    [BsonElement("creation_date")]
-    public required DateTime CreationDate { get; set; }
+    [BsonElement("creation_datetime")]
+    public required DateTime CreationDateTime { get; set; }
     
     [BsonElement("start_datetime")]
-    public required DateTime StartDate { get; set; }
+    public required DateTime StartDateTime { get; set; }
     
     
     // General Properties
-    [BsonElement("name")]
-    public required string Name { get; set; }
+    [BsonElement("tournament_name")]
+    public required string TournamentName { get; set; }
     
     [BsonElement("team_rating_max")]
     public int TeamRatingMax { get; set; }
     
-    [BsonElement("number_of_teams")]
-    public int NumberOfTeams { get; set; }
-    
+    [BsonElement("number_of_teams_max")]
+    public int NumberOfTeamsMax { get; set; }
+
+    [BsonElement("number_of_teams_min")]
+    private readonly int _numberOfTeamsMin;
+    public int NumberOfTeamsMin
+    {
+        get => _numberOfTeamsMin;
+        init => _numberOfTeamsMin = value >= 2 ? value : throw new ArgumentException("Number of teams min must be 2 or higher.");
+    }
+
     [BsonElement("registered_coach_ids")]
     public List<ObjectId> RegisteredCoachIds { get; set; }
     
@@ -37,7 +48,4 @@ public class Tournament
     // Groups
     // [BsonElement("Groups")]
     // public CoachGroups CoachGroups { get; set; }
-    
-    
-    
 }

@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using BloodTourney.Models;
 using LMWebAPI.Models.DTOs;
 
 namespace LMWebAPI.Mappers;
@@ -15,7 +14,7 @@ public static class RulesetMapper
             TieBreakers = dto.TieBreakers,
             Timekeeping = dto.Timekeeping,
             Skillstacking = dto.Skillstacking,
-            Inducements = dto.Inducements.ToImmutableArray(),
+            Inducements = dto.Inducements,
             BannedStarPlayers = dto.BannedStarPlayers,
             Guidelines = dto.Guidelines,
             AdditionalRules = dto.AdditionalRules

@@ -1,4 +1,6 @@
 using System.Collections.Immutable;
+using System.ComponentModel.DataAnnotations;
+using System.Runtime.InteropServices.JavaScript;
 using System.Text.Json;
 
 namespace BloodTourney;
@@ -24,20 +26,19 @@ public static class Helpers
         {
             throw new ArgumentException($"Failed to serialize {typeof(T)} object to JSON string.");
         }
+ 
         return serialized;   
     }
     
     public readonly record struct ValidationResult()
     {
-        public ImmutableList<string> Errors { get; private init; } = ImmutableList<string>.Empty;
+        private ImmutableList<string> Errors { get; init; } = ImmutableList<string>.Empty;
+        private bool HasErrors => !Errors.IsEmpty;
         
-        public bool IsValid => Errors.IsEmpty;
-        public bool HasErrors => !Errors.IsEmpty;
-        
-        public void ThrowIfInvalid()
+        public void ThrowIfHasErrors(string message = "")
         {
             if (HasErrors)
-                throw new ArgumentException(string.Join(Environment.NewLine, Errors));   
+                throw new ValidationException(message + "\n" + string.Join(Environment.NewLine, Errors));   
         }
         
         public static ValidationResult Valid() => new ValidationResult();
@@ -45,14 +46,14 @@ public static class Helpers
     }
 
     /// <summary>
-    /// Returns a list with an error if the collection is null or empty.
+    /// Returns a ValidationResult with error if the collection is null or empty.
     /// </summary>
     /// <param name="collection"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns name="ValidationResult"></returns>
     public static ValidationResult CheckIfCollectionNullOrEmpty<T>(IEnumerable<T>? collection)
     {
-        return collection == null || collection.Any()
+        return collection == null || !collection.Any()
             ? ValidationResult.Failure(new List<string> { $"{nameof(collection)} collection object is null or empty." })
             : ValidationResult.Valid();
     }

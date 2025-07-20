@@ -34,7 +34,7 @@ public class RulesetBuilder : IRulesetBuilder
     public IRulesetBuilder WithTiers(IEnumerable<Tiers.TierParameters> tiers)
     {
         var tierParametersList = tiers.ToList();
-        Helpers.CheckIfCollectionNullOrEmpty(tierParametersList).ThrowIfInvalid();
+        Helpers.CheckIfCollectionNullOrEmpty(tierParametersList).ThrowIfHasErrors(message: "Tiers not provided.");
         
         _tiers = tierParametersList;
         return this;
@@ -49,7 +49,7 @@ public class RulesetBuilder : IRulesetBuilder
     public IRulesetBuilder WithTieBreakers(IEnumerable<string> tieBreakers)
     {
         var tieBreakersList = tieBreakers.ToList();
-        Helpers.CheckIfCollectionNullOrEmpty(tieBreakersList).ThrowIfInvalid();
+        Helpers.CheckIfCollectionNullOrEmpty(tieBreakersList).ThrowIfHasErrors(message:"TieBreakers not provided.");
         
         _tieBreakers = tieBreakersList;
         return this;
@@ -76,7 +76,7 @@ public class RulesetBuilder : IRulesetBuilder
     public IRulesetBuilder WithBannedStarPlayers(IEnumerable<string> bannedStarPlayers)
     {
         var bannedStarPlayersList = bannedStarPlayers.ToList();
-        Helpers.CheckIfCollectionNullOrEmpty(bannedStarPlayersList).ThrowIfInvalid();
+        Helpers.CheckIfCollectionNullOrEmpty(bannedStarPlayersList).ThrowIfHasErrors(message:"Banned Star Players not provided.");
         
         _bannedStarPlayers = bannedStarPlayersList;
         return this;
@@ -85,7 +85,7 @@ public class RulesetBuilder : IRulesetBuilder
     public IRulesetBuilder WithGuidelines(IEnumerable<string> guidelines)
     {
         var guidelinesList = guidelines.ToList();
-        Helpers.CheckIfCollectionNullOrEmpty(guidelinesList).ThrowIfInvalid();
+        Helpers.CheckIfCollectionNullOrEmpty(guidelinesList).ThrowIfHasErrors(message:"Guidelines not provided");
 
         _guidelines = guidelinesList;
         return this;
