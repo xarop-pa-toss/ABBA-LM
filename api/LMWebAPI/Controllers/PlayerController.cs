@@ -1,28 +1,18 @@
 ﻿using LMWebAPI.Models;
 using LMWebAPI.Resources.Errors;
 using LMWebAPI.Services.Players;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
-using MongoDB.Driver;
-
 
 namespace LMWebAPI.Controllers;
 
 // [Authorize]
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class PlayerController : ControllerBase
+public class PlayerController(PlayerService playerService) : ControllerBase
 {
-    private readonly PlayerService _playerService;
+    private readonly PlayerService _playerService = playerService;
 
-    public PlayerController(PlayerService playerService)
-    {
-        _playerService = playerService;
-    }
-    
     [HttpGet]
     public async Task<ActionResult<List<Player>>> GetAll()
     {
@@ -35,7 +25,7 @@ public class PlayerController : ControllerBase
     {
         if (!ObjectId.TryParse(playerId, out ObjectId id))
         {
-            throw new ProblemNotFoundException("Player ID is not a valid ID.");
+            throw new Problem404NotFoundException("Player ID is not a valid ID.");
         }
         
         var player = await _playerService.GetByPlayerIdAsync(id);
@@ -47,7 +37,7 @@ public class PlayerController : ControllerBase
     {
         if (!ObjectId.TryParse(teamId, out ObjectId id))
         {
-            throw new ProblemNotFoundException("Team ID is not a valid ID.");
+            throw new Problem404NotFoundException("Team ID is not a valid ID.");
         }
         
         var players = await _playerService.GetByTeamIdAsync(id);

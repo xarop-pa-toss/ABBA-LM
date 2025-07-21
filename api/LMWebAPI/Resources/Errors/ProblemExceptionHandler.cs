@@ -1,124 +1,36 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LMWebAPI.Resources.Errors;
 
 [Serializable]
-public class ProblemException : Exception
+public class ProblemException(int statusCode, string error, string message, object? context = null) : Exception(message)
 {
-    public int StatusCode { get; }
-    public string DefaultError { get; }
-    public string Error { get; }
-    public string Message { get; }
+    public int StatusCode { get; } = statusCode;
+    public string DefaultError { get; } = "Unspecified error";
+    public string Error { get; } = error;
+    public override string Message { get; } = message;
+    public object? Context { get; } = context;
+    public string? TraceId { get; set; }
+    public Dictionary<string, object> Extensions { get; } = new Dictionary<string, object>();
 
-    public ProblemException(int statusCode, string error, string message) : base(message)
-    {
-        StatusCode = statusCode;
-        DefaultError = "Unspecified error";
-        Error = error;
-        Message = message;
-    }
 }
 
-public class ProblemNotFoundException : ProblemException
+public class ProblemExceptionHandler(IProblemDetailsService problemDetailsService) : IExceptionHandler
 {
-    private const string DefaultError = "Not Found";
-    public ProblemNotFoundException(string message)
-        : base(StatusCodes.Status404NotFound, DefaultError, message)
+    private readonly IProblemDetailsService _problemDetailsService = problemDetailsService;
+    
+
+    public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception ex, CancellationToken cancellationToken)
     {
-    }
-
-    public ProblemNotFoundException(string error, string message)
-        : base(StatusCodes.Status404NotFound, error, message)
-    {
-    }
-}
-
-public class ProblemConflictException : ProblemException
-{
-    private const string DefaultError = "Conflict";
-
-    public ProblemConflictException(string message)
-        : base(StatusCodes.Status409Conflict, DefaultError, message)
-    {
-    }
-
-    public ProblemConflictException(string error, string message)
-        : base(StatusCodes.Status409Conflict, error, message)
-    {
-    }
-}
-
-public class ProblemBadRequestException : ProblemException
-{
-    private const string DefaultError = "Bad Request";
-
-    public ProblemBadRequestException(string message)
-        : base(StatusCodes.Status400BadRequest, DefaultError, message)
-    {
-    }
-
-    public ProblemBadRequestException(string error, string message)
-        : base(StatusCodes.Status400BadRequest, error, message)
-    {
-    }
-}
-
-public class ProblemNoChangeException : ProblemException
-{
-    private const string DefaultError = "Not Modified";
-
-    public ProblemNoChangeException(string message)
-        : base(StatusCodes.Status304NotModified, DefaultError, message)
-    {
-    }
-
-    public ProblemNoChangeException(string error, string message)
-        : base(StatusCodes.Status304NotModified, error, message)
-    {
-    }
-}
-
-public class ProblemDatabaseException : ProblemException
-{
-    private const string DefaultError = "Internal Server Error";
-
-    public ProblemDatabaseException(string message)
-        : base(StatusCodes.Status500InternalServerError, DefaultError, message)
-    {
-    }
-
-    public ProblemDatabaseException(string error, string message)
-        : base(StatusCodes.Status500InternalServerError, error, message)
-    {
-    }
-}
-
-
-public class ProblemExceptionHandler : IExceptionHandler
-{
-    private readonly IProblemDetailsService _problemDetailsService;
-
-    public ProblemExceptionHandler(IProblemDetailsService problemDetailsService)
-    {
-        _problemDetailsService = problemDetailsService;
-    }
-
-    public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
-    {
-        if (exception is not ProblemException problemException)
+        if (ex is not ProblemException)
         {
+            // We don't want to catch other types of Exceptions
             return true;
         }
 
-        var problemDetails = new ProblemDetails
-        {
-            Status = problemException.StatusCode,
-            Title = problemException.Error,
-            Detail = problemException.Message,
-            Type = problemException.DefaultError
-        };
+        var problemEx = (ProblemException)ex;
+        var problemDetails = CreateProblemDetails(problemEx, httpContext);
 
         return await _problemDetailsService.TryWriteAsync(
             new ProblemDetailsContext
@@ -127,6 +39,42 @@ public class ProblemExceptionHandler : IExceptionHandler
                 ProblemDetails = problemDetails
             });
     }
-    
 
+    private ProblemDetails CreateProblemDetails(ProblemException problemEx, HttpContext httpContext)
+    {
+        var problemDetails = new ProblemDetails
+        {
+            Status = problemEx.StatusCode,
+            Title = problemEx.Error,
+            Detail = problemEx.Message,
+            Type = GetProblemTypeUri(problemEx),
+            Instance = httpContext.Request.Path
+        };
+        problemDetails.Extensions.Add("traceId", problemEx.TraceId);
+        problemDetails.Extensions.Add("timestamp", DateTimeOffset.UtcNow);
+        if (problemEx.Context != null)
+        {
+            problemDetails.Extensions.Add("context", problemEx.Context);
+        }
+
+        foreach (var (key, value) in problemEx.Extensions)
+        {
+            problemDetails.Extensions.Add(key, value);
+        }
+
+        return problemDetails;
+    }
+    
+    private static string GetProblemTypeUri(ProblemException ex)
+    {
+        // You can create a mapping or use a base URI
+        return ex.StatusCode switch
+        {
+            400 => "https://httpstatuses.com/400",
+            404 => "https://httpstatuses.com/404",
+            409 => "https://httpstatuses.com/409",
+            500 => "https://httpstatuses.com/500",
+            _ => "https://httpstatuses.com/" + ex.StatusCode
+        };
+    }
 }

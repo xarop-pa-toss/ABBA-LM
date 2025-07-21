@@ -27,11 +27,11 @@ public static class Helpers
         switch (mwx.WriteError.Category)
         {
             case ServerErrorCategory.DuplicateKey:
-                throw new ProblemConflictException("Duplicate entity found.");
+                throw new Problem400BadRequestException("Duplicate entity found.");
             case ServerErrorCategory.ExecutionTimeout:
-                throw new ProblemDatabaseException("Database interaction timed out.");
+                throw new Problem503ServiceUnavailableException("Database interaction timed out.");
             case ServerErrorCategory.Uncategorized:
-                throw new ProblemDatabaseException("Database error. Could not add entity.");
+                throw new ("Database error. Could not add entity.");
         }
     }
 }

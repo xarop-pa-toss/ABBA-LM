@@ -1,11 +1,8 @@
 ﻿using LMWebAPI.Repositories.Interfaces;
 using LMWebAPI.Resources;
 using LMWebAPI.Resources.Errors;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using ZstdSharp;
-
 
 namespace LMWebAPI.Repositories;
 
@@ -27,7 +24,7 @@ public class MongoRepository<T> : IRepository<T>
         var resultList = await Collection.Find(Builders<T>.Filter.Empty).ToListAsync();
         if (resultList == null || resultList.Count == 0)
         {
-            throw new ProblemNotFoundException("No results found.");
+            throw new Problem404NotFoundException("No results found.");
         }
         
         return resultList;
@@ -39,7 +36,7 @@ public class MongoRepository<T> : IRepository<T>
         var result = await Collection.Find(filter).FirstOrDefaultAsync();
         if (result == null)
         {
-            throw new ProblemNotFoundException("No result found.");
+            throw new Problem404NotFoundException("No result found.");
         }
         
         return result;
@@ -59,7 +56,7 @@ public class MongoRepository<T> : IRepository<T>
     }
     public async Task AddManyAsync(IEnumerable<T> docList)
     {
-        using var session = Client.StartSession();
+        using var session = await Client.StartSessionAsync(); 
         {
             CancellationToken cancellationToken = CancellationToken.None;
             await session.WithTransactionAsync(
@@ -98,13 +95,13 @@ public class MongoRepository<T> : IRepository<T>
 
             if (operationResult.MatchedCount.Equals(0))
             {
-                throw new ProblemNotFoundException("No document matched the filter.");
+                throw new Problem404NotFoundException("No document matched the filter.");
             }
 
-            if (operationResult.ModifiedCount.Equals(0))
-            {
-                throw new ProblemDatabaseException("Document was found but no changes were made.");
-            }
+            // if (operationResult.ModifiedCount.Equals(0))
+            // {
+            //     throw new ProblemDatabaseException("Document was found but no changes were made.");
+            // }
         }
         catch (MongoWriteException mwx)
         {
@@ -160,10 +157,10 @@ public class MongoRepository<T> : IRepository<T>
                 }
             }
                                 
-            if (operationResult == null || operationResult.ModifiedCount.Equals(0))
-            {
-                throw new ProblemNoChangeException("Document was found but no changes were made.");
-            }
+            // if (operationResult == null || operationResult.ModifiedCount.Equals(0))
+            // {
+            //     throw new ProblemNoChangeException("Document was found but no changes were made.");
+            // }
         }
         catch (MongoWriteException mwx)
         {
