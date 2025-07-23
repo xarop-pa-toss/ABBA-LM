@@ -16,6 +16,7 @@
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.12.1" />
     <PackageReference Include="MongoDB.Driver" Version="3.4.0" />
     <PackageReference Include="NaughtyStrings" Version="3.0.0" />
+    <PackageReference Include="Npgsql" Version="9.0.3" />
     <PackageReference Include="Scalar.AspNetCore" Version="2.5.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.3.2" />
     <PackageReference Include="WaffleGenerator" Version="4.2.2" />

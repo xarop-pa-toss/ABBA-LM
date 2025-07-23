@@ -24,25 +24,46 @@ internal class Program
             }
         );
 
+        #region Environment
+        // Load the appsettings.json and then override with environment-specific file
+        builder.Configuration
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+        #endregion
+        
+        #region PostgreSQL connection/client
+        // CREATE-USE-CLOSE A CONNECTION WHENEVER AND WHEREVER IT IS NEEDED
+        // Example:
+        // public class ExampleService
+        // {
+        //     public ExampleService(IConfiguration config)
+        //     {
+        //         var connStr = config.GetConnectionString("DefaultConnection");
+        //     }
+        //     using var connection = new NpgsqlConnection(connectionString);
+        //     connection.Open()
+        // }
+        #endregion
+        
 // This solution uses User Secrets, a .NET feature that can be created with "dotnet user-secrets init".
 // It only works in development environment which is set with "set ASPNETCORE_ENVIRONMENT=Development".
-        #region MongoDB connection/client
-        builder.Services.AddSingleton<IMongoClient>(sp =>
-        {
-            Console.WriteLine(builder.Configuration["MONGO_CONNECTION_STRING_DEV"] + " - " + builder.Configuration["MONGO_DATABASE_NAME"]);
-            var connectionString = builder.Configuration["MONGO_CONNECTION_STRING_DEV"];
-            return new MongoClient(connectionString);
-        });
-
-        builder.Services.AddScoped<IMongoDatabase>(sp =>
-        {
-            var client = sp.GetRequiredService<IMongoClient>();
-            return client.GetDatabase(builder.Configuration["MONGO_DATABASE_NAME"]);
-        });
-
-        builder.Services.AddScoped(typeof(MongoRepository<>));
-        builder.Services.AddRouting(options => options.LowercaseUrls = true);
-        #endregion
+        // #region MongoDB connection/client
+        // builder.Services.AddSingleton<IMongoClient>(sp =>
+        // {
+        //     Console.WriteLine(builder.Configuration["MONGO_CONNECTION_STRING_DEV"] + " - " + builder.Configuration["MONGO_DATABASE_NAME"]);
+        //     var connectionString = builder.Configuration["MONGO_CONNECTION_STRING_DEV"];
+        //     return new MongoClient(connectionString);
+        // });
+        //
+        // builder.Services.AddScoped<IMongoDatabase>(sp =>
+        // {
+        //     var client = sp.GetRequiredService<IMongoClient>();
+        //     return client.GetDatabase(builder.Configuration["MONGO_DATABASE_NAME"]);
+        // });
+        //
+        // builder.Services.AddScoped(typeof(MongoRepository<>));
+        // builder.Services.AddRouting(options => options.LowercaseUrls = true);
+        // #endregion
 
         #region Controllers / Services / Repositories
 // Add Repositories
