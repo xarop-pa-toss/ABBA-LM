@@ -226,7 +226,7 @@ $RECYCLE.BIN/
 ScaffoldingReadMe.txt
 
 # Azure Web Apps
-appsettings.json
+#appsettings.json
 appsettings.*.json
 
 # File-based dependency managers

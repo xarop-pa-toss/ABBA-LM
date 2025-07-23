@@ -8,6 +8,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AE7049A7-D121-4F72-A6BB-C98EDA0290E6}"
 	ProjectSection(SolutionItems) = preProject
 		compose.yaml = compose.yaml
+		appsettings.json = appsettings.json
+		appsettings.Development.json = appsettings.Development.json
+		appsettings.Production.json = appsettings.Production.json
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloodTourney", "BloodTourney\BloodTourney.csproj", "{65FD35D6-78C2-4813-A9F3-5F01B6C19A1B}"
