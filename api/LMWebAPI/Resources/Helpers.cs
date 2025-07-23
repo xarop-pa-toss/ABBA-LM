@@ -31,7 +31,7 @@ public static class Helpers
             case ServerErrorCategory.ExecutionTimeout:
                 throw new Problem503ServiceUnavailableException("Database interaction timed out.");
             case ServerErrorCategory.Uncategorized:
-                throw new ("Database error. Could not add entity.");
+                throw new Problem500InternalServerErrorException("Database error. Could not perform operation.");
         }
     }
 }

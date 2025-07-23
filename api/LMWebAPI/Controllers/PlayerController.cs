@@ -25,11 +25,11 @@ public class PlayerController(PlayerService playerService) : ControllerBase
     {
         if (!ObjectId.TryParse(playerId, out ObjectId id))
         {
-            throw new Problem404NotFoundException("Player ID is not a valid ID.");
+            throw new Problem400BadRequestException("Player ID is not a valid ObjectId.");
         }
         
         var player = await _playerService.GetByPlayerIdAsync(id);
-        return Ok(player);    
+        return Ok(player);
     }
 
     [HttpGet]
@@ -37,7 +37,7 @@ public class PlayerController(PlayerService playerService) : ControllerBase
     {
         if (!ObjectId.TryParse(teamId, out ObjectId id))
         {
-            throw new Problem404NotFoundException("Team ID is not a valid ID.");
+            throw new Problem400BadRequestException("Team ID is not a valid ID.");
         }
         
         var players = await _playerService.GetByTeamIdAsync(id);
@@ -73,7 +73,7 @@ public class PlayerController(PlayerService playerService) : ControllerBase
     }
 
     [HttpDelete]
-    public async Task<ActionResult<List<Player>>> DeleteOne([FromBody] ObjectId playerId)
+    public async Task<ActionResult<Player>> DeleteOne([FromBody] ObjectId playerId)
     {
         await _playerService.DeleteOneAsync(playerId);
         return Ok(playerId);

@@ -13,7 +13,6 @@ public class ProblemException(int statusCode, string error, string message, obje
     public object? Context { get; } = context;
     public string? TraceId { get; set; }
     public Dictionary<string, object> Extensions { get; } = new Dictionary<string, object>();
-
 }
 
 public class ProblemExceptionHandler(IProblemDetailsService problemDetailsService) : IExceptionHandler
@@ -26,7 +25,7 @@ public class ProblemExceptionHandler(IProblemDetailsService problemDetailsServic
         if (ex is not ProblemException)
         {
             // We don't want to catch other types of Exceptions
-            return true;
+            return false;
         }
 
         var problemEx = (ProblemException)ex;

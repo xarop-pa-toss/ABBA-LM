@@ -1,6 +1,5 @@
 namespace LMWebAPI.Resources.Errors;
 
-
 /// <summary>
 /// HTTP 400 Bad Request (client error such as bad syntax, invalid characters, exceeding file size limits, etc.).
 /// </summary>
@@ -80,13 +79,13 @@ public class Problem503ServiceUnavailableException : ProblemException
 {
     private new const string DefaultError = "Service Unavailable";
 
-    public Problem503ServiceUnavailableException(string message)
-        : base(StatusCodes.Status500InternalServerError, DefaultError, message)
+    public Problem503ServiceUnavailableException(string message, object? context = null)
+        : base(StatusCodes.Status500InternalServerError, DefaultError, message, context)
     {
     }
 
-    public Problem503ServiceUnavailableException(string error, string message)
-        : base(StatusCodes.Status500InternalServerError, error, message)
+    public Problem503ServiceUnavailableException(string error, string message, object? context = null)
+        : base(StatusCodes.Status500InternalServerError, error, message, context)
     {
     }
 }
