@@ -9,12 +9,28 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Http.Features;
 using MongoDB.Driver;
 using Scalar.AspNetCore;
+using Serilog;
+
 
 internal class Program
 {
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        
+        #region Logging (Serilog)
+        builder.Logging.ClearProviders();
+        Log.Logger = new LoggerConfiguration()
+            .WriteTo.Console()
+            .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day)
+            .WriteTo.Seq("http://localhost:5341")
+            .CreateLogger();
+
+        builder.Host.UseSerilog();
+        
+        Log.Information("Serilog logging initialized.");
+        #endregion
+        
         builder.Configuration.AddEnvironmentVariables();
         // Forces verification of DI on build instead of runtime
         builder.Host.UseDefaultServiceProvider((context, options) =>
@@ -29,6 +45,11 @@ internal class Program
         builder.Configuration
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
             .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+        
+        if (builder.Environment.IsDevelopment())
+            Log.Warning("Environment is set to PRODUCTION!");
+        else
+            Log.Information("Environment is set to: " + builder.Environment.EnvironmentName + ".");
         #endregion
         
         #region PostgreSQL connection/client
@@ -45,8 +66,6 @@ internal class Program
         // }
         #endregion
         
-// This solution uses User Secrets, a .NET feature that can be created with "dotnet user-secrets init".
-// It only works in development environment which is set with "set ASPNETCORE_ENVIRONMENT=Development".
         // #region MongoDB connection/client
         // builder.Services.AddSingleton<IMongoClient>(sp =>
         // {
@@ -68,17 +87,15 @@ internal class Program
         #region Controllers / Services / Repositories
 // Add Repositories
         builder.Services.AddScoped<PlayerRepository>();
-
 // Add Services
-//From BloodTourney
-        builder.Services.AddSingleton<RulesetManager>();
-//
-
         builder.Services.AddSingleton<JwtGenerator>();
         builder.Services.AddScoped<PlayerService>();
         builder.Services.AddScoped<PlayerSkillService>();
         builder.Services.AddScoped<TeamService>();
+//From BloodTourney
+        builder.Services.AddSingleton<RulesetManager>();
         #endregion
+        
         builder.Services.AddControllers();
 
         #region Middleware
@@ -120,9 +137,9 @@ internal class Program
 //     });
 // builder.Services.AddAuthorization();
         #endregion
-
+        
         var app = builder.Build();
-
+        
         #region  Scalar (OpenAPI Documentation)
         app.MapOpenApi();
         if (app.Environment.IsDevelopment())
@@ -140,5 +157,8 @@ internal class Program
         app.MapControllers();
 
         app.Run();
+        
+        Log.Information("Application started.");
+        Log.Information("Scalar OpenAPI documentation available at http://localhost:5000/scalar/api-reference");
     }
 }
