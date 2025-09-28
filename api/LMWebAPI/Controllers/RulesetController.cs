@@ -1,7 +1,6 @@
 using BloodTourney.Ruleset;
 using LMWebAPI.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
-using BT = BloodTourney;
 namespace LMWebAPI.Controllers;
 
 [ApiController]

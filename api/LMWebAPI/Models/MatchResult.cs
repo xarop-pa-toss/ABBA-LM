@@ -4,7 +4,6 @@ namespace LMWebAPI.Models;
 
 public class MatchResult : BaseEntity
 {
-    public Guid Id { get; set; }
     public Guid MatchId { get; set; }
     public Match Match { get; set; } = null!;
 

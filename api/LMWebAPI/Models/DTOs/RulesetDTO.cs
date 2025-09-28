@@ -1,6 +1,5 @@
 using System.Collections.Immutable;
 using BloodTourney.Models;
-using BT = BloodTourney;
 namespace LMWebAPI.Models.DTOs;
 
 public class RulesetDTO

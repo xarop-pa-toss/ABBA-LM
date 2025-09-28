@@ -1,11 +1,8 @@
 using LMWebAPI.Data;
-using LMWebAPI.Models.Enums;
 namespace LMWebAPI.Models;
 
 public class Match : BaseEntity
 {
-    public Guid Id { get; set; }
-    
     public Guid CompetitionId { get; set; }
     public Competition Competition { get; set; } = null!;
 

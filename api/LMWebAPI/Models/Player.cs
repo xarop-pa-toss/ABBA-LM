@@ -3,7 +3,6 @@ namespace LMWebAPI.Models;
 
 public class Player : BaseEntity
 {
-    public Guid Id { get; set; }
     public Guid TeamId { get; set; }
     public Guid PositionId { get; set; }
     public string Name { get; set; } = string.Empty;

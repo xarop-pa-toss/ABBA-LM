@@ -3,7 +3,6 @@ namespace LMWebAPI.Models;
 
 public class Competition : BaseEntity
 {
-    public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public Guid[] OrganizerIds { get; set; } = Array.Empty<Guid>();
 

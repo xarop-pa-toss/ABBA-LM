@@ -31,14 +31,45 @@ public class ApiDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Composite keys
+        #region BaseEntity config
+        modelBuilder.Entity<BaseEntity>()
+            .Property(e => e.Id)
+            .HasDefaultValueSql("gen_random_uuid()")
+            .ValueGeneratedOnAdd();
+        modelBuilder.Entity<BaseEntity>()
+            .Property(e => e.CreatedAt)
+            .HasDefaultValueSql("NOW()")
+            .ValueGeneratedOnAdd();
+        modelBuilder.Entity<BaseEntity>()
+            .Property(e => e.UpdatedAt)
+            .HasDefaultValueSql("NOW()");
+        
+        // Configure BaseJunctionEntity (junction tables)
+        modelBuilder.Entity<BaseJunctionEntity>()
+            .Property(e => e.CreatedAt)
+            .HasDefaultValueSql("NOW()");
+        
+        // Configure BaseJunctionEntity (junction tables)
+        modelBuilder.Entity<BaseJunctionEntity>()
+            .Property(e => e.UpdatedAt)
+            .HasDefaultValueSql("NOW()");
+        #endregion
+        
+        #region Competition hierarchy config
+        modelBuilder.Entity<Competition>()
+            .HasDiscriminator<string>("CompetitionType")
+            .HasValue<League>("League")
+            .HasValue<Tournament>("Tournament");
+        #endregion
+        
+        #region Composite Keys
         modelBuilder.Entity<PlayerInjury>()
             .HasKey(pi => new
             {
                 pi.PlayerId,
                 pi.InjuryId
             });
-        
+
         modelBuilder.Entity<PlayerSkill>()
             .HasKey(ps => new
             {
@@ -59,19 +90,21 @@ public class ApiDbContext : DbContext
                 ps.PositionalId,
                 ps.SkillId
             });
-        
-        // One-to-One
+        #endregion
+
+        #region One-to-One
         modelBuilder.Entity<Match>()
             .HasOne(m => m.MatchResults)
             .WithOne(mr => mr.Match)
             .HasForeignKey<MatchResult>(mr => mr.MatchId);
-
+        #endregion
+        
         // Let Postgres handle GUID creation for performance reasons
         // -> Gets all entity types in the model being build and checks of ID property
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
             var idProperty = entityType.FindProperty("Id");
-        
+
             if (idProperty != null && idProperty.ClrType == typeof(Guid))
             {
                 // Tells Postgres to create the GUID itself
@@ -83,22 +116,32 @@ public class ApiDbContext : DbContext
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        //TODO: Add CreateByUserId and UpdatedByUserId depending on current user context
-        
-        var changedEntries = ChangeTracker.Entries<BaseEntity>();
-        foreach (var entry in changedEntries)
-        {
-            if (entry.State == EntityState.Added)
-            {
-                entry.Entity.CreatedByUserId = Guid.NewGuid();
-                // set CreatedByUserId from current user context
-                entry.Entity.UpdatedByUserId = Guid.NewGuid();
-                // set UpdatedByUserId 
-            }
-            else if (entry.State == EntityState.Modified)
-            {}
-        }
-        
+        UpdateTimestamps();
         return base.SaveChangesAsync(cancellationToken);
+    }
+
+    public override int SaveChanges()
+    {
+        UpdateTimestamps();
+        return base.SaveChanges();
+    }
+
+    private void UpdateTimestamps()
+    {
+        //TODO: Add CreateByUserId and UpdatedByUserId depending on current user context
+        var entries = ChangeTracker.Entries()
+            .Where(e => e.State == EntityState.Modified);
+
+        foreach (var entry in entries)
+        {
+            if (entry.Entity is BaseEntity baseEntity)
+            {
+                baseEntity.UpdatedAt = DateTime.UtcNow;
+            }
+            else if (entry.Entity is BaseJunctionEntity junctionEntity)
+            {
+                junctionEntity.UpdatedAt = DateTime.UtcNow;
+            }
+        }
     }
 }
