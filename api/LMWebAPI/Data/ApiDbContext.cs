@@ -10,6 +10,7 @@ public class ApiDbContext : DbContext
 
     // DbSets are which Models should be turned to SQL tables
     public DbSet<Coach> Coaches { get; set; } = null!;
+    public DbSet<Competition> Competitions { get; set; } = null!;
     public DbSet<Injury> Injuries { get; set; } = null!;
     public DbSet<League> Leagues { get; set; } = null!;
     public DbSet<LeagueRound> LeagueRounds { get; set; } = null!;
@@ -37,6 +38,13 @@ public class ApiDbContext : DbContext
                 pi.PlayerId,
                 pi.InjuryId
             });
+        
+        modelBuilder.Entity<PlayerSkill>()
+            .HasKey(ps => new
+            {
+                ps.PlayerId,
+                ps.SkillId
+            });
 
         modelBuilder.Entity<PositionalRoster>()
             .HasKey(pr => new
@@ -51,8 +59,46 @@ public class ApiDbContext : DbContext
                 ps.PositionalId,
                 ps.SkillId
             });
+        
+        // One-to-One
+        modelBuilder.Entity<Match>()
+            .HasOne(m => m.MatchResults)
+            .WithOne(mr => mr.Match)
+            .HasForeignKey<MatchResult>(mr => mr.MatchId);
 
-
+        // Let Postgres handle GUID creation for performance reasons
+        // -> Gets all entity types in the model being build and checks of ID property
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            var idProperty = entityType.FindProperty("Id");
+        
+            if (idProperty != null && idProperty.ClrType == typeof(Guid))
+            {
+                // Tells Postgres to create the GUID itself
+                idProperty.SetDefaultValueSql("gen_random_uuid()");
+            }
+        }
         base.OnModelCreating(modelBuilder);
+    }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        //TODO: Add CreateByUserId and UpdatedByUserId depending on current user context
+        
+        var changedEntries = ChangeTracker.Entries<BaseEntity>();
+        foreach (var entry in changedEntries)
+        {
+            if (entry.State == EntityState.Added)
+            {
+                entry.Entity.CreatedByUserId = Guid.NewGuid();
+                // set CreatedByUserId from current user context
+                entry.Entity.UpdatedByUserId = Guid.NewGuid();
+                // set UpdatedByUserId 
+            }
+            else if (entry.State == EntityState.Modified)
+            {}
+        }
+        
+        return base.SaveChangesAsync(cancellationToken);
     }
 }

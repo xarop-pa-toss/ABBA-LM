@@ -5,9 +5,9 @@ namespace LMWebAPI.Models;
 public class Match : BaseEntity
 {
     public Guid Id { get; set; }
-
-    public CompetitionType CompetitionType { get; set; }
+    
     public Guid CompetitionId { get; set; }
+    public Competition Competition { get; set; } = null!;
 
     public Guid HomeTeamId { get; set; }
     public Team HomeTeam { get; set; } = null!;

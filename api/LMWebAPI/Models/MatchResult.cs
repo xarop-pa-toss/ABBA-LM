@@ -6,7 +6,9 @@ public class MatchResult : BaseEntity
 {
     public Guid Id { get; set; }
     public Guid MatchId { get; set; }
+    public Match Match { get; set; } = null!;
 
+    // Stats
     public int TouchdownsHome { get; set; } = 0;
     public int CasualtiesHome { get; set; } = 0;
     public int CompletionsHome { get; set; } = 0;
