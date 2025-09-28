@@ -1,7 +1,7 @@
 using LMWebAPI.Data;
 namespace LMWebAPI.Models;
 
-public class PositionalSkill : BaseEntity
+public class PositionalSkill : BaseJunctionEntity
 {
     public Guid PositionalId { get; set; }
     public Guid SkillId { get; set; }

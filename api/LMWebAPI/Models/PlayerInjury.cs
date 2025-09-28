@@ -1,7 +1,7 @@
 using LMWebAPI.Data;
 namespace LMWebAPI.Models;
 
-public class PlayerInjury : BaseEntity
+public class PlayerInjury : BaseJunctionEntity
 {
     public Guid PlayerId { get; set; }
     public Guid InjuryId { get; set; }

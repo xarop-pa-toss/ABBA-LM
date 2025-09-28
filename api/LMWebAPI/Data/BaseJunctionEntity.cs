@@ -1,9 +1,7 @@
 namespace LMWebAPI.Data;
 
-public class BaseEntity
+public class BaseJunctionEntity
 {
-    public Guid Id { get; set; }
-
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public Guid CreatedByUserId { get; set; }
 

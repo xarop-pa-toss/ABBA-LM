@@ -1,7 +1,7 @@
 using LMWebAPI.Data;
 using LMWebAPI.Models;
 
-public class PlayerSkill : BaseEntity
+public class PlayerSkill : BaseJunctionEntity
 {
     public Guid PlayerId { get; set; }
     public Guid SkillId { get; set; }
