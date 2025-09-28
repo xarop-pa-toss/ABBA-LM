@@ -7,7 +7,7 @@ using LMWebAPI.Models;
 
 namespace LMWebAPI.Identity;
 
-public class IdentityService : MongoRepository<User>
+public class IdentityService : MongoRepository<User_old>
 {
     public IdentityService(IMongoDatabase database, IMongoClient client) : base(database, "users", client)
     {

@@ -7,7 +7,7 @@ public class TournamentCoachGroup
         Name = name;
     }
 
-    internal async Task AddCoach(User user)
+    internal async Task AddCoach(User_old userOld)
     {
         
     }

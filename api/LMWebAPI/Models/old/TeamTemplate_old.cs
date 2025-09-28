@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace LMWebAPI.Models;
 
-public class TeamTemplate
+public class TeamTemplate_old
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]

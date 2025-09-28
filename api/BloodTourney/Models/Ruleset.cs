@@ -4,7 +4,7 @@ namespace BloodTourney.Models;
 
 public class Ruleset
 {
-    public required IEnumerable<Tiers.TierParameters> Tiers { get; init; }
+    public required IEnumerable<Tier> Tiers { get; init; }
     public required VictoryPoints MatchVictoryPoints { get; init; }
     public required IEnumerable<string> TieBreakers { get; init; }
     public required TimeKeeping Timekeeping { get; init; }

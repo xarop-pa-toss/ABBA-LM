@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using BloodTourney.Models.Enums;
+using MongoDB.Bson;
 
 namespace BloodTourney.Models;
 
@@ -10,38 +11,4 @@ public class Team
     public required TeamCodeNames TeamCodename { get; init; }
 
     private uint TournamentPoints;
-}
-
-public enum TeamCodeNames
-{
-    Amazons,
-    BlackOrcs,
-    Chaos,
-    ChaosDwarves,
-    ChaosRenegades,
-    DarkElves,
-    Dwarves,
-    ElvenUnion,
-    Gnomes,
-    Goblins,
-    Halflings,
-    HighElves,
-    Humans,
-    ImperialNobility,
-    Khorne,
-    Lizardmen,
-    Necromantic,
-    Norse,
-    Nurgle,
-    Ogres,
-    OldWorldAlliance,
-    Orcs,
-    Skaven,
-    Slann,
-    Snotlings,
-    TombKings,
-    Undead,
-    Underworld,
-    Vampires,
-    WoodElves
 }

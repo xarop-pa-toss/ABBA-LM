@@ -1,26 +1,19 @@
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-
-namespace LMWebAPI.Models;
+using LMWebAPI.Models;
 
 public class Skill
 {
-    [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public ObjectId Id { get; set; }
+    public Guid Id { get; set; }
+    public string Name { get; set; } = null!;
+    public string Slug { get; set; } = null!;
+    public string Category { get; set; } = null!;
+    public string Description { get; set; } = null!;
+    public bool IsSpecialTrait { get; set; } = false;
+
+    // Navigation properties
+    public ICollection<PlayerSkill> PlayerSkills { get; set; } = new List<PlayerSkill>();
+    public ICollection<PositionalSkill> PositionalSkills { get; set; } = new List<PositionalSkill>();
     
-    [BsonElement("type")]
-    public required string Type { get; set; }
-    
-    [BsonElement("code")]
-    public required string Code { get; set; }
-    
-    [BsonElement("name")]
-    public required string Name { get; set; }
-    
-    [BsonElement("is_special_trait")]
-    public required bool IsSpecialTrait { get; set; }
-    
-    [BsonElement("description")]
-    public string Description { get; set; }
+    // Meta
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }

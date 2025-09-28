@@ -4,7 +4,7 @@ namespace LMWebAPI.Models.DTOs;
 
 public class RulesetDTO
 {
-    public required IEnumerable<BT.Tiers.TierParameters> Tiers { get; init; }
+    public required IEnumerable<BT.Models.Tier> Tiers { get; init; }
     public required BT.Models.VictoryPoints MatchVictoryPoints { get; init; }
     public required IEnumerable<string> TieBreakers { get; init; }
     public required BT.Models.TimeKeeping Timekeeping { get; init; }

@@ -1,4 +1,5 @@
 using BloodTourney.Models;
+using BloodTourney.Models.Enums;
 using BloodTourney.Ruleset;
 
 namespace BloodTourney.Tests

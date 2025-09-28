@@ -1,0 +1,35 @@
+namespace BloodTourney.Models.Enums;
+
+public enum TeamCodeNames
+{
+    Amazons,
+    BlackOrcs,
+    Chaos,
+    ChaosDwarves,
+    ChaosRenegades,
+    DarkElves,
+    Dwarves,
+    ElvenUnion,
+    Gnomes,
+    Goblins,
+    Halflings,
+    HighElves,
+    Humans,
+    ImperialNobility,
+    Khorne,
+    Lizardmen,
+    Necromantic,
+    Norse,
+    Nurgle,
+    Ogres,
+    OldWorldAlliance,
+    Orcs,
+    Skaven,
+    Slann,
+    Snotlings,
+    TombKings,
+    Undead,
+    Underworld,
+    Vampires,
+    WoodElves
+}

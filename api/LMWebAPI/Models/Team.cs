@@ -1,33 +1,38 @@
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+using System;
+using System.Collections.Generic;
 
-namespace LMWebAPI.Models;
-public class Team
+namespace LMWebAPI.Models
 {
-    [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public ObjectId Id { get; set; }
+    public class Team
+    {
+        public Guid Id { get; set; }
+        public Guid CoachId { get; set; }
+        public Guid RosterId { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public int Win { get; set; }
+        public int Loss { get; set; }
+        public int Ties { get; set; }
+        public int Delta { get; set; }
+        public int TeamValue { get; set; }
+        public int Treasury { get; set; }
+        public int Rerolls { get; set; }
+        public int DedicatedFans { get; set; }
+        public int AssistantCoaches { get; set; }
+        public int Cheerleaders { get; set; }
+        public bool HasApothecary { get; set; }
+        public bool IsExperienced { get; set; }
+        public bool IsSuspended { get; set; }
+        public bool IsDeactivated { get; set; }
 
-    [BsonElement("user_id")]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public required string UserId { get; set; }
-
-    [BsonElement("team_codename")]
-    public required string TeamCodename { get; set; }
-
-    [BsonElement("players")]
-    public List<TeamPlayer> Players { get; set; } = new List<TeamPlayer>();
-
-    [BsonElement("name")]
-    public required string Name { get; set; } = "Not Named";
-}
-
-public class TeamPlayer
-{
-    [BsonElement("player_id")]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public required string PlayerId { get; set; } 
-
-    [BsonElement("list_position")]
-    public required int ListPosition { get; set; }
+        // Navigation
+        public Coach Coach { get; set; } = null!;
+        public Roster Roster { get; set; } = null!;
+        public ICollection<Player> Players { get; set; } = new List<Player>();
+        public ICollection<Match> HomeMatches { get; set; } = new List<Match>();
+        public ICollection<Match> AwayMatches { get; set; } = new List<Match>();
+                
+        // Meta
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    }
 }

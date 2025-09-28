@@ -1,0 +1,26 @@
+using LMWebAPI.Models.Enums;
+namespace LMWebAPI.Models;
+
+public class MatchResult
+{
+    public Guid Id { get; set; }
+    public Guid MatchId { get; set; }
+    
+    public int TouchdownsHome { get; set; } = 0;
+    public int CasualtiesHome { get; set; } = 0;
+    public int CompletionsHome { get; set; } = 0;
+    public int InterceptionsHome { get; set; } = 0;
+    public int FoulsHome { get; set; } = 0;
+
+    public int TouchdownsAway { get; set; } = 0;
+    public int CasualtiesAway { get; set; } = 0;
+    public int CompletionsAway { get; set; } = 0;
+    public int InterceptionsAway { get; set; } = 0;
+    public int FoulsAway { get; set; } = 0;
+    
+    public ForfeitReasons? Forfeit { get; set; }
+    
+    // Meta
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+}

@@ -88,7 +88,7 @@ internal class RulesetPresetFactory : IRulesetPresetFactory
         };
 
         return RulesetBuilder.Create()
-            .WithTiers(Tiers.SardineBowl2025)
+            .WithTiers(TierCreator.SardineBowl2025)
             .WithVictoryPoints(victoryPoints)
             .WithTieBreakers(tieBreakers)
             .WithTimeKeeping(timeKeeping)

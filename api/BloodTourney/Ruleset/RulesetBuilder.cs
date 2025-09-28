@@ -5,7 +5,7 @@ namespace BloodTourney.Ruleset;
 
 public interface IRulesetBuilder
 {
-    IRulesetBuilder WithTiers(IEnumerable<Tiers.TierParameters> tiers);
+    IRulesetBuilder WithTiers(IEnumerable<Tier> tiers);
     IRulesetBuilder WithVictoryPoints(VictoryPoints victoryPoints);
     IRulesetBuilder WithTieBreakers(IEnumerable<string> tieBreakers);
     IRulesetBuilder WithTimeKeeping(TimeKeeping timekeeping);
@@ -19,7 +19,7 @@ public interface IRulesetBuilder
 
 public class RulesetBuilder : IRulesetBuilder
 {
-    private IEnumerable<Tiers.TierParameters>? _tiers;
+    private IEnumerable<Tier>? _tiers;
     private VictoryPoints? _victoryPoints;
     private IEnumerable<string>? _tieBreakers;
     private TimeKeeping? _timekeeping;
@@ -31,7 +31,7 @@ public class RulesetBuilder : IRulesetBuilder
 
     public static IRulesetBuilder Create() => new RulesetBuilder();
 
-    public IRulesetBuilder WithTiers(IEnumerable<Tiers.TierParameters> tiers)
+    public IRulesetBuilder WithTiers(IEnumerable<Tier> tiers)
     {
         var tierParametersList = tiers.ToList();
         Helpers.CheckIfCollectionNullOrEmpty(tierParametersList).ThrowIfHasErrors(message: "Tiers not provided.");

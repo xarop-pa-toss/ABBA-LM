@@ -1,24 +1,19 @@
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+using System;
+using System.Collections.Generic;
 
-namespace LMWebAPI.Models;
-
-public class Injury
+namespace LMWebAPI.Models
 {
-    [BsonId]
-    [BsonRepresentation(BsonType.String)]
-    [BsonElement("_id")]
-    public ObjectId Id { get; set; }
+    public class Injury
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Slug { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string? AffectedStat { get; set; }
+        public int Modifier { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    [BsonElement("code")]
-    public required string Code { get; set; }
-    
-    [BsonElement("name")]
-    public required string Name { get; set; }
-    
-    [BsonElement("description")]
-    public required string Description { get; set; }
-
-    [BsonElement("stat_modifiers")]
-    public required PlayerStats StatModifiers { get; set; }
+        // Navigation
+        public ICollection<PlayerInjury> PlayerInjuries { get; set; } = new List<PlayerInjury>();
+    }
 }

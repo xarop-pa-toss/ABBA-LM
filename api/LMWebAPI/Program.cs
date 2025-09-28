@@ -1,12 +1,12 @@
 using BloodTourney.Ruleset;
+using LMWebAPI.Data;
 using LMWebAPI.Identity;
 using LMWebAPI.Repositories;
 using LMWebAPI.Resources.Errors;
 using LMWebAPI.Services.Players;
 using LMWebAPI.Services.Teams;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
 using Scalar.AspNetCore;
 using Serilog;
@@ -40,7 +40,7 @@ internal class Program
             }
         );
 
-        #region Environment
+        #region Environment Setup
         // Load the appsettings.json and then override with environment-specific file
         builder.Configuration
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
@@ -50,6 +50,11 @@ internal class Program
             Log.Warning("Environment is set to PRODUCTION!");
         else
             Log.Information("Environment is set to: " + builder.Environment.EnvironmentName + ".");
+        #endregion
+        
+        #region Database - Postgres on Fly.io
+        builder.Services.AddDbContext<ApiDbContext>(options =>
+            options.UseNpgsql(Environment.GetEnvironmentVariable("CONNECTION_STRING")));
         #endregion
         
         #region PostgreSQL connection/client
@@ -66,23 +71,23 @@ internal class Program
         // }
         #endregion
         
-        // #region MongoDB connection/client
-        // builder.Services.AddSingleton<IMongoClient>(sp =>
-        // {
-        //     Console.WriteLine(builder.Configuration["MONGO_CONNECTION_STRING_DEV"] + " - " + builder.Configuration["MONGO_DATABASE_NAME"]);
-        //     var connectionString = builder.Configuration["MONGO_CONNECTION_STRING_DEV"];
-        //     return new MongoClient(connectionString);
-        // });
-        //
-        // builder.Services.AddScoped<IMongoDatabase>(sp =>
-        // {
-        //     var client = sp.GetRequiredService<IMongoClient>();
-        //     return client.GetDatabase(builder.Configuration["MONGO_DATABASE_NAME"]);
-        // });
-        //
-        // builder.Services.AddScoped(typeof(MongoRepository<>));
-        // builder.Services.AddRouting(options => options.LowercaseUrls = true);
-        // #endregion
+        #region --INACTIVE-- MongoDB connection/client
+        builder.Services.AddSingleton<IMongoClient>(sp =>
+        {
+            Console.WriteLine(builder.Configuration["MONGO_CONNECTION_STRING_DEV"] + " - " + builder.Configuration["MONGO_DATABASE_NAME"]);
+            var connectionString = builder.Configuration["MONGO_CONNECTION_STRING_DEV"];
+            return new MongoClient(connectionString);
+        });
+        
+        builder.Services.AddScoped<IMongoDatabase>(sp =>
+        {
+            var client = sp.GetRequiredService<IMongoClient>();
+            return client.GetDatabase(builder.Configuration["MONGO_DATABASE_NAME"]);
+        });
+        
+        builder.Services.AddScoped(typeof(MongoRepository<>));
+        builder.Services.AddRouting(options => options.LowercaseUrls = true);
+        #endregion
 
         #region Controllers / Services / Repositories
 // Add Repositories

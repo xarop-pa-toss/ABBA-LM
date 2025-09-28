@@ -1,6 +1,7 @@
 ﻿using BloodTourney.Tournament;
 using BloodTourney.Tournament.Formats;
 using BloodTourney.Models;
+using BloodTourney.Models.Enums;
 using BloodTourney.Ruleset;
 using Xunit.Abstractions;
 

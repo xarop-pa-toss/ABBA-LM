@@ -2,7 +2,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 namespace LMWebAPI.Models;
 
-public class User
+public class User_old
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]

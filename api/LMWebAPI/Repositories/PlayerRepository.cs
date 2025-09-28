@@ -14,12 +14,12 @@ public class PlayerRepository : MongoRepository<Player>
     
     public async Task<List<Player>> GetByTeamIdAsync(ObjectId teamId)
     {
-        return await Collection.Find(player => player.TeamId == teamId).ToListAsync();
+        return await Collection.Find(player => player.TeamId == Guid.NewGuid() ).ToListAsync();
     }
 
     public async Task<List<Player>> GetByTeamNameAsync(string teamName)
     {
-        ObjectId teamId = _teamCollection.Find(team => team.Name.ToLower() == teamName.ToLower())
+        Guid teamId = _teamCollection.Find(team => team.Name.ToLower() == teamName.ToLower())
             .Project(team => team.Id)
             .FirstOrDefault();
 

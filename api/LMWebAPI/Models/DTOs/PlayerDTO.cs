@@ -13,5 +13,5 @@ public class PlayerDto
     public string Rank { get; set; }
     public int Value { get; set; }
     public int Number { get; set; }
-    public List<Injury> Injuries { get; set; }
+    public List<Injury_old> Injuries { get; set; }
 }

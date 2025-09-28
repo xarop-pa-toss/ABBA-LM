@@ -1,34 +1,15 @@
 ﻿using System.Collections.Immutable;
 using BloodTourney.Models;
+using BloodTourney.Models.Enums;
 using static BloodTourney.Helpers;
 // ReSharper disable UseCollectionExpression
 
 namespace BloodTourney;
 
-public class Tiers
+public class TierCreator
 {
-    /// <summary>
-    /// Represents the restrictions and parameters for a tournament Tier
-    /// </summary>
-    public readonly struct TierParameters
-    {
-        public required uint TierLevel { get; init; }
-        public required List<TeamCodeNames> Teams { get; init; }
-
-        /// <summary>
-        /// Maximum Team Value (gold pieces) before skills and inducements are applied.
-        /// </summary>
-        public required uint MaxBaseTeamValue { get; init; }
-        public required uint MaxPrimarySkills { get; init; }
-        public required uint MaxSecondarySkills { get; init; }
-        public required uint SkillStackingPlayerLimit { get; init; }
-        public required uint MaxStarPlayers { get; init; }
-        
-        public bool IsTeamAllowed(TeamCodeNames team) => Teams.Contains(team);
-    }
-    
-    public readonly static ImmutableArray<TierParameters> SardineBowl2025 = ImmutableArray.Create(
-        new TierParameters
+    public readonly static ImmutableArray<Tier> SardineBowl2025 = ImmutableArray.Create(
+        new Tier
         {
             TierLevel = 1,
             Teams = new List<TeamCodeNames>
@@ -46,7 +27,7 @@ public class Tiers
             SkillStackingPlayerLimit = 0,
             MaxStarPlayers = 0
         },
-        new TierParameters
+        new Tier
         {
             TierLevel = 2,
             Teams = new List<TeamCodeNames>
@@ -65,7 +46,7 @@ public class Tiers
             SkillStackingPlayerLimit = 0,
             MaxStarPlayers = 0
         },
-        new TierParameters
+        new Tier
         {
             TierLevel = 3,
             MaxBaseTeamValue = 1_170_000,
@@ -82,7 +63,7 @@ public class Tiers
             SkillStackingPlayerLimit = 0,
             MaxStarPlayers = 1
         },
-        new TierParameters
+        new Tier
         {
             TierLevel = 4,
             Teams = new List<TeamCodeNames>
@@ -99,7 +80,7 @@ public class Tiers
             SkillStackingPlayerLimit = 2,
             MaxStarPlayers = 1
         },
-        new TierParameters
+        new Tier
         {
             TierLevel = 5,
             Teams = new List<TeamCodeNames>
@@ -114,7 +95,7 @@ public class Tiers
             SkillStackingPlayerLimit = 2,
             MaxStarPlayers = 1
         },
-        new TierParameters
+        new Tier
         {
             TierLevel = 6,
             Teams = new List<TeamCodeNames>
@@ -132,8 +113,8 @@ public class Tiers
         }
     );
 
-    public readonly static ImmutableArray<TierParameters> EuroBowl2025 = ImmutableArray.Create(
-        new TierParameters
+    public readonly static ImmutableArray<Tier> EuroBowl2025 = ImmutableArray.Create(
+        new Tier
         {
             TierLevel = 1,
             MaxBaseTeamValue = 1_150_000,
@@ -151,7 +132,7 @@ public class Tiers
             SkillStackingPlayerLimit = 0,
             MaxStarPlayers = 0
         },
-        new TierParameters
+        new Tier
         {
             TierLevel = 2,
             MaxBaseTeamValue = 1_160_000,
@@ -170,7 +151,7 @@ public class Tiers
             SkillStackingPlayerLimit = 0,
             MaxStarPlayers = 0
         },
-        new TierParameters
+        new Tier
         {
             TierLevel = 3,
             MaxBaseTeamValue = 1_170_000,
@@ -187,7 +168,7 @@ public class Tiers
             SkillStackingPlayerLimit = 0,
             MaxStarPlayers = 1
         },
-        new TierParameters
+        new Tier
         {
             TierLevel = 4,
             MaxBaseTeamValue = 1_180_000,
@@ -204,7 +185,7 @@ public class Tiers
             SkillStackingPlayerLimit = 2,
             MaxStarPlayers = 1
         },
-        new TierParameters
+        new Tier
         {
             TierLevel = 5,
             MaxBaseTeamValue = 1_200_000,
@@ -219,7 +200,7 @@ public class Tiers
             SkillStackingPlayerLimit = 2,
             MaxStarPlayers = 1
         },
-        new TierParameters
+        new Tier
         {
             TierLevel = 6,
             MaxBaseTeamValue = 1_200_000,
@@ -243,7 +224,7 @@ public class Tiers
     /// <param name="name"></param>
     /// <param name="tierParameters"></param>
     /// <returns>ValidationResult can return Valid or Failure (with error list)</returns>
-    public ValidationResult ValidateCustomTierset(IEnumerable<TierParameters> tierParameters)
+    public ValidationResult ValidateCustomTierset(IEnumerable<Tier> tierParameters)
     {
         var errors = new List<string>();
         var tierParametersList = tierParameters.ToList();

@@ -1,3 +1,4 @@
+using BloodTourney.Models.Enums;
 namespace BloodTourney.Models;
 
 public class TournamentConfig
@@ -31,11 +32,3 @@ public class TournamentConfig
     public required bool ResurrectionMode { get; init; } = true;
 }
 
-public enum TournamentFormatType
-{
-    RoundRobin,
-    Swiss,
-    SingleElimination,
-    DoubleElimination,
-    KingOfTheHill
-}
