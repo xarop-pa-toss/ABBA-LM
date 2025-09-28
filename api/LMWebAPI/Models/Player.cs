@@ -1,4 +1,5 @@
 using LMWebAPI.Data;
+using LMWebAPI.Models.Enums;
 namespace LMWebAPI.Models;
 
 public class Player : BaseEntity
@@ -7,7 +8,7 @@ public class Player : BaseEntity
     public Guid PositionId { get; set; }
     public string Name { get; set; } = string.Empty;
     public int Number { get; set; }
-    public string Status { get; set; } = string.Empty;
+    public PlayerStatus PlayerStatus { get; set; }
     public bool StarPlayer { get; set; }
     public int MA { get; set; }
     public int ST { get; set; }

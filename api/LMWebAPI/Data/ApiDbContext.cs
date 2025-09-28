@@ -10,7 +10,6 @@ public class ApiDbContext : DbContext
 
     // DbSets are which Models should be turned to SQL tables
     public DbSet<Coach> Coaches { get; set; } = null!;
-    public DbSet<Competition> Competitions { get; set; } = null!;
     public DbSet<Injury> Injuries { get; set; } = null!;
     public DbSet<League> Leagues { get; set; } = null!;
     public DbSet<LeagueRound> LeagueRounds { get; set; } = null!;
@@ -23,7 +22,6 @@ public class ApiDbContext : DbContext
     public DbSet<PositionalRoster> PositionalRosters { get; set; } = null!;
     public DbSet<PositionalSkill> PositionalSkills { get; set; } = null!;
     public DbSet<Roster> Rosters { get; set; } = null!;
-    public DbSet<Round> Rounds { get; set; } = null!;
     public DbSet<Skill> Skills { get; set; } = null!;
     public DbSet<Team> Teams { get; set; } = null!;
     public DbSet<Tournament> Tournaments { get; set; } = null!;
@@ -31,7 +29,7 @@ public class ApiDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        #region BaseEntity config
+        #region BaseEntity and BaseJunctionEntity config
         modelBuilder.Entity<BaseEntity>()
             .Property(e => e.Id)
             .HasDefaultValueSql("gen_random_uuid()")
@@ -44,15 +42,10 @@ public class ApiDbContext : DbContext
             .Property(e => e.UpdatedAt)
             .HasDefaultValueSql("NOW()");
         
-        // Configure BaseJunctionEntity (junction tables)
         modelBuilder.Entity<BaseJunctionEntity>()
             .Property(e => e.CreatedAt)
             .HasDefaultValueSql("NOW()");
         
-        // Configure BaseJunctionEntity (junction tables)
-        modelBuilder.Entity<BaseJunctionEntity>()
-            .Property(e => e.UpdatedAt)
-            .HasDefaultValueSql("NOW()");
         #endregion
         
         #region Competition hierarchy config
@@ -99,18 +92,6 @@ public class ApiDbContext : DbContext
             .HasForeignKey<MatchResult>(mr => mr.MatchId);
         #endregion
         
-        // Let Postgres handle GUID creation for performance reasons
-        // -> Gets all entity types in the model being build and checks of ID property
-        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-        {
-            var idProperty = entityType.FindProperty("Id");
-
-            if (idProperty != null && idProperty.ClrType == typeof(Guid))
-            {
-                // Tells Postgres to create the GUID itself
-                idProperty.SetDefaultValueSql("gen_random_uuid()");
-            }
-        }
         base.OnModelCreating(modelBuilder);
     }
 
@@ -137,10 +118,6 @@ public class ApiDbContext : DbContext
             if (entry.Entity is BaseEntity baseEntity)
             {
                 baseEntity.UpdatedAt = DateTime.UtcNow;
-            }
-            else if (entry.Entity is BaseJunctionEntity junctionEntity)
-            {
-                junctionEntity.UpdatedAt = DateTime.UtcNow;
             }
         }
     }

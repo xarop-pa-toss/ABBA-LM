@@ -19,8 +19,8 @@ public class Match : BaseEntity
     public MatchResult? MatchResults { get; set; }
 
     // Scheduling
-    public DateTime ScheduledTo { get; set; } = DateTime.UtcNow;
-    public DateTime PlayedAt { get; set; } = DateTime.UtcNow;
+    public DateTime ScheduledTo { get; set; }
+    public DateTime PlayedAt { get; set; }
 
     // Navigation
 }

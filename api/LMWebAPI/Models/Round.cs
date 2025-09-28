@@ -4,7 +4,7 @@ namespace LMWebAPI.Models;
 public abstract class Round : BaseEntity
 {
 
-    public uint RoundNumber { get; set; }
+    public int RoundNumber { get; set; }
     public bool IsComplete { get; set; }
 
     // Navigation
