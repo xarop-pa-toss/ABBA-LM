@@ -7,19 +7,16 @@ public class TournamentCoachGroup
         Name = name;
     }
 
+    public string Name { get; set; }
+    public List<CoachAndTeam> Teams { get; set; }
+
     internal async Task AddCoach(User_old userOld)
     {
-        
     }
-    
+
     public struct CoachAndTeam
     {
         private string CoachName;
         private Team Team;
     }
-    
-    public string Name { get; set; }
-    public List<CoachAndTeam> Teams { get; set; }
-    
-    
 }

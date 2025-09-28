@@ -1,7 +1,6 @@
 ﻿using LMWebAPI.Resources.Errors;
 using MongoDB.Bson;
 using MongoDB.Driver;
-
 namespace LMWebAPI.Resources;
 
 public static class Helpers
@@ -17,7 +16,7 @@ public static class Helpers
         var idValue = idPropInfo.GetValue(doc);
         if (idValue == null)
         {
-            throw new ArgumentException($"'_id' is null or empty.");
+            throw new ArgumentException("'_id' is null or empty.");
         }
         return (ObjectId)idValue;
     }

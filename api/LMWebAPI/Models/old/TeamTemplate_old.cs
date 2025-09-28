@@ -1,6 +1,5 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-
 namespace LMWebAPI.Models;
 
 public class TeamTemplate_old
@@ -18,6 +17,6 @@ public class TeamTemplate_old
 
 public class TeamTemplatePlayer
 {
-    ObjectId player_template_id { get; set; }
-    int list_position { get; set; }
+    private ObjectId player_template_id { get; set; }
+    private int list_position { get; set; }
 }

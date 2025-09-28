@@ -1,11 +1,12 @@
+using LMWebAPI.Data;
 using LMWebAPI.Models.Enums;
 namespace LMWebAPI.Models;
 
-public class MatchResult
+public class MatchResult : BaseEntity
 {
     public Guid Id { get; set; }
     public Guid MatchId { get; set; }
-    
+
     public int TouchdownsHome { get; set; } = 0;
     public int CasualtiesHome { get; set; } = 0;
     public int CompletionsHome { get; set; } = 0;
@@ -17,10 +18,6 @@ public class MatchResult
     public int CompletionsAway { get; set; } = 0;
     public int InterceptionsAway { get; set; } = 0;
     public int FoulsAway { get; set; } = 0;
-    
+
     public ForfeitReasons? Forfeit { get; set; }
-    
-    // Meta
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }

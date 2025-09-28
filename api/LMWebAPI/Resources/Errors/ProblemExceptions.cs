@@ -1,7 +1,7 @@
 namespace LMWebAPI.Resources.Errors;
 
 /// <summary>
-/// HTTP 400 Bad Request (client error such as bad syntax, invalid characters, exceeding file size limits, etc.).
+///     HTTP 400 Bad Request (client error such as bad syntax, invalid characters, exceeding file size limits, etc.).
 /// </summary>
 public class Problem400BadRequestException : ProblemException
 {
@@ -19,7 +19,7 @@ public class Problem400BadRequestException : ProblemException
 }
 
 /// <summary>
-/// For HTTP 404 Not Found (resource not found on server)
+///     For HTTP 404 Not Found (resource not found on server)
 /// </summary>
 public class Problem404NotFoundException : ProblemException
 {
@@ -36,9 +36,8 @@ public class Problem404NotFoundException : ProblemException
 }
 
 /// <summary>
-/// For HTTP 409 Conflict (conflict with resources current state on server)
+///     For HTTP 409 Conflict (conflict with resources current state on server)
 /// </summary>
-
 public class Problem409ConflictException : ProblemException
 {
     private new const string DefaultError = "Conflict";
@@ -55,7 +54,7 @@ public class Problem409ConflictException : ProblemException
 }
 
 /// <summary>
-/// For HTTP 500 Internal Server Error (generic server error)
+///     For HTTP 500 Internal Server Error (generic server error)
 /// </summary>
 public class Problem500InternalServerErrorException : ProblemException
 {
@@ -73,7 +72,7 @@ public class Problem500InternalServerErrorException : ProblemException
 }
 
 /// <summary>
-/// For HTTP 503 Unavailable (when a server service is unreachable or offline)
+///     For HTTP 503 Unavailable (when a server service is unreachable or offline)
 /// </summary>
 public class Problem503ServiceUnavailableException : ProblemException
 {

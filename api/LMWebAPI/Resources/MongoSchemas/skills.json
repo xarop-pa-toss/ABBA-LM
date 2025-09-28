@@ -2,7 +2,13 @@
   "$jsonSchema": {
     "bsonType": "object",
     "description": "Schema for the Skill collection.",
-    "required": ["_id", "type", "code", "name", "is_special_trait"],
+    "required": [
+      "_id",
+      "type",
+      "code",
+      "name",
+      "is_special_trait"
+    ],
     "properties": {
       "_id": {
         "bsonType": "objectId",

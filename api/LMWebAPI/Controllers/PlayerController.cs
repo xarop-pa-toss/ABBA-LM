@@ -3,7 +3,6 @@ using LMWebAPI.Resources.Errors;
 using LMWebAPI.Services.Players;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
-
 namespace LMWebAPI.Controllers;
 
 // [Authorize]
@@ -17,31 +16,31 @@ public class PlayerController(PlayerService playerService) : ControllerBase
     public async Task<ActionResult<List<Player>>> GetAll()
     {
         var players = await _playerService.GetAllAsync();
-        return Ok(players);    
+        return Ok(players);
     }
-    
+
     [HttpGet]
-    public async Task<ActionResult<Player>> GetById([FromBody]string playerId)
+    public async Task<ActionResult<Player>> GetById([FromBody] string playerId)
     {
-        if (!ObjectId.TryParse(playerId, out ObjectId id))
+        if (!ObjectId.TryParse(playerId, out var id))
         {
             throw new Problem400BadRequestException("Player ID is not a valid ObjectId.");
         }
-        
+
         var player = await _playerService.GetByPlayerIdAsync(id);
         return Ok(player);
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<Player>>> GetPlayersByTeamId([FromBody]string teamId)
+    public async Task<ActionResult<List<Player>>> GetPlayersByTeamId([FromBody] string teamId)
     {
-        if (!ObjectId.TryParse(teamId, out ObjectId id))
+        if (!ObjectId.TryParse(teamId, out var id))
         {
             throw new Problem400BadRequestException("Team ID is not a valid ID.");
         }
-        
+
         var players = await _playerService.GetByTeamIdAsync(id);
-        return Ok(players);    
+        return Ok(players);
     }
 
     [HttpPost]
@@ -50,14 +49,14 @@ public class PlayerController(PlayerService playerService) : ControllerBase
         await _playerService.AddOneAsync(player);
         return Ok(player);
     }
-    
+
     [HttpPost]
     public async Task<ActionResult<List<Player>>> AddMany([FromBody] List<Player> players)
     {
         await _playerService.AddManyAsync(players);
         return Ok(players);
     }
-    
+
     [HttpPut]
     public async Task<ActionResult<Player>> UpdateOne([FromBody] Player player)
     {

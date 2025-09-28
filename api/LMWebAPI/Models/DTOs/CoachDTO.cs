@@ -1,5 +1,4 @@
 using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
 namespace LMWebAPI.Models.DTOs;
 
 public class CoachDTO

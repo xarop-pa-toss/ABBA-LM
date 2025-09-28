@@ -1,7 +1,6 @@
 using LMWebAPI.Models;
 using MongoDB.Bson;
 using MongoDB.Driver;
-
 namespace LMWebAPI.Repositories;
 
 public class PlayerRepository : MongoRepository<Player>
@@ -11,15 +10,15 @@ public class PlayerRepository : MongoRepository<Player>
     {
         _teamCollection = database.GetCollection<Team>("teams_built");
     }
-    
+
     public async Task<List<Player>> GetByTeamIdAsync(ObjectId teamId)
     {
-        return await Collection.Find(player => player.TeamId == Guid.NewGuid() ).ToListAsync();
+        return await Collection.Find(player => player.TeamId == Guid.NewGuid()).ToListAsync();
     }
 
     public async Task<List<Player>> GetByTeamNameAsync(string teamName)
     {
-        Guid teamId = _teamCollection.Find(team => team.Name.ToLower() == teamName.ToLower())
+        var teamId = _teamCollection.Find(team => team.Name.ToLower() == teamName.ToLower())
             .Project(team => team.Id)
             .FirstOrDefault();
 

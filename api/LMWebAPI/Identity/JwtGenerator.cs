@@ -1,7 +1,6 @@
 using System.Security.Claims;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
-
 namespace LMWebAPI.Identity;
 
 public class JwtGenerator
@@ -21,7 +20,7 @@ public class JwtGenerator
             new Claim(JwtRegisteredClaimNames.Email, email)
         };
 
-        var tokenDescriptor = new SecurityTokenDescriptor()
+        var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claimsList),
             Expires = DateTime.UtcNow.AddHours(1),
@@ -30,7 +29,7 @@ public class JwtGenerator
             SigningCredentials =
                 new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
-        
+
         return tokenHandler.CreateToken(tokenDescriptor);
     }
 }

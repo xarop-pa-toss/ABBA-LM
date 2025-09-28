@@ -1,12 +1,12 @@
+using BloodTourney.Models;
 using LMWebAPI.Models.DTOs;
-
 namespace LMWebAPI.Mappers;
 
 public static class RulesetMapper
 {
-    public static BloodTourney.Models.Ruleset ToDomain(RulesetDTO dto)
+    public static Ruleset ToDomain(RulesetDTO dto)
     {
-        return new BloodTourney.Models.Ruleset
+        return new Ruleset
         {
             Tiers = dto.Tiers,
             MatchVictoryPoints = dto.MatchVictoryPoints,
@@ -20,7 +20,7 @@ public static class RulesetMapper
         };
     }
 
-    public static RulesetDTO ToDto(BloodTourney.Models.Ruleset domain)
+    public static RulesetDTO ToDto(Ruleset domain)
     {
         return new RulesetDTO
         {

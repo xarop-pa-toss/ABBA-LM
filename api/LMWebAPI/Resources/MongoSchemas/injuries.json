@@ -2,7 +2,13 @@
   "$jsonSchema": {
     "bsonType": "object",
     "description": "Schema for the Injury collection.",
-    "required": ["_id", "code", "name", "description", "stat_modifiers"],
+    "required": [
+      "_id",
+      "code",
+      "name",
+      "description",
+      "stat_modifiers"
+    ],
     "properties": {
       "_id": {
         "bsonType": "objectId",
@@ -23,7 +29,12 @@
       "stat_modifiers": {
         "bsonType": "object",
         "description": "Modifiers for player stats affected by the injury.",
-        "required": ["movement", "strength", "agility", "armor"],
+        "required": [
+          "movement",
+          "strength",
+          "agility",
+          "armor"
+        ],
         "properties": {
           "movement": {
             "bsonType": "int",

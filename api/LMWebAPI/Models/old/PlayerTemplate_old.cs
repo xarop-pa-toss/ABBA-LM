@@ -1,6 +1,5 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-
 namespace LMWebAPI.Models;
 
 public class PlayerTemplate_old
@@ -8,7 +7,7 @@ public class PlayerTemplate_old
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
     public ObjectId Id { get; set; }
-    
+
     [BsonElement("team_code")]
     public required string TeamCode { get; set; }
 
@@ -23,10 +22,10 @@ public class PlayerTemplate_old
 
     [BsonElement("skills")]
     public List<string> Skills { get; set; } = new List<string>();
-    
+
     [BsonElement("injuries")]
     public List<string> Injuries { get; set; } = new List<string>();
-    
+
     [BsonElement("rank_description")]
     public required string RankDescription { get; set; }
 }
@@ -57,5 +56,4 @@ public enum PlayerPositionEnum
 
 public class Rank
 {
-
 }

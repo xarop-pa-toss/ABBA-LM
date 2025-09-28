@@ -1,6 +1,5 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-
 namespace LMWebAPI.Models;
 
 public class Player_old
@@ -26,19 +25,19 @@ public class Player_old
 
     [BsonElement("injuries")]
     public List<string> Injuries { get; set; } = new List<string>();
-    
+
     [BsonElement("spp_available")]
     public required int SppAvailable { get; set; }
-    
+
     [BsonElement("spp_spent")]
     public required int SppSpent { get; set; }
-    
+
     [BsonElement("rank")]
     public required string Rank { get; set; }
-    
+
     [BsonElement("value")]
     public required int Value { get; set; }
-    
+
     [BsonElement("number")]
     public int Number { get; set; }
 }

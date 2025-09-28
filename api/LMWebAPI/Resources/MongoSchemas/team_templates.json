@@ -2,7 +2,11 @@
   "$jsonSchema": {
     "bsonType": "object",
     "description": "Schema for the TeamTemplate collection.",
-    "required": ["_id", "team_code", "player_templates_ids"],
+    "required": [
+      "_id",
+      "team_code",
+      "player_templates_ids"
+    ],
     "properties": {
       "_id": {
         "bsonType": "objectId",
@@ -17,7 +21,10 @@
         "description": "List of player templates in the team template.",
         "items": {
           "bsonType": "object",
-          "required": ["player_id", "list_position"],
+          "required": [
+            "player_id",
+            "list_position"
+          ],
           "properties": {
             "player_id": {
               "bsonType": "objectId",

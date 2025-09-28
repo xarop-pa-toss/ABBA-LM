@@ -28,13 +28,24 @@
       },
       "position": {
         "bsonType": "string",
-        "enum": ["Blitzer", "Thrower", "Catcher", "Lineman", "StarPlayer"],
+        "enum": [
+          "Blitzer",
+          "Thrower",
+          "Catcher",
+          "Lineman",
+          "StarPlayer"
+        ],
         "description": "Position of the player."
       },
       "stats": {
         "bsonType": "object",
         "description": "Stats for the player.",
-        "required": ["movement", "strength", "agility", "armor"],
+        "required": [
+          "movement",
+          "strength",
+          "agility",
+          "armor"
+        ],
         "properties": {
           "movement": {
             "bsonType": "int",

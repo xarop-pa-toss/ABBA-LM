@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-
 namespace LMWebAPI.Resources.Errors;
 
 [Serializable]
@@ -18,7 +17,7 @@ public class ProblemException(int statusCode, string error, string message, obje
 public class ProblemExceptionHandler(IProblemDetailsService problemDetailsService) : IExceptionHandler
 {
     private readonly IProblemDetailsService _problemDetailsService = problemDetailsService;
-    
+
 
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception ex, CancellationToken cancellationToken)
     {
@@ -63,7 +62,7 @@ public class ProblemExceptionHandler(IProblemDetailsService problemDetailsServic
 
         return problemDetails;
     }
-    
+
     private static string GetProblemTypeUri(ProblemException ex)
     {
         // You can create a mapping or use a base URI

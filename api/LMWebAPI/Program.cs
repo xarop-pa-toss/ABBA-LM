@@ -11,13 +11,12 @@ using MongoDB.Driver;
 using Scalar.AspNetCore;
 using Serilog;
 
-
 internal class Program
 {
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        
+
         #region Logging (Serilog)
         builder.Logging.ClearProviders();
         Log.Logger = new LoggerConfiguration()
@@ -27,10 +26,10 @@ internal class Program
             .CreateLogger();
 
         builder.Host.UseSerilog();
-        
+
         Log.Information("Serilog logging initialized.");
         #endregion
-        
+
         builder.Configuration.AddEnvironmentVariables();
         // Forces verification of DI on build instead of runtime
         builder.Host.UseDefaultServiceProvider((context, options) =>
@@ -43,20 +42,20 @@ internal class Program
         #region Environment Setup
         // Load the appsettings.json and then override with environment-specific file
         builder.Configuration
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
-        
+            .AddJsonFile("appsettings.json", false, true)
+            .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true, true);
+
         if (builder.Environment.IsDevelopment())
             Log.Warning("Environment is set to PRODUCTION!");
         else
             Log.Information("Environment is set to: " + builder.Environment.EnvironmentName + ".");
         #endregion
-        
+
         #region Database - Postgres on Fly.io
         builder.Services.AddDbContext<ApiDbContext>(options =>
             options.UseNpgsql(Environment.GetEnvironmentVariable("CONNECTION_STRING")));
         #endregion
-        
+
         #region PostgreSQL connection/client
         // CREATE-USE-CLOSE A CONNECTION WHENEVER AND WHEREVER IT IS NEEDED
         // Example:
@@ -70,7 +69,7 @@ internal class Program
         //     connection.Open()
         // }
         #endregion
-        
+
         #region --INACTIVE-- MongoDB connection/client
         builder.Services.AddSingleton<IMongoClient>(sp =>
         {
@@ -78,13 +77,13 @@ internal class Program
             var connectionString = builder.Configuration["MONGO_CONNECTION_STRING_DEV"];
             return new MongoClient(connectionString);
         });
-        
+
         builder.Services.AddScoped<IMongoDatabase>(sp =>
         {
             var client = sp.GetRequiredService<IMongoClient>();
             return client.GetDatabase(builder.Configuration["MONGO_DATABASE_NAME"]);
         });
-        
+
         builder.Services.AddScoped(typeof(MongoRepository<>));
         builder.Services.AddRouting(options => options.LowercaseUrls = true);
         #endregion
@@ -100,7 +99,7 @@ internal class Program
 //From BloodTourney
         builder.Services.AddSingleton<RulesetManager>();
         #endregion
-        
+
         builder.Services.AddControllers();
 
         #region Middleware
@@ -142,10 +141,10 @@ internal class Program
 //     });
 // builder.Services.AddAuthorization();
         #endregion
-        
+
         var app = builder.Build();
-        
-        #region  Scalar (OpenAPI Documentation)
+
+        #region Scalar (OpenAPI Documentation)
         app.MapOpenApi();
         if (app.Environment.IsDevelopment())
         {
@@ -162,7 +161,7 @@ internal class Program
         app.MapControllers();
 
         app.Run();
-        
+
         Log.Information("Application started.");
         Log.Information("Scalar OpenAPI documentation available at http://localhost:5000/scalar/api-reference");
     }

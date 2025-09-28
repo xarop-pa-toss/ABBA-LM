@@ -1,5 +1,4 @@
 using MongoDB.Bson;
-
 namespace LMWebAPI.Repositories.Interfaces;
 
 // Base for all CRUD repositories

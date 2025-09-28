@@ -1,6 +1,7 @@
+using LMWebAPI.Data;
 using LMWebAPI.Models;
 
-public class Skill
+public class Skill : BaseEntity
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = null!;
@@ -12,8 +13,4 @@ public class Skill
     // Navigation properties
     public ICollection<PlayerSkill> PlayerSkills { get; set; } = new List<PlayerSkill>();
     public ICollection<PositionalSkill> PositionalSkills { get; set; } = new List<PositionalSkill>();
-    
-    // Meta
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }

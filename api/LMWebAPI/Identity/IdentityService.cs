@@ -1,10 +1,6 @@
-using Microsoft.AspNetCore.Identity.Data;
-using LMWebAPI.Repositories;
-using LMWebAPI.Resources.Errors;
-using MongoDB.Driver;
-using Crypt = BCrypt.Net.BCrypt;
 using LMWebAPI.Models;
-
+using LMWebAPI.Repositories;
+using MongoDB.Driver;
 namespace LMWebAPI.Identity;
 
 public class IdentityService : MongoRepository<User_old>
@@ -12,7 +8,7 @@ public class IdentityService : MongoRepository<User_old>
     public IdentityService(IMongoDatabase database, IMongoClient client) : base(database, "users", client)
     {
     }
-    
+
     // public async Task<IdentityService> ValidateUserCredentials(LoginRequest loginRequest)
     // {
     //     var filter = Builders<User>.Filter.Eq("email", loginRequest.Email);

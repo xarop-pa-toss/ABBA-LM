@@ -2,7 +2,14 @@
   "$jsonSchema": {
     "bsonType": "object",
     "description": "Schema for the User collection.",
-    "required": ["_id", "username", "first_name", "last_name", "password", "password_salt"],
+    "required": [
+      "_id",
+      "username",
+      "first_name",
+      "last_name",
+      "password",
+      "password_salt"
+    ],
     "properties": {
       "_id": {
         "bsonType": "objectId",

@@ -1,6 +1,5 @@
-using Microsoft.EntityFrameworkCore;
 using LMWebAPI.Models;
-
+using Microsoft.EntityFrameworkCore;
 namespace LMWebAPI.Data;
 
 public class ApiDbContext : DbContext
@@ -30,18 +29,30 @@ public class ApiDbContext : DbContext
     public DbSet<TournamentRound> TournamentRounds { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
-    { 
+    {
         // Composite keys
         modelBuilder.Entity<PlayerInjury>()
-            .HasKey(pi => new { pi.PlayerId, pi.InjuryId });
-        
+            .HasKey(pi => new
+            {
+                pi.PlayerId,
+                pi.InjuryId
+            });
+
         modelBuilder.Entity<PositionalRoster>()
-            .HasKey(pr => new { pr.PositionalId, pr.RosterId });
-        
+            .HasKey(pr => new
+            {
+                pr.PositionalId,
+                pr.RosterId
+            });
+
         modelBuilder.Entity<PositionalSkill>()
-            .HasKey(ps => new { ps.PositionalId, ps.SkillId });
-        
-        
+            .HasKey(ps => new
+            {
+                ps.PositionalId,
+                ps.SkillId
+            });
+
+
         base.OnModelCreating(modelBuilder);
     }
 }

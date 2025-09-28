@@ -1,9 +1,7 @@
 ﻿using System.Text.Json;
 using BloodTourney.Ruleset;
 using LMWebAPI.Models.DTOs;
-using BT = BloodTourney;
 using Microsoft.AspNetCore.Mvc;
-
 namespace LMWebAPI.Controllers;
 
 // [Authorize]
@@ -42,17 +40,17 @@ public class TournamentController(RulesetManager rulesetManager) : ControllerBas
     [HttpGet]
     public async Task<ActionResult<string>> CreateCustomRuleset([FromBody] RulesetDTO rulesetDto)
     {
-        var newRuleset = new BT.Ruleset.RulesetBuilder()
+        var newRuleset = new RulesetBuilder()
             .WithTiers(rulesetDto.Tiers)
             .WithVictoryPoints(rulesetDto.MatchVictoryPoints)
             .WithTieBreakers(rulesetDto.TieBreakers)
             .WithSkillStacking(rulesetDto.Skillstacking)
             .WithTimeKeeping(rulesetDto.Timekeeping)
             .Build();
-        
+
         var serializedRuleset = JsonSerializer.Serialize(newRuleset);
         return !string.IsNullOrEmpty(serializedRuleset)
             ? Ok(serializedRuleset)
-               : BadRequest("Could not serialize ruleset.");
+            : BadRequest("Could not serialize ruleset.");
     }
 }

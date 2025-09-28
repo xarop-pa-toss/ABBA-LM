@@ -2,7 +2,13 @@
   "$jsonSchema": {
     "bsonType": "object",
     "description": "Schema for the Team collection.",
-    "required": ["_id", "user_id", "team_code", "players", "name"],
+    "required": [
+      "_id",
+      "user_id",
+      "team_code",
+      "players",
+      "name"
+    ],
     "properties": {
       "_id": {
         "bsonType": "objectId",
@@ -21,7 +27,10 @@
         "description": "List of players in the team.",
         "items": {
           "bsonType": "object",
-          "required": ["player_id", "list_position"],
+          "required": [
+            "player_id",
+            "list_position"
+          ],
           "properties": {
             "player_id": {
               "bsonType": "objectId",

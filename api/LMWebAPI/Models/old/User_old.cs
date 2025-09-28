@@ -19,10 +19,10 @@ public class User_old
 
     [BsonElement("last_name")]
     public required string LastName { get; set; }
-    
+
     [BsonElement("naf_details")]
     public required NAFInfo NafDetails { get; set; }
-    
+
     [BsonElement("profile_image")]
     public string ProfileImage { get; set; } = "default_profile_image.png";
 
@@ -31,7 +31,7 @@ public class User_old
 
     [BsonElement("email_confirmed")]
     public required bool EmailConfirmed { get; set; } = false;
-    
+
     [BsonElement("login_suspended")]
     public required bool LoginSuspended { get; set; } = false;
 
@@ -46,8 +46,7 @@ public class NAFInfo
 {
     [BsonElement("naf_number")]
     public required int NafNumber { get; set; } = 0;
-    
+
     [BsonElement("naf_nickname")]
     public required string NafNickname { get; set; } = "";
-
 }
