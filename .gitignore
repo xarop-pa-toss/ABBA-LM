@@ -288,3 +288,6 @@ test-results/
 tmp/
 temp/
 *.tmp
+
+COMMANDS.md
+POSTGRES.md

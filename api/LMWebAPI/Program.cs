@@ -17,6 +17,18 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        #region Environment Setup
+        // Load the appsettings.json and then override with environment-specific file
+        builder.Configuration
+            .AddJsonFile("appsettings.json", false, true)
+            .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true, true);
+
+        if (builder.Environment.IsDevelopment())
+            Log.Warning("Environment is set to PRODUCTION!");
+        else
+            Log.Information("Environment is set to: " + builder.Environment.EnvironmentName + ".");
+        #endregion
+        
         #region Logging (Serilog)
         builder.Logging.ClearProviders();
         Log.Logger = new LoggerConfiguration()
@@ -39,36 +51,14 @@ internal class Program
             }
         );
 
-        #region Environment Setup
-        // Load the appsettings.json and then override with environment-specific file
-        builder.Configuration
-            .AddJsonFile("appsettings.json", false, true)
-            .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true, true);
-
-        if (builder.Environment.IsDevelopment())
-            Log.Warning("Environment is set to PRODUCTION!");
-        else
-            Log.Information("Environment is set to: " + builder.Environment.EnvironmentName + ".");
-        #endregion
-
         #region Database - Postgres on Fly.io
-        builder.Services.AddDbContext<ApiDbContext>(options =>
-            options.UseNpgsql(Environment.GetEnvironmentVariable("CONNECTION_STRING")));
-        #endregion
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+                               ?? Environment.GetEnvironmentVariable("DATABASE_URL");
 
-        #region PostgreSQL connection/client
-        // CREATE-USE-CLOSE A CONNECTION WHENEVER AND WHEREVER IT IS NEEDED
-        // Example:
-        // public class ExampleService
-        // {
-        //     public ExampleService(IConfiguration config)
-        //     {
-        //         var connStr = config.GetConnectionString("DefaultConnection");
-        //     }
-        //     using var connection = new NpgsqlConnection(connectionString);
-        //     connection.Open()
-        // }
+        builder.Services.AddDbContext<ApiDbContext>(options =>
+            options.UseNpgsql(connectionString));
         #endregion
+        
 
         #region --INACTIVE-- MongoDB connection/client
         builder.Services.AddSingleton<IMongoClient>(sp =>
@@ -144,6 +134,13 @@ internal class Program
 
         var app = builder.Build();
 
+        // Migrate the database to the latest version
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
+            db.Database.Migrate();
+        }
+        
         #region Scalar (OpenAPI Documentation)
         app.MapOpenApi();
         if (app.Environment.IsDevelopment())
