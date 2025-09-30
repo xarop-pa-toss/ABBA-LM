@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloodTourney", "BloodTourney\BloodTourney.csproj", "{65FD35D6-78C2-4813-A9F3-5F01B6C19A1B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloodTourney.Tests", "BloodTourney.tests\BloodTourney.Tests.csproj", "{4808005D-0EA9-4888-BB45-CB2F275E276F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloodTourney.Tests", "BloodTourney.Tests\BloodTourney.Tests.csproj", "{4808005D-0EA9-4888-BB45-CB2F275E276F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
