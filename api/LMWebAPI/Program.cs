@@ -113,6 +113,27 @@ internal class Program
         });
         builder.Services.AddExceptionHandler<ProblemExceptionHandler>();
         builder.Services.AddOpenApi();
+        
+// CORS
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAll", policy =>
+            {
+                policy.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            });
+            
+            options.AddPolicy("Production", policy =>
+            {
+                policy.WithOrigins(
+                        "https://abbalm-api.fly.dev",
+                        "https://www.abbalm-api.fly.dev")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials();
+            });
+        });
 
 // JWT
 // builder.Services.AddAuthentication(options =>
@@ -166,6 +187,7 @@ internal class Program
         #endregion
 
         app.UseExceptionHandler();
+        app.UseCors();
         app.UseHttpsRedirection();
 
         app.UseAuthentication();

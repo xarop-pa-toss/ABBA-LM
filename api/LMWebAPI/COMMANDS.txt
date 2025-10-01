@@ -1,0 +1,23 @@
+DOCKER
+
+Build
+    docker build -f LMWebAPI/Dockerfile -t lmwebapi .
+
+Run Local
+    docker run -p 5000:80 --name lmwebapi-local -e CONNECTION_STRING="postgres://devuser:devpass@host.docker.internal:5432/abbalm-dev" lmwebapi
+
+
+
+
+
+FLY Postgres
+Postgres cluster abbalm-db created
+  Username:    postgres
+  Password:    1SANUIG9m6YLiVw
+  Hostname:    abbalm-db.internal
+  Flycast:     fdaa:2d:fbcd:0:1::3
+  Proxy port:  5432
+  Postgres port:  5433
+  Connection string: postgres://postgres:1SANUIG9m6YLiVw@abbalm-db.flycast:5432
+
+  

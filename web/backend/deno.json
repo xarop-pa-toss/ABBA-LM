@@ -1,12 +1,8 @@
 {
-  "imports": {
-    "hono": "https://deno.land/x/hono@v3.11.7/mod.ts"
-  },
   "tasks": {
-    "dev": "deno run --allow-net main.ts"
+    "dev": "deno run --allow-net --watch server.ts"
   },
   "compilerOptions": {
-    "jsx": "precompile",
-    "jsxImportSource": "hono/jsx"
+    "strict": true
   }
 }
